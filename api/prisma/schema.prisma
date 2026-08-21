@@ -1,0 +1,100 @@
+// This is your Prisma schema file.
+// Learn more in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model user {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+
+  followings followship[] @relation("following")
+  followers  followship[] @relation("follower")
+
+  posts    post[]
+  likes    like[]
+  comments comment[]
+
+  notifications notification[]
+}
+
+model followship {
+  id Int @id @default(autoincrement())
+
+  followerId  Int
+  followingId Int
+
+  createdAt DateTime @default(now())
+
+  follower  user @relation("following", fields: [followerId], references: [id])
+  following user @relation("follower", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+}
+
+model post {
+  id Int @id @default(autoincrement())
+
+  authorId Int
+  content  String
+
+  createdAt DateTime @default(now())
+
+  author   user      @relation(fields: [authorId], references: [id])
+  likes    like[]
+  comments comment[]
+}
+
+model like {
+  id Int @id @default(autoincrement())
+
+  likerId Int
+  postId  Int
+
+  createdAt DateTime @default(now())
+
+  liker user @relation(fields: [likerId], references: [id])
+  post  post @relation(fields: [postId], references: [id])
+
+  @@unique([likerId, postId])
+}
+
+model comment {
+  id Int @id @default(autoincrement())
+
+  commenterId Int
+  postId      Int
+  content     String
+
+  createdAt DateTime @default(now())
+
+  commenter user @relation(fields: [commenterId], references: [id])
+  post      post @relation(fields: [postId], references: [id])
+}
+
+enum EventTypes {
+  FOLLOW
+  POST
+  LIKE
+  COMMENT
+}
+
+model notification {
+  id Int @id @default(autoincrement())
+
+  eventType EventTypes
+  isRead    Boolean    @default(false)
+
+  receiverId Int
+  receiver   user @relation(fields: [receiverId], references: [id])
+
+  data Json
+
+  createdAt DateTime @default(now())
+}
