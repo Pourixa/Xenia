@@ -1,3 +1,5 @@
+const { githubAuth } = require("../middleware/githubAuth")
+
 const userRouter = require("express").Router()
 
 userRouter.patch("/",updateUser)  //authenticate update user
@@ -7,6 +9,7 @@ userRouter.get("/:username",getUser)  // get user by username
 
 userRouter.post("/auth/signin",signinUser) // sign in  
 userRouter.post("/auth/signup",signupUser) // signup user
+userRouter.get("/auth/github",githubAuth)
 userRouter.post("/search/username",searchUser) // search user by query username
 
 
