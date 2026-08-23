@@ -16,6 +16,7 @@ model user {
   avatarUrl String?
   name String?
   about String?
+  githubAccountID String? @unique
 
   followings followship[] @relation("following")
   followers  followship[] @relation("follower")
