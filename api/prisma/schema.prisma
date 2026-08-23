@@ -27,13 +27,13 @@ model user {
 model followship {
   id Int @id @default(autoincrement())
 
-  followerId  Int
+  followerId  Int 
   followingId Int
 
   createdAt DateTime @default(now())
 
-  follower  user @relation("following", fields: [followerId], references: [id])
-  following user @relation("follower", fields: [followingId], references: [id])
+  follower  user @relation("following", fields: [followerId], references: [id] , onDelete: Cascade) 
+  following user @relation("follower", fields: [followingId], references: [id] , onDelete: Cascade)
 
   @@unique([followerId, followingId])
 }
@@ -46,7 +46,7 @@ model post {
 
   createdAt DateTime @default(now())
 
-  author   user      @relation(fields: [authorId], references: [id])
+  author   user      @relation(fields: [authorId], references: [id] , onDelete: Cascade)
   likes    like[]
   comments comment[]
 }
@@ -59,8 +59,8 @@ model like {
 
   createdAt DateTime @default(now())
 
-  liker user @relation(fields: [likerId], references: [id])
-  post  post @relation(fields: [postId], references: [id])
+  liker user @relation(fields: [likerId], references: [id] , onDelete: Cascade)
+  post  post @relation(fields: [postId], references: [id]  , onDelete: Cascade)
 
   @@unique([likerId, postId])
 }
@@ -74,8 +74,8 @@ model comment {
 
   createdAt DateTime @default(now())
 
-  commenter user @relation(fields: [commenterId], references: [id])
-  post      post @relation(fields: [postId], references: [id])
+  commenter user @relation(fields: [commenterId], references: [id], onDelete: Cascade)
+  post      post @relation(fields: [postId], references: [id] , onDelete: Cascade)
 }
 
 enum EventTypes {
@@ -92,7 +92,7 @@ model notification {
   isRead    Boolean    @default(false)
 
   receiverId Int
-  receiver   user @relation(fields: [receiverId], references: [id])
+  receiver   user @relation(fields: [receiverId], references: [id], onDelete: Cascade)
 
   data Json
 
