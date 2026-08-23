@@ -13,6 +13,9 @@ datasource db {
 model user {
   id       Int    @id @default(autoincrement())
   username String @unique
+  avatarUrl String?
+  name String?
+  about String?
 
   followings followship[] @relation("following")
   followers  followship[] @relation("follower")
