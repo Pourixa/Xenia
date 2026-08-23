@@ -74,7 +74,7 @@ exports.githubAuthCallback = async (req, res, next) => {
       }
       const newUser = await db.user.create({
         data: {
-          username: username,
+          username: username.toLowerCase(),
           githubAccountID: githubUser.id,
           avatarUrl: githubUser.avatar_url,
           name: githubUser.name,
