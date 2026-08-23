@@ -1,3 +1,6 @@
+const db = require("../prisma/db").prisma;
+const jwt = require("jsonwebtoken")
+
 exports.githubAuth = (req,res,next) => {
     try {const githubUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}&scope=user:email`
 
@@ -7,6 +10,7 @@ exports.githubAuth = (req,res,next) => {
 exports.githubAuthCallback = async (req,res,next) => {
 try
     {    const { code } = req.query
+    if (!code) return res.status(400).json({ error: "No code provided" });
     const response = await fetch(
             "https://github.com/login/oauth/access_token",
             {
@@ -34,7 +38,17 @@ try
             }
         );
         const githubUser = await githubResponse.json();
-        console.log(githubUser)
+        const user = await db.user.findUnique({
+            where:{
+                githubAccountID:githubUser.id
+            }
+        })
+        if(user) {
+            res.redirect("/?token="+jwt.sign({username:user.username,id:user.id},process.env.JWT_SECRET,{expiresIn:"7d"}))
+       } else {
+            const signupToken = jwt.sign({accountId:githubUser.id,name:githubUser.name,avatar:githubUser.avatar_url},process.env.JWT_SECRET,{expiresIn:"10m"})
+            res.redirect("/finishSignup?token="+signupToken)
+        }
     } catch(e) {
         next(e)
     }
