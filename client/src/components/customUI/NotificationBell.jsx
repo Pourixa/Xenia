@@ -2,11 +2,13 @@ import { SelectedContext } from "@/routes/Home";
 import { Avatar, AvatarBadge, AvatarFallback } from "../ui/avatar";
 import { Bell } from "lucide-react";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 
 export function NotificationBell({ unreadNotifications = 0 }) {
-  const { selected, setSelected } = useContext(SelectedContext);
+  const { selected } = useContext(SelectedContext);
+  const nav = useNavigate()
   return (
-    <Avatar onClick={() => setSelected("notifications")} className={"after:border-none"}>
+    <Avatar onClick={() => {nav("/notifications")}} className={"after:border-none"}>
       <AvatarFallback className={"bg-background text-foreground"}>
         <Bell width={24} height={24} className={(selected === "notifications" ? "fill-foreground" : "")} />
       </AvatarFallback>

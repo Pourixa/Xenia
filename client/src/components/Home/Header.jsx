@@ -3,6 +3,7 @@ import { XeniaLogoNoName } from "../customUI/XeniaLogoNoName";
 import { NotificationBell } from "../customUI/NotificationBell";
 
 export function Header({imageSrc,name}) {
+    
     return <header className="border-b-2 flex justify-between items-center p-1 pl-5 pr-5">
         <XeniaAvatar size="lg" imageSrc={imageSrc} name={name}/>
         <XeniaLogoNoName width={56} height={56}/>

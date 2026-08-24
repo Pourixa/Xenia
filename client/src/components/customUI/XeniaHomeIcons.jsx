@@ -2,7 +2,7 @@ import { SelectedContext } from "@/routes/Home";
 import { useContext } from "react";
 
 export function XeniaHomeIcon({ className = "", ...props }) {
-  const { selected, setSelected } = useContext(SelectedContext);
+  const { selected } = useContext(SelectedContext);
   return (
     <svg
       viewBox="0 0 24 24"
