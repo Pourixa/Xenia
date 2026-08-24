@@ -1,13 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { Style, Avatar as DiceBearAvatar } from "@dicebear/core";
 import lineFace from "@dicebear/styles/line-face.json" with { type: "json" };
+import { SelectedContext } from "@/routes/Home";
 const style = new Style(lineFace);
 
 export function XeniaAvatar({
   size = "default",
   imageSrc = null,
-  alt = "",
   name = "",
 }) {
   const generatedAvatar = useMemo(() => {
@@ -17,9 +17,10 @@ export function XeniaAvatar({
     }).toDataUri();
   }, [name]);
   const avatar = imageSrc ?? generatedAvatar;
+  const {selected,setSelected} = useContext(SelectedContext)
   return (
-    <Avatar size={size}>
-      <AvatarImage src={avatar} alt={alt}></AvatarImage>
+    <Avatar size={size} onClick={() => setSelected("profile")}  className={`${selected === "profile" ? "ring-2" : ""}`}>
+      <AvatarImage src={avatar} alt={name}></AvatarImage>
       <AvatarFallback>{name.slice(0, 1)}</AvatarFallback>
     </Avatar>
   );
