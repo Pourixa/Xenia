@@ -19,9 +19,6 @@ export function XeniaAvatar({ size = "default", imageSrc = null, name = "" }) {
   return (
     <Avatar
       size={size}
-      onClick={() => {
-        nav("/profile");
-      }}
       className={`${selected === "profile" ? "ring-2" : ""}`}
     >
       <AvatarImage src={avatar} alt={name}></AvatarImage>

@@ -6,6 +6,21 @@ exports.getPosts = async (req, res, next) => {
   try {
     const posts = await db.post.findMany({
       take: MAX_POSTS,
+      include:{
+        _count:{
+          select:{
+            comments:true,
+            likes:true
+          }
+        },
+        author:{
+          select:{
+            avatarUrl:true,
+            username:true,
+            name:true,
+          }
+        }
+      }
     });
     res.json(posts);
   } catch (e) {

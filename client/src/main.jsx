@@ -11,6 +11,7 @@ import { Profile } from './routes/Profile'
 import { Notifications } from './routes/Notifications'
 import { Signin } from './routes/Signin'
 import { Signup } from './routes/Signup'
+import { PostPage } from './routes/PostPage'
 
 const router = createBrowserRouter([
   {
@@ -20,8 +21,9 @@ const router = createBrowserRouter([
       {index:true,element:<HomeTab/>},
       {path:"/search",element:<Search/>},
       {path:"/create",element:<Create/>},
-      {path:"/profile",element:<Profile/>},
       {path:"/notifications",element:<Notifications/>},
+      {path:"/:username",element:<Profile/>},
+      {path:"/:username/posts/:postId",element:<PostPage/>},
     ]
   },
   {

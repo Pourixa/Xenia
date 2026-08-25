@@ -2,9 +2,13 @@ const express = require("express")
 const postRouter = require("./routes/postRouter")
 const { errorHandler } = require("./middleware/errorHandeler")
 const userRouter = require("./routes/userRouter")
+const cors = require("cors")
 
 const app = express()
 app.use(express.json())
+app.use(cors({
+    origin:process.env.CLIENT_URL
+}))
 
 app.use("/post",postRouter)
 app.use("/user",userRouter)
