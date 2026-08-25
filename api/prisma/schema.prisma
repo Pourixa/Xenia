@@ -14,9 +14,9 @@ model user {
   id       Int    @id @default(autoincrement())
   username String @unique
   avatarUrl String?
-  name String?
+  name String
   about String?
-  githubAccountID String? @unique
+  githubAccountID BigInt @unique
 
   followings followship[] @relation("following")
   followers  followship[] @relation("follower")
