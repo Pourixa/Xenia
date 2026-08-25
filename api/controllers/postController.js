@@ -46,6 +46,7 @@ exports.getPost = async (req,res,next) => {
     comments:{
       take:20,
       select:{
+        id:true,
         content:true,
         createdAt:true,
         commenter:{

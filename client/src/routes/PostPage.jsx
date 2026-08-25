@@ -3,20 +3,25 @@ import { Post } from "@/components/PostPage/post";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { getRequest } from "@/lib/requests";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { SelectedContext } from "./Home";
 
 export function PostPage() {
   const [post, setPost] = useState(null);
   const { postId } = useParams();
+  
+  const { setSelected } = useContext(SelectedContext);
+
 
   useEffect(() => {
+    setSelected("post");
     getRequest("/post/" + postId).then((res) => {
       res.json().then((pst) => {
         setPost(pst);
       });
     });
-  }, []);
+  }, [setSelected]);
   console.log(post);
   if (!post) return <>Loading</>;
   return (

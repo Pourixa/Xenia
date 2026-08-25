@@ -4,7 +4,6 @@ import { timeAgo } from "@/lib/utils";
 import { Heart, LucideMessageSquare } from "lucide-react";
 
 export function Comment({ comment }) {
-    console.log(comment)
   return (
     <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
       <Link to={`/${comment.commenter.username}`} className="p-0.5" draggable={false}>
@@ -25,13 +24,11 @@ export function Comment({ comment }) {
             </div>
           </div>
         </Link>
-        <Link
-          to={`/${comment.commenter.username}/comment/${comment.id}`}
+        <div
           className="flex flex-col"
-          draggable={false}
         >
           <div className="p-0.5">{comment.content}</div>
-        </Link>
+        </div>
       </div>
     </div>
   );
