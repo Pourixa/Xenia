@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       {path:"/create",element:<Create/>},
       {path:"/notifications",element:<Notifications/>},
       {path:"/:username",element:<Profile/>},
-      {path:"/:username/posts/:postId",element:<PostPage/>},
+      {path:"/:username/post/:postId",element:<PostPage/>},
     ]
   },
   {

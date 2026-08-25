@@ -8,7 +8,7 @@ export function Footer() {
   const { selected } = useContext(SelectedContext);
   const nav = useNavigate()
   return (
-    <footer className="border-t-2 flex justify-between items-center p-1 pl-5 pr-5">
+    <footer className=" bg-background  border-t-2 flex justify-between items-center p-1 pl-5 pr-5">
       <XeniaHomeIcon onClick={() => {nav("/")}}/>
       <PlusIcon onClick={() => {nav("/create")}} className={selected === "create" ? "ring-2 rounded-full" : ""}/>
       <Search onClick={() => {nav("/search")}} className={selected === "search" ? "fill-foreground" : ""}/>

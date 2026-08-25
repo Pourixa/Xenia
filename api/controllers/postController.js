@@ -28,6 +28,58 @@ exports.getPosts = async (req, res, next) => {
   }
 };
 
+exports.getPost = async (req,res,next) => {
+  try {
+    const post = await db.post.findUnique({
+  where: {
+    id: Number(req.params.postId)
+  },
+  select: {
+    content: true,
+    createdAt:true,
+    _count:{
+      select:{
+        likes:true,
+        comments:true
+      }
+    },
+    comments:{
+      take:20,
+      select:{
+        content:true,
+        createdAt:true,
+        commenter:{
+          select:{
+            avatarUrl:true,
+            username:true,
+            name:true,
+          }
+        }
+      },
+    },
+    author: {
+      select: {
+        username: true,
+        avatarUrl: true,
+        name: true,
+
+        followers: req.user
+          ? {
+              where: {
+                followerId: req.user.id
+              }
+            }
+          : false
+      }
+    }
+  }
+})
+res.json(post)
+  } catch(e) {
+    next(e)
+  }
+}
+
 exports.postPost = async (req, res, next) => {
   try {
     const post = await db.post.create({

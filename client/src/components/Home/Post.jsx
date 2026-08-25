@@ -37,16 +37,12 @@ export function Post({ post }) {
             to={`/${post.author.username}/post/${post.id}#comments`}
           >
             <div className="flex gap-0.5 active:text-accent ">
-              <span>
                 <LucideMessageSquare className="active:fill-accent" />
-              </span>
               <span>{post._count.comments}</span>
             </div>
           </Link>
           <div className="flex gap-0.5 active:text-primary hover:cursor-pointer">
-            <span>
               <Heart className="active:fill-primary hover:cursor-pointer"/>
-            </span>
             <span>{post._count.likes}</span>
           </div>
         </div>

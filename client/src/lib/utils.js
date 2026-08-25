@@ -5,10 +5,6 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-const rtf = new Intl.RelativeTimeFormat("en", {
-    numeric: "always"
-})
-
 const units = [
     ["year", 31536000, "y"],
     ["month", 2592000, "mo"],
