@@ -7,6 +7,7 @@ export async function postRequest(path, body) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: body,
+    method:"post",
+    body: JSON.stringify(body),
   });
 }
