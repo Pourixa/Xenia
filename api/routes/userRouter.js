@@ -9,14 +9,15 @@ userRouter.delete("/",deleteUser)  //authenticate delete user
 
 // userRouter.post("/auth/signin",signinUser) // sign in  
 // userRouter.post("/auth/signup",signupUser) // signup user
+userRouter.post("/search",searchUser) // search user by query username
 
+// userRouter.get("/",getClient)
 userRouter.get("/auth/github",githubAuth)
 userRouter.get("/auth/github/callback",githubAuthCallback)
-
-userRouter.post("/search/username",searchUser) // search user by query username
-
-
 userRouter.get("/:username",getUser)  // get user by username
+
+
+
 
 
 

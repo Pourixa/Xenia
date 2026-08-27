@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 exports.githubAuth = (req, res, next) => {
   try {
-    const githubUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_CALLBACK_URL}&scope=user`;
+    const githubUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_CALLBACK_URL}&scope=read:user user:email`;
 
     res.redirect(githubUrl);
   } catch (e) {
@@ -41,8 +41,8 @@ exports.githubAuthCallback = async (req, res, next) => {
       },
     });
     if (!githubResponse.ok) {
-    return next(new Error("Failed to fetch GitHub user"));
-}
+      return next(new Error("Failed to fetch GitHub user"));
+    }
 
     const githubUser = await githubResponse.json();
     const user = await db.user.findUnique({
@@ -50,6 +50,7 @@ exports.githubAuthCallback = async (req, res, next) => {
         githubAccountID: githubUser.id,
       },
     });
+    console.log(githubUser)
     if (user) {
       res.cookie(
         "token",
@@ -64,7 +65,7 @@ exports.githubAuthCallback = async (req, res, next) => {
           maxAge: 7 * 24 * 60 * 60 * 1000,
         },
       );
-      res.redirect("/");
+      res.redirect(process.env.CLIENT_URL);
     } else {
       const baseUsername = githubUser.login;
       let username = baseUsername;
@@ -93,7 +94,7 @@ exports.githubAuthCallback = async (req, res, next) => {
           maxAge: 7 * 24 * 60 * 60 * 1000,
         },
       );
-      res.redirect("/");
+      res.redirect(process.env.CLIENT_URL);
     }
   } catch (e) {
     next(e);
