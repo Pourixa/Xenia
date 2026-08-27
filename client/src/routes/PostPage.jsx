@@ -27,7 +27,7 @@ export function PostPage() {
     {
       // add comment 
     } else {
-      nav("/signin")
+      nav("/user/signin")
     }
 }
 
@@ -46,7 +46,7 @@ export function PostPage() {
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">
-        <Post post={post} />
+        <Post post={post} isSigned={isSigned}/>
       </div>
       <div>
         <div className="p-4 grid w-full gap-2 border-b">

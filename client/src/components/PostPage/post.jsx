@@ -2,12 +2,21 @@ import { Heart, MessageSquare } from "lucide-react";
 import { XeniaAvatar } from "../customUI/XeniaAvatar";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useEffect } from "react";
 
-export function Post({ post }) {
+export function Post({ post ,isSigned }) {
   const { hash } = useLocation();
-
+  const nav =useNavigate()
+  function handleFollow() {
+    if(isSigned)
+    {
+      //follow
+    }
+    else {
+      nav("/user/signin")
+    }
+  }
   useEffect(() => {
     if (hash) {
       const element = document.getElementById(hash.replace("#", ""));
@@ -22,7 +31,7 @@ export function Post({ post }) {
     <div className="flex flex-col gap-1">
       <div className="flex flex-col p-0.5">
         <div className="flex justify-between ">
-          <div className="flex gap-1">
+          <div className="flex gap-1" onClick={() => nav(`/${post.author.username}`)}>
             <XeniaAvatar
               imageSrc={post.author.avatarUrl}
               name={post.author.name}
@@ -34,7 +43,7 @@ export function Post({ post }) {
               </span>
             </div>
           </div>
-          <Button>Follow</Button>
+          <Button onClick={() => handleFollow()}>{isSigned ? "Follow" : "Sign in to follow"}</Button>
         </div>
         <div>{post.content}</div>
         <div className="text-muted-foreground">
