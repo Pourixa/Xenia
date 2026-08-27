@@ -14,6 +14,32 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
+exports.getCurrentUser = async (req,res,next) => {
+  try {
+    const token = req.cookies.token
+    if(!token) 
+      return res.json({user:null , isSigned:false})
+
+    const data = jwt.decode(token)
+    const user = await db.user.findUnique({
+      where:{
+        id:data.id
+      },
+      select:{
+        id:true,
+        username:true,
+        avatarUrl:true,
+        name:true
+      }
+    })
+
+    return res.json({user:user,isSigned:true})
+
+  } catch(e) {
+    next(e)
+  }
+}
+
 exports.updateUser = async (req, res, next) => {
   try {
     const user = await db.user.update({

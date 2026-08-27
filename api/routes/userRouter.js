@@ -1,4 +1,4 @@
-const { updateUser, deleteUser, getUser, searchUser } = require("../controllers/userController")
+const { updateUser, deleteUser, getUser, searchUser, getCurrentUser } = require("../controllers/userController")
 const { githubAuth, githubAuthCallback } = require("../middleware/githubAuth")
 
 const userRouter = require("express").Router()
@@ -11,7 +11,7 @@ userRouter.delete("/",deleteUser)  //authenticate delete user
 // userRouter.post("/auth/signup",signupUser) // signup user
 userRouter.post("/search",searchUser) // search user by query username
 
-// userRouter.get("/",getClient)
+userRouter.get("/",getCurrentUser)
 userRouter.get("/auth/github",githubAuth)
 userRouter.get("/auth/github/callback",githubAuthCallback)
 userRouter.get("/:username",getUser)  // get user by username

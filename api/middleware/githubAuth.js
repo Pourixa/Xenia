@@ -50,7 +50,6 @@ exports.githubAuthCallback = async (req, res, next) => {
         githubAccountID: githubUser.id,
       },
     });
-    console.log(githubUser)
     if (user) {
       res.cookie(
         "token",
@@ -60,6 +59,7 @@ exports.githubAuthCallback = async (req, res, next) => {
           { expiresIn: "7d" },
         ),
         {
+          secure:false,
           httpOnly: true,
           sameSite: "lax",
           maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -90,6 +90,7 @@ exports.githubAuthCallback = async (req, res, next) => {
         ),
         {
           httpOnly: true,
+          secure:false,
           sameSite: "lax",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         },

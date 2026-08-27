@@ -37,11 +37,24 @@ export function HomeTab() {
 
 export function Home() {
   const [selected, setSelected] = useState("home");
+  const [user,setUser] = useState(null)
+  const [isSigned,setIsSigned] = useState(null)
+  useEffect(() => {
+    getRequest("/user").then(res => res.json().then(j => {
+      setUser(j.user)
+      setIsSigned(j.isSigned)
+    }))
+  }, [])
+  console.log(user,isSigned)
+  if(!user) 
+    return <>
+    Loading
+    </>
   return (
     <div className="flex flex-col h-dvh">
       <SelectedContext value={{ selected, setSelected }}>
-        <Header />
-        <Outlet />
+        <Header imageSrc={user.avatarUrl} name={user.name} username={user.username}/>
+        <Outlet context={{user,isSigned}}/>
         <Footer />
       </SelectedContext>
     </div>

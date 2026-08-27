@@ -4,18 +4,20 @@ import { NotificationBell } from "../customUI/NotificationBell";
 import { SelectedContext } from "@/routes/Home";
 import { useContext } from "react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const explicitList = [["post", "/"]];
 
-export function Header({ imageSrc, name }) {
+export function Header({ username, imageSrc, name }) {
   const { selected } = useContext(SelectedContext);
   const nav = useNavigate();
   const idx = explicitList.find((e) => e[0] === selected);
   if (!idx) {
     return (
       <header className="sticky bg-background z-999 top-0 border-b-2 flex justify-between items-center p-1 pl-5 pr-5">
-        <XeniaAvatar size="lg" imageSrc={imageSrc} name={name} />
+        <Link to={`/${username}`}>
+          <XeniaAvatar size="lg" imageSrc={imageSrc} name={name} />
+        </Link>
         <XeniaLogoNoName width={56} height={56} />
         <NotificationBell unreadNotifications={0} />
       </header>

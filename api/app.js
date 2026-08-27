@@ -3,11 +3,14 @@ const postRouter = require("./routes/postRouter")
 const { errorHandler } = require("./middleware/errorHandeler")
 const userRouter = require("./routes/userRouter")
 const cors = require("cors")
+const cookieParser = require("cookie-parser")
 
 const app = express()
 app.use(express.json())
+app.use(cookieParser())
 app.use(cors({
-    origin:process.env.CLIENT_URL
+    origin:process.env.CLIENT_URL,
+    credentials:true,
 }))
 
 app.use("/post",postRouter)
