@@ -22,7 +22,6 @@ export function HomeTab() {
       );
     }
   }, [setSelected, tab]);
-  console.log(posts)
   if(posts === null) 
     return <span>Loading</span>
   return <main className="overflow-auto flex flex-col items-center grow">
@@ -45,15 +44,10 @@ export function Home() {
       setIsSigned(j.isSigned)
     }))
   }, [])
-  console.log(user,isSigned)
-  if(!user) 
-    return <>
-    Loading
-    </>
   return (
     <div className="flex flex-col h-dvh">
       <SelectedContext value={{ selected, setSelected }}>
-        <Header imageSrc={user.avatarUrl} name={user.name} username={user.username}/>
+        <Header notifications={user?._count.notifications ?? 0} imageSrc={user?.avatarUrl ?? null} name={user?.name ?? ""} username={user?.username ?? ""}/>
         <Outlet context={{user,isSigned}}/>
         <Footer />
       </SelectedContext>

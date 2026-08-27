@@ -6,28 +6,35 @@ import { useContext } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 
-const explicitList = [["post", "/"]];
-
-export function Header({ username, imageSrc, name }) {
+export function Header({ username, notifications, imageSrc, name }) {
   const { selected } = useContext(SelectedContext);
+  console.log(selected)
   const nav = useNavigate();
-  const idx = explicitList.find((e) => e[0] === selected);
-  if (!idx) {
+  if (selected.selected === "post") {
+        return (
+      <div className="flex p-4 border-b w-full">
+        <ArrowLeft className="mr-8" onClick={() => nav(selected.path)} />
+        <span className="font-bold">
+          Post
+        </span>
+      </div>
+    );
+  } else if (selected.selected === "user") {
+        return <div className="flex p-4 border-b w-full">
+        <ArrowLeft className="mr-8" onClick={() => history.back()} />
+        <span className="font-bold">
+          {selected.name}
+        </span>
+      </div>
+  } else {
     return (
       <header className="sticky bg-background z-999 top-0 border-b-2 flex justify-between items-center p-1 pl-5 pr-5">
         <Link to={`/${username}`}>
           <XeniaAvatar size="lg" imageSrc={imageSrc} name={name} />
         </Link>
         <XeniaLogoNoName width={56} height={56} />
-        <NotificationBell unreadNotifications={0} />
+        <NotificationBell unreadNotifications={notifications} />
       </header>
-    );
-  } else {
-    return (
-      <div className="flex p-4 border-b w-full">
-        <ArrowLeft className="mr-8" onClick={() => nav(idx[1])} />
-        <span className="font-bold">{selected.charAt(0).toUpperCase() + selected.slice(1)}</span>
-      </div>
     );
   }
 }

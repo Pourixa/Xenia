@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { getRequest } from "@/lib/requests";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useOutletContext, useParams } from "react-router";
 import { SelectedContext } from "./Home";
 import { XeniaEmpty } from "@/components/customUI/XeniaEmpty";
 import { MessageSquareX } from "lucide-react";
@@ -13,14 +13,26 @@ import { Separator } from "@/components/ui/separator";
 
 const MAX_LENGTH = 280;
 
+
+
 export function PostPage() {
   const [post, setPost] = useState(null);
   const { postId } = useParams();
-
+  const {isSigned} = useOutletContext()
   const { setSelected } = useContext(SelectedContext);
+  const nav = useNavigate()
+
+  function handleClick() {
+    if(isSigned)
+    {
+      // add comment 
+    } else {
+      nav("/signin")
+    }
+}
 
   useEffect(() => {
-    setSelected("post");
+    setSelected({selected:"post" , path:"/"});
     getRequest("/post/" + postId).then((res) => {
       res.json().then((pst) => {
         setPost(pst);
@@ -61,7 +73,7 @@ export function PostPage() {
                 </span>
               </div>
             </div>
-            <Button disabled={text.length <= 0}>Comment</Button>
+            <Button disabled={text.length <= 0 && isSigned} onClick={() => handleClick()}>{isSigned ? "Comment" : "Sign in to comment"}</Button>
           </div>
         </div>
       </div>
