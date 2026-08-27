@@ -4,18 +4,25 @@ import { Header } from "@/components/Home/Header";
 import { Post } from "@/components/Home/Post";
 import { getRequest } from "@/lib/requests";
 import { useState, createContext, useContext, useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useOutlet, useOutletContext } from "react-router";
 
 export const SelectedContext = createContext(null);
 
 export function HomeTab() {
   const { setSelected } = useContext(SelectedContext);
+  const {user} = useOutletContext()
   const [tab, setTab] = useState("fy");
   const [posts, setPosts] = useState(null);
   useEffect(() => {
     setSelected("home");
     if (tab === "fy") {
       getRequest("/post").then((res) =>
+        res.json().then((json) => {
+          setPosts(json);
+        }),
+      );
+    } else {
+      getRequest("/post/following?id="+user.id).then((res) =>
         res.json().then((json) => {
           setPosts(json);
         }),
