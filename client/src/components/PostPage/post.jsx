@@ -2,48 +2,71 @@ import { Heart, MessageSquare } from "lucide-react";
 import { XeniaAvatar } from "../customUI/XeniaAvatar";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
+import { useEffect } from "react";
 
-export function Post({post}) {
-    const date = new Date(post.createdAt)
-    return <div className="flex flex-col gap-1">
-        <div className="flex flex-col p-0.5">
-            <div className="flex justify-between ">
-                <div className="flex gap-1">
-                    <XeniaAvatar imageSrc={post.author.avatarUrl} name={post.author.name}/>
-                    <div className="flex flex-col">
-                        <span>{post.author.name}</span>
-                        <span className="text-muted-foreground">@{post.author.username}</span>
-                    </div>
-                </div>
-                    <Button>Follow</Button>
+export function Post({ post }) {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.getElementById(hash.replace("#", ""));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [hash]);
+
+  const date = new Date(post.createdAt);
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="flex flex-col p-0.5">
+        <div className="flex justify-between ">
+          <div className="flex gap-1">
+            <XeniaAvatar
+              imageSrc={post.author.avatarUrl}
+              name={post.author.name}
+            />
+            <div className="flex flex-col">
+              <span>{post.author.name}</span>
+              <span className="text-muted-foreground">
+                @{post.author.username}
+              </span>
             </div>
-            <div>
-                {post.content}
-            </div>
-            <div className="text-muted-foreground">
-                <time dateTime={date}>
-                    {date.toLocaleTimeString(undefined,{
-                        hour:"numeric",
-                        minute:"2-digit"
-                    })} · {date.toLocaleDateString(undefined,{
-                        day:"numeric",
-                        month:"short",
-                        year:"numeric"
-                    })}
-                </time>
-            </div>
+          </div>
+          <Button>Follow</Button>
         </div>
-        <Separator className={"h-px bg-muted-foreground"}/>
-        <div  className="flex p-0.5 gap-2 text-muted-foreground items-center">
-            <Link to={"#comments"} className="flex gap-0.5 active:text-accent " draggable={false} >
-                <MessageSquare className="active:fill-accent"/>
-                <span>{post._count.comments}</span>
-            </Link>
-            <div className="flex gap-0.5 active:text-primary " draggable={false} >
-                <Heart className="active:fill-primary"/>
-                <span>{post._count.likes}</span>
-            </div>
+        <div>{post.content}</div>
+        <div className="text-muted-foreground">
+          <time dateTime={date}>
+            {date.toLocaleTimeString(undefined, {
+              hour: "numeric",
+              minute: "2-digit",
+            })}{" "}
+            ·{" "}
+            {date.toLocaleDateString(undefined, {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </time>
         </div>
+      </div>
+      <Separator className={"h-px bg-muted-foreground"} />
+      <div className="flex p-0.5 gap-2 text-muted-foreground items-center">
+        <Link
+          to={"#comments"}
+          className="flex gap-0.5 active:text-accent "
+          draggable={false}
+        >
+          <MessageSquare className="active:fill-accent" />
+          <span>{post._count.comments}</span>
+        </Link>
+        <div className="flex gap-0.5 active:text-primary " draggable={false}>
+          <Heart className="active:fill-primary" />
+          <span>{post._count.likes}</span>
+        </div>
+      </div>
     </div>
+  );
 }
