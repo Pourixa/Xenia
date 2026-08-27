@@ -44,10 +44,14 @@ export function Home() {
       setIsSigned(j.isSigned)
     }))
   }, [])
+  if(!user && isSigned==null) 
+    return <>
+    Loading
+    </>
   return (
     <div className="flex flex-col h-dvh">
       <SelectedContext value={{ selected, setSelected }}>
-        <Header notifications={user?._count.notifications ?? 0} imageSrc={user?.avatarUrl ?? null} name={user?.name ?? ""} username={user?.username ?? ""}/>
+        <Header isSigned={isSigned} notifications={user?._count.notifications ?? 0} imageSrc={user?.avatarUrl ?? null} name={user?.name ?? ""} username={user?.username ?? ""}/>
         <Outlet context={{user,isSigned}}/>
         <Footer />
       </SelectedContext>

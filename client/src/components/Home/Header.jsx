@@ -5,12 +5,12 @@ import { SelectedContext } from "@/routes/Home";
 import { useContext } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router";
+const  guest = "guest.png"
 
-export function Header({ username, notifications, imageSrc, name }) {
+export function Header({ isSigned,  username, notifications, imageSrc, name }) {
   const { selected } = useContext(SelectedContext);
-  console.log(selected)
   const nav = useNavigate();
-  if (selected.selected === "post") {
+  if (selected?.selected === "post") {
         return (
       <div className="flex p-4 border-b w-full">
         <ArrowLeft className="mr-8" onClick={() => nav(selected.path)} />
@@ -19,9 +19,9 @@ export function Header({ username, notifications, imageSrc, name }) {
         </span>
       </div>
     );
-  } else if (selected.selected === "user") {
+  } else if (selected?.selected === "user") {
         return <div className="flex p-4 border-b w-full">
-        <ArrowLeft className="mr-8" onClick={() => history.back()} />
+        <ArrowLeft className="mr-8" onClick={() => nav(-1)} />
         <span className="font-bold">
           {selected.name}
         </span>
@@ -29,8 +29,8 @@ export function Header({ username, notifications, imageSrc, name }) {
   } else {
     return (
       <header className="sticky bg-background z-999 top-0 border-b-2 flex justify-between items-center p-1 pl-5 pr-5">
-        <Link to={`/${username}`}>
-          <XeniaAvatar size="lg" imageSrc={imageSrc} name={name} />
+        <Link to={isSigned ? `/${username}` : "/user/signin"}>
+          <XeniaAvatar size="lg" imageSrc={isSigned ? imageSrc : guest} name={isSigned ? name : "G"} />
         </Link>
         <XeniaLogoNoName width={56} height={56} />
         <NotificationBell unreadNotifications={notifications} />
