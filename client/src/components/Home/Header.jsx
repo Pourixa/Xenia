@@ -30,7 +30,7 @@ export function Header({ isSigned,  username, notifications, imageSrc, name }) {
     return (
       <header className="sticky bg-background z-999 top-0 border-b-2 flex justify-between items-center p-1 pl-5 pr-5">
         <Link to={isSigned ? `/${username}` : "/user/signin"}>
-          <XeniaAvatar size="lg" imageSrc={isSigned ? imageSrc : guest} name={isSigned ? name : "G"} />
+          <XeniaAvatar className={selected === "profile" ? "ring-2" : ""} size="lg" imageSrc={isSigned ? imageSrc : guest} name={isSigned ? name : "G"} />
         </Link>
         <XeniaLogoNoName width={56} height={56} />
         <NotificationBell unreadNotifications={notifications} />

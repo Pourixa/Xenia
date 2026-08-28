@@ -5,7 +5,7 @@ import { Heart, LucideMessageSquare } from "lucide-react";
 
 export function Post({ post }) {
   return (
-    <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
+    <div className="flex border-b last:border-b-0 pl-4 pr-4 pt-1 pb-1">
       <Link to={`/${post.author.username}`} className="p-0.5" draggable={false}>
         <XeniaAvatar
           imageSrc={post.author.avatarUrl}
