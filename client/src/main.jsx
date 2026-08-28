@@ -12,27 +12,42 @@ import { Notifications } from './routes/Notifications'
 import { Signin } from './routes/Signin'
 import { Signup } from './routes/Signup'
 import { PostPage } from './routes/PostPage'
+import { ProfilePosts } from './components/profile/ProfilePosts'
+import { ProfileLikes } from './components/profile/ProfileLikes'
+import { ProfileComments } from './components/profile/ProfileComments'
 
 const router = createBrowserRouter([
   {
-    path:"/",
-    element:<Home/>,
-    children:[
-      {index:true,element:<HomeTab/>},
-      {path:"/user/search",element:<Search/>},
-      {path:"/post/create",element:<Create/>},
-      {path:"/user/notifications",element:<Notifications/>},
-      {path:"/:username",element:<Profile/>},
-      {path:"/:username/post/:postId",element:<PostPage/>},
+    path: "/",
+    element: <Home />,
+    children: [
+      { index: true, element: <HomeTab /> },
+
+      { path: "user/search", element: <Search /> },
+      { path: "post/create", element: <Create /> },
+      { path: "user/notifications", element: <Notifications /> },
+
+      {
+        path: ":username",
+        element: <Profile />,
+        children: [
+          { index: true, element: <ProfilePosts /> },
+          { path: "likes", element: <ProfileLikes /> },
+          { path: "comments", element: <ProfileComments /> },
+        ]
+      },
+
+      { path: ":username/post/:postId", element: <PostPage /> },
     ]
   },
+
   {
-    path:"/user/signin",
-    element:<Signin/>
+    path: "/user/signin",
+    element: <Signin />
   },
   {
-    path:"/user/signup",
-    element:<Signup/>
+    path: "/user/signup",
+    element: <Signup />
   }
 ])
 

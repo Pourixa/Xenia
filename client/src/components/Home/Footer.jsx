@@ -9,9 +9,9 @@ export function Footer() {
   const nav = useNavigate()
   return (
     <footer className=" bg-background  border-t-2 flex justify-between items-center p-1 pl-5 pr-5">
-      <XeniaHomeIcon onClick={() => {nav("/")}}/>
-      <PlusIcon onClick={() => {nav("/post/create")}} className={selected === "create" ? "ring-2 rounded-full" : ""}/>
-      <Search onClick={() => {nav("/user/search")}} className={selected === "search" ? "fill-foreground" : ""}/>
+      <XeniaHomeIcon className="hover:cursor-pointer" onClick={() => {nav("/")}}/>
+      <PlusIcon onClick={() => {nav("/post/create")}} className={"hover:cursor-pointer " + (selected === "create" ? "ring-2 rounded-full" : "")}/>
+      <Search onClick={() => {nav("/user/search")}} className={"hover:cursor-pointer "+ (selected === "search" ? "fill-foreground" : "")}/>
     </footer>
   );
 }

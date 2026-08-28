@@ -1,6 +1,8 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
 
+
+MAX_POSTS = 100
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await db.user.delete({
@@ -29,8 +31,13 @@ exports.getCurrentUser = async (req,res,next) => {
         id:true,
         username:true,
         avatarUrl:true,
-        name:true
-      }
+        name:true,
+        _count:{
+          select:{
+            notifications:true
+          }
+        }
+      },
     })
 
     return res.json({user:user,isSigned:true})
@@ -57,18 +64,62 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
-exports.getUser = async (req, res, next) => {
+const MAX_FOLLOW = 100
+
+exports.getUserInfo = async (req, res, next) => {
   try {
     const user = await db.user.findUnique({
       where: {
         username: req.params.username,
       },
+      select: {
+        username:true,
+        name:true,
+        about:true,
+        avatarUrl:true,
+        _count:{
+          select:{
+            followers:true,
+            followings:true,
+            posts:true
+          }
+        }
+      }
     });
     res.json(user);
   } catch (e) {
     next(e);
   }
 };
+
+
+
+exports.getUserFollowers = async (req,res,next) => {
+   // followers:{
+        //   take:MAX_FOLLOW,
+        //   select:{
+        //     follower:{
+        //       select:{
+        //         avatarUrl:true,
+        //         name:true,
+        //         username:true
+        //       }
+        //     }
+        //   },
+        // },
+        // followings:{
+        //   take:MAX_FOLLOW,
+        //   select:{
+        //     follower:{
+        //       select:{
+        //         avatarUrl:true,
+        //         name:true,
+        //         username:true
+        //       }
+        //     }
+        //   },
+        // },
+}
 
 exports.signupUser = async (req, res, next) => {
   try {
@@ -77,6 +128,8 @@ exports.signupUser = async (req, res, next) => {
   }
 };
 
+
+
 exports.signinUser = async (req, res, next) => {
   try {
   } catch (e) {
@@ -84,7 +137,7 @@ exports.signinUser = async (req, res, next) => {
   }
 };
 
-const MAX_SEARCH = 10;
+const MAX_SEARCH = 50;
 exports.searchUser = async (req, res, next) => {
   try {
     if (req.query.q && req.query.q.length <= 0) return res.json({ users: [] });

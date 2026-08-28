@@ -13,7 +13,7 @@ export function Header({ isSigned,  username, notifications, imageSrc, name }) {
   if (selected?.selected === "post") {
         return (
       <div className="flex p-4 border-b w-full">
-        <ArrowLeft className="mr-8" onClick={() => nav(selected.path)} />
+        <ArrowLeft className="mr-8 hover:cursor-pointer" onClick={() => nav(selected.path)} />
         <span className="font-bold">
           Post
         </span>
@@ -21,7 +21,7 @@ export function Header({ isSigned,  username, notifications, imageSrc, name }) {
     );
   } else if (selected?.selected === "user") {
         return <div className="flex p-4 border-b w-full">
-        <ArrowLeft className="mr-8" onClick={() => nav(-1)} />
+        <ArrowLeft className="mr-8 hover:cursor-pointer" onClick={() => nav(-1)} />
         <span className="font-bold">
           {selected.name}
         </span>
