@@ -40,7 +40,7 @@ export function Profile() {
   console.log(profileUser);
   return (
     <main className="grow">
-      <div className="p-4 border-b flex flex-col gap-2">
+      <div className="p-4 border-b-2 flex flex-col gap-2">
         <div className="flex justify-between">
           <div className="flex gap-2">
             <XeniaAvatar

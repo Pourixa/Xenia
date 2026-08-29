@@ -4,8 +4,8 @@ import { useState } from "react";
 
 export function ProfileTabs() {
     const [tab,setTab] = useState("posts")
-    return <Tabs defaultValue="posts" className={"flex justify-center sticky top-0 w-full bg-background border-b-2 z-999 p-1 "} >
-        <TabsList variant="default" className={"flex gap-16 bg-background"}>
+    return <Tabs defaultValue="posts" className={"flex justify-center sticky top-0 w-full bg-background border-b-2 z-999 p-1 pl-4 pr-4 "} >
+        <TabsList variant="default" className={"flex justify-between w-full bg-background"}>
             <Link to={""}>
                 <TabsTrigger onClick={() => setTab("posts")} value="posts" className={"border-3 border-foreground hover:cursor-pointer"}>
                     Posts
