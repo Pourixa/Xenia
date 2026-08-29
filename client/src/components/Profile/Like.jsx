@@ -39,7 +39,7 @@ export function Like({ like }) {
           </Link>
           <Link
             className="underline underline-offset-4 hover:text-primary text-center"
-            to={`/${like.post.author.username}/post/${like.post.id}?c=${like.id}#likes`}
+            to={`/${like.post.author.username}/post/${like.post.id}?c=${like.id}`}
           >
             Post
           </Link>
