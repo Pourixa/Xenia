@@ -1,5 +1,5 @@
+import { timeAgo } from "@/lib/utils";
 import { Link } from "react-router";
-
 
 export function Comment({ comment }) {
   return (
@@ -29,12 +29,24 @@ export function Comment({ comment }) {
             draggable={false}
             className="flex-wrap flex gap-1 gap-y-0 p-0.5"
           >
-            <span className="text-muted-foreground">{comment.post.author.name}</span>
             <span className="text-muted-foreground">
-              @{comment.post.author.username}<span className="text-foreground">'s</span>
+              {comment.post.author.name}
+            </span>
+            <span className="text-muted-foreground">
+              @{comment.post.author.username}
+              <span className="text-foreground">'s</span>
             </span>
           </Link>
-          <Link className="underline underline-offset-4 hover:text-primary text-center" to={`/${comment.post.author.username}/post/${comment.post.id}?c=${comment.id}#comments`}>Post</Link>
+          <Link
+            className="underline underline-offset-4 hover:text-primary text-center"
+            to={`/${comment.post.author.username}/post/${comment.post.id}?c=${comment.id}#comments`}
+          >
+            Post
+          </Link>
+          <span>·</span>
+          <span className="text-muted-foreground">
+            {timeAgo(comment.createdAt)}
+          </span>
         </div>
         <div className="flex flex-col">
           <div className="p-0.5">{comment.content}</div>

@@ -2,44 +2,43 @@ const db = require("../prisma/db").prisma;
 
 const MAX_POSTS = 20;
 
-
 exports.getPostsFollowing = async (req, res, next) => {
   try {
     const followings = await db.user.findUnique({
-      where:{
-        id:Number(req.query.id)
+      where: {
+        id: Number(req.query.id),
       },
-      select:{
-        followings:{
-          select:{
-            followingId:true,
-          }
-        }
-      }
-    })
-    const ids = Array.from(followings.followings.values()) 
+      select: {
+        followings: {
+          select: {
+            followingId: true,
+          },
+        },
+      },
+    });
+    const ids = Array.from(followings.followings.values());
     const posts = await db.post.findMany({
       take: MAX_POSTS,
-      where:{
-        authorId:{
-          in:ids    
-        }
-      },
-      include:{
-        _count:{
-          select:{
-            comments:true,
-            likes:true
-          }
+      where: {
+        authorId: {
+          in: ids,
         },
-        author:{
-          select:{
-            avatarUrl:true,
-            username:true,
-            name:true,
-          }
-        }
-      }
+      },
+      include: {
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+        author: {
+          select: {
+            avatarUrl: true,
+            username: true,
+            name: true,
+          },
+        },
+      },
     });
     res.json(posts);
   } catch (e) {
@@ -51,21 +50,21 @@ exports.getPosts = async (req, res, next) => {
   try {
     const posts = await db.post.findMany({
       take: MAX_POSTS,
-      include:{
-        _count:{
-          select:{
-            comments:true,
-            likes:true
-          }
+      include: {
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
         },
-        author:{
-          select:{
-            avatarUrl:true,
-            username:true,
-            name:true,
-          }
-        }
-      }
+        author: {
+          select: {
+            avatarUrl: true,
+            username: true,
+            name: true,
+          },
+        },
+      },
     });
     res.json(posts);
   } catch (e) {
@@ -73,150 +72,174 @@ exports.getPosts = async (req, res, next) => {
   }
 };
 
-exports.getPostsByUsername = async (req,res,next) => {
+exports.getPostsByUsername = async (req, res, next) => {
   try {
-    const author = await db.user.findUnique({
-      where:{
-        username:req.params.username
-      }
-    })
+    const user = await db.user.findUnique({
+      where: {
+        username: req.params.username,
+      },
+    });
     const posts = await db.post.findMany({
-      where:{
-        authorId : author.id
+      where: {
+        authorId: user.id,
       },
       take: MAX_POSTS,
-      include:{
-        _count:{
-          select:{
-            comments:true,
-            likes:true
-          }
-        },
-        author:{
-          select:{
-            avatarUrl:true,
-            username:true,
-            name:true,
-          }
-        }
-      }
-    });
-    res.json(posts);
-  } catch (e) {
-    next(e);
-  }
-}
-
-exports.getCommentsByUsername = async (req,res,next) => {
-  try {
-    const author = await db.user.findUnique({
-      where:{
-        username:req.params.username
-      }
-    })
-    const posts = await db.comment.findMany({
-      where:{
-        commenterId : author.id
-      },
-      take: MAX_POSTS,
-      select:{
-        id:true,
-        content:true,
-        createdAt:true,
-        commenter:{
-          select:{
-            avatarUrl:true,
-            username:true,
-            name:true,
-          }
+      include: {
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
           },
-          post:{
-            select:{
-              id:true,
-              content:true,
-              author:{
-                select:{
-                  username:true,
-                  name:true
-                }
-              },
-            }
-          }
-      }
-      // include:{
-      //   _count:{
-      //     select:{
-      //       comments:true,
-      //       likes:true
-      //     }
-      //   },
-      //   author:{
-      //     select:{
-      //       avatarUrl:true,
-      //       username:true,
-      //       name:true,
-      //     }
-      //   }
-      // }
+        },
+        author: {
+          select: {
+            avatarUrl: true,
+            username: true,
+            name: true,
+          },
+        },
+      },
     });
     res.json(posts);
   } catch (e) {
     next(e);
   }
-}
+};
 
-exports.getPost = async (req,res,next) => {
+exports.getCommentsByUsername = async (req, res, next) => {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        username: req.params.username,
+      },
+    });
+    const posts = await db.comment.findMany({
+      where: {
+        commenterId: user.id,
+      },
+      take: MAX_POSTS,
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        commenter: {
+          select: {
+            username: true,
+            name: true,
+          },
+        },
+        post: {
+          select: {
+            id: true,
+            content: true,
+            author: {
+              select: {
+                username: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    res.json(posts);
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.getLikesByUsername = async (req, res, next) => {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        username: req.params.username,
+      },
+    });
+    const posts = await db.like.findMany({
+      where: {
+        likerId: user.id,
+      },
+      take: MAX_POSTS,
+      select: {
+        createdAt: true,
+        liker: {
+          select: {
+            username: true,
+            name: true,
+          },
+        },
+        post: {
+          select: {
+            id: true,
+            content: true,
+            author: {
+              select: {
+                username: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    res.json(posts);
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.getPost = async (req, res, next) => {
   try {
     const post = await db.post.findUnique({
-  where: {
-    id: Number(req.params.postId)
-  },
-  select: {
-    content: true,
-    createdAt:true,
-    _count:{
-      select:{
-        likes:true,
-        comments:true
-      }
-    },
-    comments:{
-      take:MAX_POSTS,
-      select:{
-        id:true,
-        content:true,
-        createdAt:true,
-        commenter:{
-          select:{
-            avatarUrl:true,
-            username:true,
-            name:true,
-          }
-        }
+      where: {
+        id: Number(req.params.postId),
       },
-    },
-    author: {
       select: {
-        username: true,
-        avatarUrl: true,
-        name: true,
+        content: true,
+        createdAt: true,
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          },
+        },
+        comments: {
+          take: MAX_POSTS,
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            commenter: {
+              select: {
+                avatarUrl: true,
+                username: true,
+                name: true,
+              },
+            },
+          },
+        },
+        author: {
+          select: {
+            username: true,
+            avatarUrl: true,
+            name: true,
 
-        followers: req.user
-          ? {
-              where: {
-                followerId: req.user.id
-              }
-            }
-          : false
-      }
-    }
+            followers: req.user
+              ? {
+                  where: {
+                    followerId: req.user.id,
+                  },
+                }
+              : false,
+          },
+        },
+      },
+    });
+    res.json(post);
+  } catch (e) {
+    next(e);
   }
-})
-res.json(post)
-  } catch(e) {
-    next(e)
-  }
-}
+};
 
 exports.postPost = async (req, res, next) => {
   try {
@@ -251,7 +274,7 @@ exports.updatePost = async (req, res, next) => {
     const post = await db.post.update({
       where: {
         id: req.params.postId,
-        authorId:req.user.id
+        authorId: req.user.id,
       },
       data: {
         content: req.body.content,

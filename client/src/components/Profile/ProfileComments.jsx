@@ -1,7 +1,7 @@
 import { getRequest } from "@/lib/requests";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Comment } from "./comment"
+import { Comment } from "./Comment"
 
 export function ProfileComments() {
   const [comments, setComments] = useState(null);

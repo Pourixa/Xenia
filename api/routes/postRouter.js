@@ -7,6 +7,7 @@ const {
   getPostsFollowing,
   getPostsByUsername,
   getCommentsByUsername,
+  getLikesByUsername,
 } = require("../controllers/postController");
 
 const postRouter = require("express").Router();
@@ -14,7 +15,7 @@ const postRouter = require("express").Router();
 postRouter.get("/", getPosts);
 postRouter.get("/user/:username", getPostsByUsername);
 postRouter.get("/comments/:username", getCommentsByUsername);
-// postRouter.get("/likes/:username", getLikesByUsername);
+postRouter.get("/likes/:username", getLikesByUsername);
 
 postRouter.get("/following", getPostsFollowing);
 postRouter.get("/:postId", getPost);
