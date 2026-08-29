@@ -73,6 +73,40 @@ exports.getPosts = async (req, res, next) => {
   }
 };
 
+exports.getPostsByUsername = async (req,res,next) => {
+  try {
+    const author = await db.user.findUnique({
+      where:{
+        username:req.params.username
+      }
+    })
+    const posts = await db.post.findMany({
+      where:{
+        authorId : author.id
+      },
+      take: MAX_POSTS,
+      include:{
+        _count:{
+          select:{
+            comments:true,
+            likes:true
+          }
+        },
+        author:{
+          select:{
+            avatarUrl:true,
+            username:true,
+            name:true,
+          }
+        }
+      }
+    });
+    res.json(posts);
+  } catch (e) {
+    next(e);
+  }
+}
+
 exports.getPost = async (req,res,next) => {
   try {
     const post = await db.post.findUnique({

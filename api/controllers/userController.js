@@ -2,7 +2,7 @@ const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
 
 
-MAX_POSTS = 100
+MAX_POSTS = 20
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await db.user.delete({
@@ -64,7 +64,7 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
-const MAX_FOLLOW = 100
+const MAX_FOLLOW = 20
 
 exports.getUserInfo = async (req, res, next) => {
   try {
@@ -137,7 +137,7 @@ exports.signinUser = async (req, res, next) => {
   }
 };
 
-const MAX_SEARCH = 50;
+const MAX_SEARCH = 20;
 exports.searchUser = async (req, res, next) => {
   try {
     if (req.query.q && req.query.q.length <= 0) return res.json({ users: [] });

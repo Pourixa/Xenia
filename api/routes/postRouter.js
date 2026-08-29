@@ -5,11 +5,14 @@ const {
   updatePost,
   getPost,
   getPostsFollowing,
+  getPostsByUsername,
 } = require("../controllers/postController");
 
 const postRouter = require("express").Router();
 
 postRouter.get("/", getPosts);
+postRouter.get("/user/:username", getPostsByUsername);
+
 postRouter.get("/following", getPostsFollowing);
 postRouter.get("/:postId", getPost);
 
