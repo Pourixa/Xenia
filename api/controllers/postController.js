@@ -161,6 +161,7 @@ exports.getLikesByUsername = async (req, res, next) => {
       },
       take: MAX_POSTS,
       select: {
+        id:true,
         createdAt: true,
         liker: {
           select: {

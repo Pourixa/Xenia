@@ -14,11 +14,9 @@ import { SmileIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function XeniaEmojiPicker({ setText, maxLength }) {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger >
         <SmileIcon className="active:bg-foreground active:text-background rounded-full" />
       </PopoverTrigger>
       <PopoverContent className="w-fit p-0">
