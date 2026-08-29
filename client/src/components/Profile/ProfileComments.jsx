@@ -14,7 +14,6 @@ export function ProfileComments() {
     })();
   },[]);
   if (!comments) return <>loading</>;
-  console.log(comments)
   return <div className="overflow-auto flex flex-col items-center grow w-full">
       <div className="w-full">
         {comments.map((cmt) => {

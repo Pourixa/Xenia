@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 export function ProfileTabs() {
   const [tab, setTab] = useState("posts");
   const location = useLocation();
-console.log(location)
   useEffect(() => {
     const parts = location.pathname.split("/");
 
