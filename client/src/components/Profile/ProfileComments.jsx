@@ -15,8 +15,8 @@ export function ProfileComments() {
   });
 
   if (!comments) return <>loading</>;
-  return <div className="overflow-auto flex flex-col items-center grow">
-      <div>
+  return <div className="overflow-auto flex flex-col items-center grow w-full">
+      <div className="w-full">
         {comments.map((cmt) => {
           return <Comment comment={cmt} key={cmt.id}/>
         })}
