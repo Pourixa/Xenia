@@ -4,11 +4,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import XeniaEmojiPicker from "@/components/Create/EmojiPicker";
 import { Separator } from "@/components/ui/separator";
+import {useNavigate, useOutletContext } from "react-router";
 
 const MAX_LENGTH = 280;
 export function Create() {
   const { setSelected } = useContext(SelectedContext);
+  const {user,isSigned}= useOutletContext()
+  const nav = useNavigate()
   const [text, setText] = useState("");
+
+  function handleClick() {
+    if(isSigned)
+    {
+      //post
+    }
+    else {
+      nav("/user/signin")
+    }
+  }
+
   useEffect(() => {
     setSelected("create");
   }, [setSelected]);
@@ -37,7 +51,7 @@ export function Create() {
             </span>
           </div>
         </div>
-        <Button disabled={text.length <= 0}>Post</Button>
+        <Button disabled={isSigned && text.length <= 0} onClick={() => handleClick()}>{isSigned ? "Post" : "Sign in to Post"}</Button>
       </div>
     </main>
   );

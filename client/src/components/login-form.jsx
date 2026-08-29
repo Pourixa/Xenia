@@ -70,6 +70,7 @@ export function LoginForm({ className, ...props }) {
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  autoComplete="username"
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -86,7 +87,7 @@ export function LoginForm({ className, ...props }) {
                     Forgot your password?
                   </a> */}
                 </div>
-                <Input id="password" type="password" required />
+                <Input autoComplete="current-password" id="password" type="password" required />
               </Field>
               <Field>
                 <Button type="submit">Login</Button>

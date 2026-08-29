@@ -11,8 +11,9 @@ export function Profile() {
   const { setSelected } = useContext(SelectedContext);
   const [edit, setEdit] = useState(false);
   const [profileUser, setProfileUser] = useState(null);
-  const { user } = useOutletContext();
+  const { user , isSigned } = useOutletContext();
   const params = useParams();
+  const nav = useNavigate()
 
   function handleFollow() {}
 
@@ -39,9 +40,9 @@ export function Profile() {
   if (!profileUser) return <>loading</>;
   return (
     <main className="grow">
-      <div className="p-4 border-b-2 flex flex-col gap-2">
+      <div className="p-4 border-b-2 flex flex-col gap-2 ">
         <div className="flex justify-between">
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <XeniaAvatar
               imageSrc={profileUser.avatarUrl}
               name={profileUser.name}
@@ -54,11 +55,11 @@ export function Profile() {
               </span>
             </div>
           </div>
-          {user?.username === profileUser.username ? (
+          {isSigned ? user.username === profileUser.username ? (
             <Button onClick={() => handleEdit()}>Edit Profile</Button>
           ) : (
             <Button onClick={() => handleFollow()}>Follow</Button>
-          )}
+          ) : <Button onClick={() => nav("/user/signin")}>Sign in to Follow</Button>}
         </div>
         <div>{profileUser.about}</div>
         <div className="flex gap-4">

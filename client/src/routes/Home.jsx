@@ -10,9 +10,9 @@ export const SelectedContext = createContext(null);
 
 export function HomeTab() {
   const { setSelected } = useContext(SelectedContext);
-  const {user} = useOutletContext()
   const [tab, setTab] = useState("fy");
   const [posts, setPosts] = useState(null);
+  const {isSigned , user} = useOutletContext()
   useEffect(() => {
     setSelected("home");
     if (tab === "fy") {
@@ -32,7 +32,7 @@ export function HomeTab() {
   if(posts === null) 
     return <span>Loading</span>
   return <main className="overflow-auto flex flex-col items-center grow">
-    <HomeTabs setTab={setTab}/>
+    <HomeTabs setTab={setTab} isSigned={isSigned}/>
     <div>
       {posts.map((pst) => {
         return <Post post={pst} key={pst.id}/>

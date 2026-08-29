@@ -12,13 +12,13 @@ export function Comment({ comment }) {
         />
       </Link> */}
       <div>
-        <div className="flex gap-1 flex-wrap">
+        <div className="flex gap-1 flex-wrap gap-y-0">
           <Link
             to={`/${comment.commenter.username}`}
             draggable={false}
             className="flex-wrap flex gap-1 gap-y-0 p-0.5"
           >
-            <span>{comment.commenter.name}</span>
+            <span className="font-bold">{comment.commenter.name}</span>
             {/* <span className="text-muted-foreground">
               @{comment.commenter.username}
             </span> */}
@@ -29,7 +29,7 @@ export function Comment({ comment }) {
             draggable={false}
             className="flex-wrap flex gap-1 gap-y-0 p-0.5"
           >
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground font-bold">
               {comment.post.author.name}
             </span>
             <span className="text-muted-foreground">
@@ -38,7 +38,7 @@ export function Comment({ comment }) {
             </span>
           </Link>
           <Link
-            className="underline underline-offset-4 hover:text-primary text-center"
+            className="underline underline-offset-4 hover:text-primary text-center font-bold"
             to={`/${comment.post.author.username}/post/${comment.post.id}?c=${comment.id}#comments`}
           >
             Post
