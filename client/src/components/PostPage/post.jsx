@@ -9,6 +9,7 @@ export function Post({ post, isSigned }) {
   const { hash } = useLocation();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("c")
+  const loc = useLocation()
   const nav = useNavigate();
   function handleFollow() {
     if (isSigned) {
@@ -76,6 +77,9 @@ export function Post({ post, isSigned }) {
       <Separator className={"h-px bg-muted-foreground"} />
       <div className="flex p-0.5 gap-2 text-muted-foreground items-center">
         <Link
+                    state={{
+              from:loc.pathname
+            }}
           to={"#comments"}
           className="flex gap-0.5 active:text-accent "
           draggable={false}

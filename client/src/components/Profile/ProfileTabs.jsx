@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { useEffect, useState } from "react";
 
-export function ProfileTabs() {
+export function ProfileTabs({state}) {
   const [tab, setTab] = useState("posts");
   const location = useLocation();
   useEffect(() => {
@@ -25,7 +25,9 @@ export function ProfileTabs() {
         variant="default"
         className={"flex justify-between w-full bg-background"}
       >
-        <Link to={""}>
+        <Link state={{
+          from:state?.from ?? "/"
+        }} to={""}>
           <TabsTrigger
             onClick={() => setTab("posts")}
             value="posts"
@@ -34,7 +36,9 @@ export function ProfileTabs() {
             Posts
           </TabsTrigger>
         </Link>
-        <Link to={"comments"}>
+        <Link state={{
+          from:state?.from ?? "/"
+        }} to={"comments"}>
           <TabsTrigger
             onClick={() => {
               setTab("comments");
@@ -45,7 +49,9 @@ export function ProfileTabs() {
             Comments
           </TabsTrigger>
         </Link>
-        <Link to={"likes"}>
+        <Link state={{
+          from:state?.from ?? "/"
+        }} to={"likes"}>
           <TabsTrigger
             onClick={() => {
               setTab("likes");

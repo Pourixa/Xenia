@@ -1,12 +1,19 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { XeniaAvatar } from "../customUI/XeniaAvatar";
 import { timeAgo } from "@/lib/utils";
-import { Heart, LucideMessageSquare } from "lucide-react";
 
 export function Comment({ comment }) {
+  const loc = useLocation()
   return (
     <div className="flex border-b pl-4 pr-4 pt-1 pb-1" id={comment.id}>
-      <Link to={`/${comment.commenter.username}`} className="p-0.5" draggable={false}>
+      <Link
+        state={{
+          from: loc.pathname,
+        }}
+        to={`/${comment.commenter.username}`}
+        className="p-0.5"
+        draggable={false}
+      >
         <XeniaAvatar
           imageSrc={comment.commenter.avatarUrl}
           size="lg"
@@ -14,7 +21,13 @@ export function Comment({ comment }) {
         />
       </Link>
       <div>
-        <Link to={`/${comment.commenter.username}`} draggable={false}>
+        <Link
+          state={{
+            from: loc.pathname,
+          }}
+          to={`/${comment.commenter.username}`}
+          draggable={false}
+        >
           <div className="flex-wrap flex gap-1 gap-y-0 p-0.5">
             <span>{comment.commenter.name}</span>
             <div className="flex gap-1 text-muted-foreground">
@@ -24,9 +37,7 @@ export function Comment({ comment }) {
             </div>
           </div>
         </Link>
-        <div
-          className="flex flex-col"
-        >
+        <div className="flex flex-col">
           <div className="p-0.5">{comment.content}</div>
         </div>
       </div>

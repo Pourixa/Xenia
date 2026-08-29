@@ -1,7 +1,8 @@
 import { timeAgo } from "@/lib/utils";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export function Comment({ comment }) {
+  const loc = useLocation()
   return (
     <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
       {/* <Link to={`/${comment.commenter.username}`} className="p-0.5" draggable={false}>
@@ -17,6 +18,9 @@ export function Comment({ comment }) {
             to={`/${comment.commenter.username}`}
             draggable={false}
             className="flex-wrap flex gap-1 gap-y-0 p-0.5"
+            state={{
+              from: loc.pathname,
+            }}
           >
             <span className="font-bold">{comment.commenter.name}</span>
             {/* <span className="text-muted-foreground">
@@ -25,6 +29,9 @@ export function Comment({ comment }) {
           </Link>
           <span>Commented on</span>
           <Link
+            state={{
+              from: loc.pathname,
+            }}
             to={`/${comment.post.author.username}`}
             draggable={false}
             className="flex-wrap flex gap-1 gap-y-0 p-0.5"
@@ -38,6 +45,9 @@ export function Comment({ comment }) {
             </span>
           </Link>
           <Link
+            state={{
+              from: loc.pathname,
+            }}
             className="underline underline-offset-4 hover:text-primary text-center font-bold"
             to={`/${comment.post.author.username}/post/${comment.post.id}?c=${comment.id}#comments`}
           >

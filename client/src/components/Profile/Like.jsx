@@ -1,7 +1,8 @@
 import { timeAgo } from "@/lib/utils";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export function Like({ like }) {
+  const loc = useLocation()
   return (
     <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
       {/* <Link to={`/${like.liker.username}`} className="p-0.5" draggable={false}>
@@ -16,6 +17,9 @@ export function Like({ like }) {
           <Link
             to={`/${like.liker.username}`}
             draggable={false}
+            state={{
+              from:loc.pathname
+            }}
             className="flex-wrap flex gap-1 gap-y-0 p-0.5"
           >
             <span className="font-bold">{like.liker.name}</span>
@@ -26,6 +30,9 @@ export function Like({ like }) {
           <span>Liked</span>
           <Link
             to={`/${like.post.author.username}`}
+            state={{
+              from:loc.pathname
+            }}
             draggable={false}
             className="flex-wrap flex gap-1 gap-y-0 p-0.5"
           >
@@ -39,6 +46,9 @@ export function Like({ like }) {
           </Link>
           <Link
             className="underline underline-offset-4 hover:text-primary text-center font-bold"
+            state={{
+              from:loc.pathname
+            }}
             to={`/${like.post.author.username}/post/${like.post.id}?c=${like.id}`}
           >
             Post

@@ -1,6 +1,6 @@
 import { use, useContext, useEffect, useState } from "react";
 import { SelectedContext } from "./Home";
-import { Outlet, useNavigate, useOutletContext, useParams } from "react-router";
+import { Outlet, useLocation, useNavigate, useOutletContext, useParams } from "react-router";
 import { getRequest } from "@/lib/requests";
 import { Post } from "@/components/Home/Post";
 import { ProfileTabs } from "@/components/Profile/ProfileTabs";
@@ -12,6 +12,7 @@ export function Profile() {
   const [edit, setEdit] = useState(false);
   const [profileUser, setProfileUser] = useState(null);
   const { user , isSigned } = useOutletContext();
+  const loc = useLocation()
   const params = useParams();
   const nav = useNavigate()
 
@@ -24,7 +25,6 @@ export function Profile() {
       const r = await getRequest(`/user/${params.username}`);
       const profileInfo = await r.json();
       setProfileUser(profileInfo);
-
       if (user?.username === profileInfo.username) {
         setSelected("profile");
       } else {
@@ -77,7 +77,7 @@ export function Profile() {
         </div>
       </div>
       <div>
-        <ProfileTabs />
+        <ProfileTabs state={loc.state}/>
         <Outlet />
       </div>
     </main>
