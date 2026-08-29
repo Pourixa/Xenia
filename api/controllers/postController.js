@@ -107,6 +107,51 @@ exports.getPostsByUsername = async (req,res,next) => {
   }
 }
 
+exports.getCommentsByUsername = async (req,res,next) => {
+  try {
+    const author = await db.user.findUnique({
+      where:{
+        username:req.params.username
+      }
+    })
+    const posts = await db.comment.findMany({
+      where:{
+        commenterId : author.id
+      },
+      take: MAX_POSTS,
+      select:{
+        content:true,
+        createdAt:true,
+        commenter:{
+          select:{
+            avatarUrl:true,
+            username:true,
+            name:true,
+          }
+          }
+      }
+      // include:{
+      //   _count:{
+      //     select:{
+      //       comments:true,
+      //       likes:true
+      //     }
+      //   },
+      //   author:{
+      //     select:{
+      //       avatarUrl:true,
+      //       username:true,
+      //       name:true,
+      //     }
+      //   }
+      // }
+    });
+    res.json(posts);
+  } catch (e) {
+    next(e);
+  }
+}
+
 exports.getPost = async (req,res,next) => {
   try {
     const post = await db.post.findUnique({
@@ -123,7 +168,7 @@ exports.getPost = async (req,res,next) => {
       }
     },
     comments:{
-      take:20,
+      take:MAX_POSTS,
       select:{
         id:true,
         content:true,

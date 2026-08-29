@@ -3,7 +3,7 @@ import { SelectedContext } from "./Home";
 import { Outlet, useNavigate, useOutletContext, useParams } from "react-router";
 import { getRequest } from "@/lib/requests";
 import { Post } from "@/components/Home/Post";
-import { ProfileTabs } from "@/components/profile/ProfileTabs";
+import { ProfileTabs } from "@/components/Profile/ProfileTabs";
 import { XeniaAvatar } from "@/components/customUI/XeniaAvatar";
 import { Button } from "@/components/ui/button";
 

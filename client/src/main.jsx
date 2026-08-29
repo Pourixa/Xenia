@@ -12,9 +12,9 @@ import { Notifications } from './routes/Notifications'
 import { Signin } from './routes/Signin'
 import { Signup } from './routes/Signup'
 import { PostPage } from './routes/PostPage'
-import { ProfilePosts } from './components/profile/ProfilePosts'
-import { ProfileLikes } from './components/profile/ProfileLikes'
-import { ProfileComments } from './components/profile/ProfileComments'
+import { ProfilePosts } from './components/Profile/ProfilePosts'
+import { ProfileLikes } from './components/Profile/ProfileLikes'
+import { ProfileComments } from './components/Profile/ProfileComments'
 
 const router = createBrowserRouter([
   {
