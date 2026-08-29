@@ -32,7 +32,7 @@ export function PostPage() {
 }
 
   useEffect(() => {
-    setSelected({selected:"post" , path:"/"});
+    setSelected({selected:"post" });
     getRequest("/post/" + postId).then((res) => {
       res.json().then((pst) => {
         setPost(pst);
@@ -80,7 +80,7 @@ export function PostPage() {
       <div className="last:border-b-none" id="comments">
         {post.comments.length > 0 ? (
           post.comments.map((cmt) => {
-            return <Comment comment={cmt} key={cmt.id} />;
+            return <Comment  comment={cmt} key={cmt.id} />;
           })
         ) : (
           <XeniaEmpty

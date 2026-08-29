@@ -120,6 +120,7 @@ exports.getCommentsByUsername = async (req,res,next) => {
       },
       take: MAX_POSTS,
       select:{
+        id:true,
         content:true,
         createdAt:true,
         commenter:{
@@ -128,6 +129,18 @@ exports.getCommentsByUsername = async (req,res,next) => {
             username:true,
             name:true,
           }
+          },
+          post:{
+            select:{
+              id:true,
+              content:true,
+              author:{
+                select:{
+                  username:true,
+                  name:true
+                }
+              },
+            }
           }
       }
       // include:{

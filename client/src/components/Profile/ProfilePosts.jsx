@@ -12,7 +12,7 @@ export function ProfilePosts() {
       const json = await res.json()
       setPosts(json);
     })();
-  });
+  },[]);
 
   if (!posts) return <>loading</>;
   return <div className="overflow-auto flex flex-col items-center grow">

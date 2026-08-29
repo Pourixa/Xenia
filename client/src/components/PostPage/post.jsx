@@ -2,26 +2,33 @@ import { Heart, MessageSquare } from "lucide-react";
 import { XeniaAvatar } from "../customUI/XeniaAvatar";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useEffect } from "react";
 
-export function Post({ post ,isSigned }) {
+export function Post({ post, isSigned }) {
   const { hash } = useLocation();
-  const nav =useNavigate()
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("c")
+  const nav = useNavigate();
   function handleFollow() {
-    if(isSigned)
-    {
+    if (isSigned) {
       //follow
-    }
-    else {
-      nav("/user/signin")
+    } else {
+      nav("/user/signin");
     }
   }
   useEffect(() => {
     if (hash) {
-      const element = document.getElementById(hash.replace("#", ""));
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (query) {
+        const element = document.getElementById(query);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      } else {
+        const element = document.getElementById(hash.replace("#", ""));
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       }
     }
   }, [hash]);
@@ -31,7 +38,10 @@ export function Post({ post ,isSigned }) {
     <div className="flex flex-col gap-1">
       <div className="flex flex-col p-0.5">
         <div className="flex justify-between ">
-          <div className="flex gap-1" onClick={() => nav(`/${post.author.username}`)}>
+          <div
+            className="flex gap-1"
+            onClick={() => nav(`/${post.author.username}`)}
+          >
             <XeniaAvatar
               imageSrc={post.author.avatarUrl}
               name={post.author.name}
@@ -43,7 +53,9 @@ export function Post({ post ,isSigned }) {
               </span>
             </div>
           </div>
-          <Button onClick={() => handleFollow()}>{isSigned ? "Follow" : "Sign in to follow"}</Button>
+          <Button onClick={() => handleFollow()}>
+            {isSigned ? "Follow" : "Sign in to follow"}
+          </Button>
         </div>
         <div>{post.content}</div>
         <div className="text-muted-foreground">
