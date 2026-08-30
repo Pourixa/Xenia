@@ -66,7 +66,7 @@ const MAX_FOLLOW = 20;
 exports.getUserInfo = async (req, res, next) => {
   try {
     let data = null;
-    if (req.cookies.token) data = jwt.decode(req.cookies.token);
+    if (req.cookies.token) data = jwt.verify(req.cookies.token,process.env.JWT_SECRET);
 
     const user = await db.user.findUnique({
       where: {
@@ -166,25 +166,17 @@ exports.searchUser = async (req, res, next) => {
       },
       take: MAX_SEARCH,
     });
-    res.json({ users: searchResult });
+    res.json(searchResult);
   } catch (e) {
     next(e);
   }
 };
 
-exports.followUser = async (req, res, next) => {
+exports.followUser = async (req, res, next) => { // auth
   try {
-    const follower = await db.user.findUniqueOrThrow({
-      where: {
-        username: req.body.followerUsername,
-      },
-      select: {
-        id: true,
-        name: true,
-        username: true,
-        avatarUrl: true,
-      },
-    });
+    const bearer = jwt.verify(req.cookies.token,process.env.JWT_SECRET)
+    if(!(bearer))
+      return next(new Error("UNAUTHORIZED"))
     const following = await db.user.findUniqueOrThrow({
       where: {
         username: req.body.followingUsername,
@@ -193,21 +185,32 @@ exports.followUser = async (req, res, next) => {
         id: true,
       },
     });
-    await db.followship.create({
+    const data = await db.followship.create({
       data: {
-        followerId: follower.id,
+        followerId: bearer.id,
         followingId: following.id,
       },
+      select:{
+        follower:{
+          select:{
+        id: true,
+        name: true,
+        username: true,
+        avatarUrl: true,
+      }
+        }
+      }
     });
     await db.notification.create({
       data: {
         eventType: "FOLLOW",
         data: {
-          follower: follower,
+          follower: data.follower,
         },
+        receiverId:following.id
       },
     });
-    res.json("");
+    res.json("Followed");
   } catch (e) {
     next(e);
   }
