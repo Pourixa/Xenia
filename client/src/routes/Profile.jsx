@@ -38,6 +38,7 @@ export function Profile() {
     fetchUser();
   }, [params.username, user, setSelected]);
   if (!profileUser) return <>loading</>;
+  console.log(profileUser)
   return (
     <main className="grow">
       <div className="p-4 border-b-2 flex flex-col gap-2 ">

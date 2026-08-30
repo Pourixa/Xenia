@@ -1,8 +1,7 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
 
-
-MAX_POSTS = 20
+MAX_POSTS = 20;
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await db.user.delete({
@@ -16,36 +15,34 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
-exports.getCurrentUser = async (req,res,next) => {
+exports.getCurrentUser = async (req, res, next) => {
   try {
-    const token = req.cookies.token
-    if(!token) 
-      return res.json({user:null , isSigned:false})
+    const token = req.cookies.token;
+    if (!token) return res.json({ user: null, isSigned: false });
 
-    const data = jwt.decode(token)
+    const data = jwt.decode(token);
     const user = await db.user.findUnique({
-      where:{
-        id:data.id
+      where: {
+        id: data.id,
       },
-      select:{
-        id:true,
-        username:true,
-        avatarUrl:true,
-        name:true,
-        _count:{
-          select:{
-            notifications:true
-          }
-        }
+      select: {
+        id: true,
+        username: true,
+        avatarUrl: true,
+        name: true,
+        _count: {
+          select: {
+            notifications: true,
+          },
+        },
       },
-    })
+    });
 
-    return res.json({user:user,isSigned:true})
-
-  } catch(e) {
-    next(e)
+    return res.json({ user: user, isSigned: true });
+  } catch (e) {
+    next(e);
   }
-}
+};
 
 exports.updateUser = async (req, res, next) => {
   try {
@@ -64,27 +61,35 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
-const MAX_FOLLOW = 20
+const MAX_FOLLOW = 20;
 
 exports.getUserInfo = async (req, res, next) => {
   try {
+    let data = null;
+    if (req.cookies.token) data = jwt.decode(req.cookies.token);
+
     const user = await db.user.findUnique({
       where: {
         username: req.params.username,
       },
       select: {
-        username:true,
-        name:true,
-        about:true,
-        avatarUrl:true,
-        _count:{
-          select:{
-            followers:true,
-            followings:true,
-            posts:true
+        username: true,
+        name: true,
+        about: true,
+        avatarUrl: true,
+        followers: (!data ? false : {
+          where:{
+            followerId:data.id
           }
-        }
-      }
+        }),
+        _count: {
+          select: {
+            followers: true,
+            followings: true,
+            posts: true,
+          },
+        },
+      },
     });
     res.json(user);
   } catch (e) {
@@ -92,34 +97,32 @@ exports.getUserInfo = async (req, res, next) => {
   }
 };
 
-
-
-exports.getUserFollowers = async (req,res,next) => {
-   // followers:{
-        //   take:MAX_FOLLOW,
-        //   select:{
-        //     follower:{
-        //       select:{
-        //         avatarUrl:true,
-        //         name:true,
-        //         username:true
-        //       }
-        //     }
-        //   },
-        // },
-        // followings:{
-        //   take:MAX_FOLLOW,
-        //   select:{
-        //     follower:{
-        //       select:{
-        //         avatarUrl:true,
-        //         name:true,
-        //         username:true
-        //       }
-        //     }
-        //   },
-        // },
-}
+exports.getUserFollowers = async (req, res, next) => {
+  // followers:{
+  //   take:MAX_FOLLOW,
+  //   select:{
+  //     follower:{
+  //       select:{
+  //         avatarUrl:true,
+  //         name:true,
+  //         username:true
+  //       }
+  //     }
+  //   },
+  // },
+  // followings:{
+  //   take:MAX_FOLLOW,
+  //   select:{
+  //     follower:{
+  //       select:{
+  //         avatarUrl:true,
+  //         name:true,
+  //         username:true
+  //       }
+  //     }
+  //   },
+  // },
+};
 
 exports.signupUser = async (req, res, next) => {
   try {
@@ -127,8 +130,6 @@ exports.signupUser = async (req, res, next) => {
     next(e);
   }
 };
-
-
 
 exports.signinUser = async (req, res, next) => {
   try {
@@ -166,6 +167,47 @@ exports.searchUser = async (req, res, next) => {
       take: MAX_SEARCH,
     });
     res.json({ users: searchResult });
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.followUser = async (req, res, next) => {
+  try {
+    const follower = await db.user.findUniqueOrThrow({
+      where: {
+        username: req.body.followerUsername,
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        avatarUrl: true,
+      },
+    });
+    const following = await db.user.findUniqueOrThrow({
+      where: {
+        username: req.body.followingUsername,
+      },
+      select: {
+        id: true,
+      },
+    });
+    await db.followship.create({
+      data: {
+        followerId: follower.id,
+        followingId: following.id,
+      },
+    });
+    await db.notification.create({
+      data: {
+        eventType: "FOLLOW",
+        data: {
+          follower: follower,
+        },
+      },
+    });
+    res.json("");
   } catch (e) {
     next(e);
   }

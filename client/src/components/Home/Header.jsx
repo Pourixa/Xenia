@@ -15,13 +15,11 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
   useEffect(() => {
     if (loc.state?.from) {
       const from = loc.state?.from;
-      console.log(from)
       if (!from || breadCrumb.at(-1) === from) return;
 
       setBreadCrumb((prev) => [...prev, from]);
     }
   }, [loc.state]);
-  console.log(breadCrumb);
   if (selected?.selected === "post") {
     return (
       <div className="flex p-4 border-b w-full">
