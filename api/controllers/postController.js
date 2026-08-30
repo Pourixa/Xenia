@@ -1,4 +1,5 @@
 const db = require("../prisma/db").prisma;
+const jwt = require("jsonwebtoken");
 
 const MAX_POSTS = 20;
 
@@ -161,7 +162,7 @@ exports.getLikesByUsername = async (req, res, next) => {
       },
       take: MAX_POSTS,
       select: {
-        id:true,
+        id: true,
         createdAt: true,
         liker: {
           select: {
@@ -191,6 +192,9 @@ exports.getLikesByUsername = async (req, res, next) => {
 
 exports.getPost = async (req, res, next) => {
   try {
+    let bearer = null;
+    if (req.cookies.token)
+      bearer = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
     const post = await db.post.findUnique({
       where: {
         id: Number(req.params.postId),
@@ -225,13 +229,13 @@ exports.getPost = async (req, res, next) => {
             avatarUrl: true,
             name: true,
 
-            followers: req.user
-              ? {
+            followers: !bearer
+              ? false
+              : {
                   where: {
-                    followerId: req.user.id,
+                    followerId: bearer.id,
                   },
-                }
-              : false,
+                },
           },
         },
       },

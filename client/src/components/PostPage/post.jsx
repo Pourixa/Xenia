@@ -4,20 +4,27 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useEffect } from "react";
+import { postRequest } from "@/lib/requests";
 
-export function Post({ post, isSigned }) {
+export function Post({setPost, post, isSigned }) {
   const { hash } = useLocation();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("c")
   const loc = useLocation()
   const nav = useNavigate();
-  function handleFollow() {
-    if (isSigned) {
-      //follow
-    } else {
-      nav("/user/signin");
+  async function handleFollowUnfollow() {
+      if(!post.author.isFollowed)
+      {
+        const res = await postRequest(`/user/${post.author.username}/follow`,{
+          followingUsername:post.author.username
+        })
+        if(res.ok)
+          setPost(prev => ({...prev,author:{
+        ...prev.author,
+        isFollowed : true}
+      }))
+      }
     }
-  }
   useEffect(() => {
     if (hash) {
       if (query) {
@@ -54,9 +61,15 @@ export function Post({ post, isSigned }) {
               </span>
             </div>
           </div>
-          <Button onClick={() => handleFollow()}>
-            {isSigned ? "Follow" : "Sign in to follow"}
-          </Button>
+          {isSigned ? (
+              <Button onClick={() => handleFollowUnfollow()}>
+                {post.author.isFollowed ? "Unfollow" : "Follow"}
+              </Button>
+            ) : (
+            <Button onClick={() => nav("/user/signin")}>
+              Sign in to Follow
+            </Button>
+          )}
         </div>
         <div>{post.content}</div>
         <div className="text-muted-foreground">

@@ -35,6 +35,8 @@ export function PostPage() {
     setSelected({selected:"post" });
     getRequest("/post/" + postId).then((res) => {
       res.json().then((pst) => {
+        if(isSigned)
+          pst.author.isFollowed = pst.author.followers.length > 0
         setPost(pst);
       });
     });
@@ -43,10 +45,11 @@ export function PostPage() {
   const [text, setText] = useState("");
 
   if (!post) return <>Loading</>;
+  console.log(post)
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">
-        <Post post={post} isSigned={isSigned}/>
+        <Post setPost={setPost} post={post} isSigned={isSigned}/>
       </div>
       <div>
         <div className="p-4 grid w-full gap-2 border-b">

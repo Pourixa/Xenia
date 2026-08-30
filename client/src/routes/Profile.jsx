@@ -39,7 +39,7 @@ export function Profile() {
     async function fetchUser() {
       const r = await getRequest(`/user/${params.username}`);
       const profileInfo = await r.json();
-      if (isSigned) profileInfo.isFollowed = profileInfo.followers?.length > 0;
+      if (isSigned) profileInfo.isFollowed = profileInfo.followers.length > 0;
       setProfileUser(profileInfo);
       if (user?.username === profileInfo.username) {
         setSelected("profile");

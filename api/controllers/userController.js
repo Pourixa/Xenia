@@ -65,8 +65,8 @@ const MAX_FOLLOW = 20;
 
 exports.getUserInfo = async (req, res, next) => {
   try {
-    let data = null;
-    if (req.cookies.token) data = jwt.verify(req.cookies.token,process.env.JWT_SECRET);
+    let bearer = null;
+    if (req.cookies.token) bearer = jwt.verify(req.cookies.token,process.env.JWT_SECRET);
 
     const user = await db.user.findUnique({
       where: {
@@ -77,9 +77,9 @@ exports.getUserInfo = async (req, res, next) => {
         name: true,
         about: true,
         avatarUrl: true,
-        followers: (!data ? false : {
+        followers: (!bearer ? false : {
           where:{
-            followerId:data.id
+            followerId:bearer.id
           }
         }),
         _count: {
