@@ -18,7 +18,7 @@ export function Search() {
     if(text.length > 0) {
       postRequest("/user/search",{
         q:text
-      }).then((r) => r.json().then(j => setResult(j.users)))
+      }).then((r) => r.json().then(j => setResult(j)))
     } else setResult([])
   }, [setSelected,text]);
   return <main className="grow overflow-auto">
