@@ -17,7 +17,7 @@ exports.getPostsFollowing = async (req, res, next) => {
         },
       },
     });
-    const ids = Array.from(followings.followings.values());
+    const ids = followings.followings.map(e => e.followingId);
     const posts = await db.post.findMany({
       take: MAX_POSTS,
       where: {
