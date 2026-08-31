@@ -30,6 +30,12 @@ export function Profile() {
       })
       if(res.ok)
         setProfileUser(prev => ({...prev,isFollowed : true}))
+    } else{ 
+      const res = await postRequest(`/user/${profileUser.username}/unfollow`,{
+        followingUsername:profileUser.username
+      })
+      if(res.ok)
+        setProfileUser(prev => ({...prev,isFollowed : false}))
     }
   }
 

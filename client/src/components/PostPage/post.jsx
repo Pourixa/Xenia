@@ -23,6 +23,15 @@ export function Post({setPost, post, isSigned }) {
         ...prev.author,
         isFollowed : true}
       }))
+      } else {
+        const res = await postRequest(`/user/${post.author.username}/unfollow`,{
+          followingUsername:post.author.username
+        })
+        if(res.ok)
+          setPost(prev => ({...prev,author:{
+        ...prev.author,
+        isFollowed : false}
+      }))
       }
     }
   useEffect(() => {

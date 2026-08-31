@@ -215,3 +215,31 @@ exports.followUser = async (req, res, next) => { // auth
     next(e);
   }
 };
+
+
+exports.unfollowUser = async (req, res, next) => { // auth
+  try {
+    const bearer = jwt.verify(req.cookies.token,process.env.JWT_SECRET)
+    if(!(bearer))
+      return next(new Error("UNAUTHORIZED"))
+    const following = await db.user.findUniqueOrThrow({
+      where: {
+        username: req.body.followingUsername,
+      },
+      select: {
+        id: true,
+      },
+    });
+    const data = await db.followship.delete({
+      where:{
+        followerId_followingId:{
+          followingId:following.id,
+          followerId:bearer.id
+        }
+      }
+    });
+    res.json("unFollowed");
+  } catch (e) {
+    next(e);
+  }
+};
