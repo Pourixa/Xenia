@@ -19,9 +19,9 @@ postRouter.get("/", getPosts);
 postRouter.get("/user/:username", getPostsByUsername);
 postRouter.get("/comments/:username", getCommentsByUsername);
 postRouter.get("/likes/:username", getLikesByUsername);
-
-postRouter.get("/following", getPostsFollowing);
+postRouter.get("/following",authenticate, getPostsFollowing);
 postRouter.get("/:postId",authenticate, getPost);
+
 
 postRouter.post("/",authenticate, postPost); //authenitcate
 postRouter.post("/comment", commentPost); //authenitcate

@@ -21,6 +21,9 @@ exports.getPostsFollowing = async (req, res, next) => {
     const ids = followings.followings.map(e => e.followingId);
     const posts = await db.post.findMany({
       take: MAX_POSTS,
+      orderBy:{
+        createdAt:"desc"
+      },
       where: {
         authorId: {
           in: ids,
@@ -52,6 +55,9 @@ exports.getPosts = async (req, res, next) => {
   try {
     const posts = await db.post.findMany({
       take: MAX_POSTS,
+      orderBy:{
+        createdAt:"desc"
+      },
       include: {
         _count: {
           select: {
@@ -82,6 +88,9 @@ exports.getPostsByUsername = async (req, res, next) => {
       },
     });
     const posts = await db.post.findMany({
+      orderBy:{
+        createdAt:"desc"
+      },
       where: {
         authorId: user.id,
       },
@@ -115,7 +124,10 @@ exports.getCommentsByUsername = async (req, res, next) => {
         username: req.params.username,
       },
     });
-    const posts = await db.comment.findMany({
+    const comments = await db.comment.findMany({
+      orderBy:{
+        createdAt:"desc"
+      },
       where: {
         commenterId: user.id,
       },
@@ -144,7 +156,7 @@ exports.getCommentsByUsername = async (req, res, next) => {
         },
       },
     });
-    res.json(posts);
+    res.json(comments);
   } catch (e) {
     next(e);
   }
@@ -157,7 +169,10 @@ exports.getLikesByUsername = async (req, res, next) => {
         username: req.params.username,
       },
     });
-    const posts = await db.like.findMany({
+    const likes = await db.like.findMany({
+      orderBy:{
+        createdAt:"desc"
+      },
       where: {
         likerId: user.id,
       },
@@ -185,7 +200,7 @@ exports.getLikesByUsername = async (req, res, next) => {
         },
       },
     });
-    res.json(posts);
+    res.json(likes);
   } catch (e) {
     next(e);
   }

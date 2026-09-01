@@ -45,7 +45,6 @@ export function PostPage() {
   const [text, setText] = useState("");
 
   if (!post) return <>Loading</>;
-  console.log(post)
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">
