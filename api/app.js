@@ -1,6 +1,6 @@
 const express = require("express")
 const postRouter = require("./routes/postRouter")
-const { errorHandler } = require("./middleware/errorHandeler")
+const { errorHandler } = require("./middleware/utils")
 const userRouter = require("./routes/userRouter")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")

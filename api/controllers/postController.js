@@ -4,8 +4,7 @@ const MAX_POSTS = 20;
 
 exports.getPostsFollowing = async (req, res, next) => {
   try {
-    if(!req.user) 
-      throw new Error("NO USER")
+    if (!req.user) throw new Error("NO USER");
     const followings = await db.user.findUnique({
       where: {
         id: Number(req.query.id),
@@ -18,11 +17,11 @@ exports.getPostsFollowing = async (req, res, next) => {
         },
       },
     });
-    const ids = followings.followings.map(e => e.followingId);
+    const ids = followings.followings.map((e) => e.followingId);
     const posts = await db.post.findMany({
       take: MAX_POSTS,
-      orderBy:{
-        createdAt:"desc"
+      orderBy: {
+        createdAt: "desc",
       },
       where: {
         authorId: {
@@ -55,8 +54,8 @@ exports.getPosts = async (req, res, next) => {
   try {
     const posts = await db.post.findMany({
       take: MAX_POSTS,
-      orderBy:{
-        createdAt:"desc"
+      orderBy: {
+        createdAt: "desc",
       },
       include: {
         _count: {
@@ -88,8 +87,8 @@ exports.getPostsByUsername = async (req, res, next) => {
       },
     });
     const posts = await db.post.findMany({
-      orderBy:{
-        createdAt:"desc"
+      orderBy: {
+        createdAt: "desc",
       },
       where: {
         authorId: user.id,
@@ -125,8 +124,8 @@ exports.getCommentsByUsername = async (req, res, next) => {
       },
     });
     const comments = await db.comment.findMany({
-      orderBy:{
-        createdAt:"desc"
+      orderBy: {
+        createdAt: "desc",
       },
       where: {
         commenterId: user.id,
@@ -170,8 +169,8 @@ exports.getLikesByUsername = async (req, res, next) => {
       },
     });
     const likes = await db.like.findMany({
-      orderBy:{
-        createdAt:"desc"
+      orderBy: {
+        createdAt: "desc",
       },
       where: {
         likerId: user.id,
@@ -223,6 +222,9 @@ exports.getPost = async (req, res, next) => {
         },
         comments: {
           take: MAX_POSTS,
+          orderBy:{
+            createdAt:"desc"
+          },
           select: {
             id: true,
             content: true,
@@ -273,13 +275,32 @@ exports.postPost = async (req, res, next) => {
   }
 };
 
-exports.commentPost = async (req,res,next) => {
-  try{
-    return
-  } catch(e) {
-  next(e)
+exports.commentPost = async (req, res, next) => {
+  try {
+    const comment = await db.comment.create({
+      data: {
+        content: req.body.content,
+        postId: Number(req.params.postId),
+        commenterId: req.user.id,
+      },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        commenter: {
+          select: {
+            avatarUrl: true,
+            username: true,
+            name: true,
+          },
+        },
+      },
+    });
+    res.json(comment);
+  } catch (e) {
+    next(e);
   }
-}
+};
 exports.deletePost = async (req, res, next) => {
   try {
     const post = await db.post.delete({

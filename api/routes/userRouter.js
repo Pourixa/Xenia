@@ -1,6 +1,6 @@
 const { updateUser, deleteUser, searchUser, getCurrentUser, getUserInfo, followUser, unfollowUser } = require("../controllers/userController")
 const { githubAuth, githubAuthCallback } = require("../middleware/githubAuth")
-const {authenticate} = require("../middleware/authenticate")
+const {authenticate} = require("../middleware/utils")
 const userRouter = require("express").Router()
 
 userRouter.patch("/",updateUser)  //authenticate update user

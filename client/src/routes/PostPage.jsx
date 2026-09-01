@@ -2,7 +2,7 @@ import { Comment } from "@/components/PostPage/comment";
 import { Post } from "@/components/PostPage/post";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { getRequest } from "@/lib/requests";
+import { getRequest, postRequest } from "@/lib/requests";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router";
 import { SelectedContext } from "./Home";
@@ -13,42 +13,47 @@ import { Separator } from "@/components/ui/separator";
 
 const MAX_LENGTH = 280;
 
-
-
 export function PostPage() {
   const [post, setPost] = useState(null);
+  const [text, setText] = useState("");
   const { postId } = useParams();
-  const {isSigned} = useOutletContext()
+  const { isSigned } = useOutletContext();
   const { setSelected } = useContext(SelectedContext);
-  const nav = useNavigate()
+  const nav = useNavigate();
 
-  function handleClick() {
-    if(isSigned)
-    {
-      // add comment 
+  async function handleClick() {
+    if (isSigned) {
+      const res = await postRequest(`/post/${postId}/comment`, {
+        content: text,
+      });
+      if (res.ok) {
+        const comment = await res.json();
+        setPost((prev) => ({
+          ...prev,
+          comments: [comment,...prev.comments],
+        }));
+        setText("")
+      }
     } else {
-      nav("/user/signin")
+      nav("/user/signin");
     }
-}
+  }
 
   useEffect(() => {
-    setSelected({selected:"post" });
+    setSelected({ selected: "post" });
     getRequest("/post/" + postId).then((res) => {
       res.json().then((pst) => {
-        if(isSigned)
-          pst.author.isFollowed = pst.author.followers.length > 0
+        if (isSigned) pst.author.isFollowed = pst.author.followers.length > 0;
         setPost(pst);
       });
     });
   }, [setSelected]);
 
-  const [text, setText] = useState("");
-
   if (!post) return <>Loading</>;
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">
-        <Post setPost={setPost} post={post} isSigned={isSigned}/>
+        <Post setPost={setPost} post={post} isSigned={isSigned} />
       </div>
       <div>
         <div className="p-4 grid w-full gap-2 border-b">
@@ -75,14 +80,19 @@ export function PostPage() {
                 </span>
               </div>
             </div>
-            <Button disabled={text.length <= 0 && isSigned} onClick={() => handleClick()}>{isSigned ? "Comment" : "Sign in to comment"}</Button>
+            <Button
+              disabled={text.length <= 0 && isSigned}
+              onClick={() => handleClick()}
+            >
+              {isSigned ? "Comment" : "Sign in to comment"}
+            </Button>
           </div>
         </div>
       </div>
       <div className="last:border-b-none" id="comments">
         {post.comments.length > 0 ? (
           post.comments.map((cmt) => {
-            return <Comment  comment={cmt} key={cmt.id} />;
+            return <Comment comment={cmt} key={cmt.id} />;
           })
         ) : (
           <XeniaEmpty
