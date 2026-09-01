@@ -9,6 +9,8 @@ const {
   getCommentsByUsername,
   getLikesByUsername,
   commentPost,
+  likePost,
+  unlikePost,
 } = require("../controllers/postController");
 
 const {authenticate, checkValidation} = require("../middleware/utils")
@@ -25,6 +27,8 @@ postRouter.get("/:postId",authenticate, getPost);
 
 postRouter.post("/",authenticate, postPost); //authenitcate
 postRouter.post("/:postId/comment",...commentValidations,checkValidation,authenticate, commentPost); //authenitcate
+postRouter.post("/:postId/like",authenticate, likePost); //authenitcate
+postRouter.post("/:postId/unlike",authenticate, unlikePost); //authenitcate
 
 postRouter.delete("/:postId", deletePost); //authenticate
 postRouter.patch("/:postId", updatePost); //authenticate

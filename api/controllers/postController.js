@@ -212,8 +212,16 @@ exports.getPost = async (req, res, next) => {
         id: Number(req.params.postId),
       },
       select: {
+        id:true,
         content: true,
         createdAt: true,
+        likes: !req.user
+          ? false
+          : {
+              where: {
+                likerId: req.user.id,
+              },
+            },
         _count: {
           select: {
             likes: true,
@@ -222,8 +230,8 @@ exports.getPost = async (req, res, next) => {
         },
         comments: {
           take: MAX_POSTS,
-          orderBy:{
-            createdAt:"desc"
+          orderBy: {
+            createdAt: "desc",
           },
           select: {
             id: true,
@@ -297,6 +305,36 @@ exports.commentPost = async (req, res, next) => {
       },
     });
     res.json(comment);
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.likePost = async (req, res, next) => {
+  try {
+    await db.like.create({
+      data: {
+        postId: Number(req.params.postId),
+        likerId: req.user.id,
+      },
+    });
+    res.json("Post Liked");
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.unlikePost = async (req, res, next) => {
+  try {
+    await db.like.delete({
+      where: {
+        likerId_postId: {
+          likerId: req.user.id,
+          postId:Number( req.params.postId),
+        },
+      },
+    });
+    res.json("Post Unliked");
   } catch (e) {
     next(e);
   }

@@ -5,6 +5,7 @@ import { Separator } from "../ui/separator";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { postRequest } from "@/lib/requests";
+import { handleLikeUnLike } from "@/lib/utils";
 
 export function Post({ setPost, post, isSigned }) {
   const { hash } = useLocation();
@@ -57,6 +58,7 @@ export function Post({ setPost, post, isSigned }) {
   }, [hash,scrollTrigger]);
 
   const date = new Date(post.createdAt);
+  console.log(post)
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-col p-0.5">
@@ -116,8 +118,8 @@ export function Post({ setPost, post, isSigned }) {
           <MessageSquare className="active:fill-accent" />
           <span>{post._count.comments}</span>
         </Link>
-        <div className="flex gap-0.5 active:text-primary " draggable={false}>
-          <Heart className="active:fill-primary" />
+        <div onClick={() => handleLikeUnLike(post,setPost)} className="flex gap-0.5 active:text-primary " draggable={false}>
+          <Heart className={"active:fill-primary " + `${post.isLiked ? "fill-primary stroke-primary" : ""}`}/>
           <span>{post._count.likes}</span>
         </div>
       </div>

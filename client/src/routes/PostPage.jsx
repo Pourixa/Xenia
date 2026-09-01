@@ -44,6 +44,7 @@ export function PostPage() {
     getRequest("/post/" + postId).then((res) => {
       res.json().then((pst) => {
         if (isSigned) pst.author.isFollowed = pst.author.followers.length > 0;
+        if (isSigned) pst.isLiked = pst.likes.length > 0;
         setPost(pst);
       });
     });
