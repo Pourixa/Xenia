@@ -8,7 +8,10 @@ const {
   getPostsByUsername,
   getCommentsByUsername,
   getLikesByUsername,
+  commentPost,
 } = require("../controllers/postController");
+
+const {authenticate} = require("../middleware/authenticate")
 
 const postRouter = require("express").Router();
 
@@ -18,9 +21,10 @@ postRouter.get("/comments/:username", getCommentsByUsername);
 postRouter.get("/likes/:username", getLikesByUsername);
 
 postRouter.get("/following", getPostsFollowing);
-postRouter.get("/:postId", getPost);
+postRouter.get("/:postId",authenticate, getPost);
 
-postRouter.post("/", postPost); //authenitcate
+postRouter.post("/",authenticate, postPost); //authenitcate
+postRouter.post("/comment", commentPost); //authenitcate
 
 postRouter.delete("/:postId", deletePost); //authenticate
 postRouter.patch("/:postId", updatePost); //authenticate

@@ -174,9 +174,6 @@ exports.searchUser = async (req, res, next) => {
 
 exports.followUser = async (req, res, next) => { // auth
   try {
-    const bearer = jwt.verify(req.cookies.token,process.env.JWT_SECRET)
-    if(!(bearer))
-      return next(new Error("UNAUTHORIZED"))
     const following = await db.user.findUniqueOrThrow({
       where: {
         username: req.body.followingUsername,
@@ -187,7 +184,7 @@ exports.followUser = async (req, res, next) => { // auth
     });
     const data = await db.followship.create({
       data: {
-        followerId: bearer.id,
+        followerId: req.user.id,
         followingId: following.id,
       },
       select:{
@@ -219,9 +216,6 @@ exports.followUser = async (req, res, next) => { // auth
 
 exports.unfollowUser = async (req, res, next) => { // auth
   try {
-    const bearer = jwt.verify(req.cookies.token,process.env.JWT_SECRET)
-    if(!(bearer))
-      return next(new Error("UNAUTHORIZED"))
     const following = await db.user.findUniqueOrThrow({
       where: {
         username: req.body.followingUsername,
@@ -234,7 +228,7 @@ exports.unfollowUser = async (req, res, next) => { // auth
       where:{
         followerId_followingId:{
           followingId:following.id,
-          followerId:bearer.id
+          followerId:req.user.id
         }
       }
     });

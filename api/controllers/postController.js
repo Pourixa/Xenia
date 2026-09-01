@@ -1,10 +1,11 @@
 const db = require("../prisma/db").prisma;
-const jwt = require("jsonwebtoken");
 
 const MAX_POSTS = 20;
 
 exports.getPostsFollowing = async (req, res, next) => {
   try {
+    if(!req.user) 
+      throw new Error("NO USER")
     const followings = await db.user.findUnique({
       where: {
         id: Number(req.query.id),
@@ -192,9 +193,6 @@ exports.getLikesByUsername = async (req, res, next) => {
 
 exports.getPost = async (req, res, next) => {
   try {
-    let bearer = null;
-    if (req.cookies.token)
-      bearer = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
     const post = await db.post.findUnique({
       where: {
         id: Number(req.params.postId),
@@ -229,11 +227,11 @@ exports.getPost = async (req, res, next) => {
             avatarUrl: true,
             name: true,
 
-            followers: !bearer
+            followers: !req.user
               ? false
               : {
                   where: {
-                    followerId: bearer.id,
+                    followerId: req.user.id,
                   },
                 },
           },
@@ -260,6 +258,13 @@ exports.postPost = async (req, res, next) => {
   }
 };
 
+exports.commentPost = async (req,res,next) => {
+  try{
+    return
+  } catch(e) {
+  next(e)
+  }
+}
 exports.deletePost = async (req, res, next) => {
   try {
     const post = await db.post.delete({
