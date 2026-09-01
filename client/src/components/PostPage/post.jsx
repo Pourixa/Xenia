@@ -3,37 +3,43 @@ import { XeniaAvatar } from "../customUI/XeniaAvatar";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { postRequest } from "@/lib/requests";
 
-export function Post({setPost, post, isSigned }) {
+export function Post({ setPost, post, isSigned }) {
   const { hash } = useLocation();
+  const [scrollTrigger, setScrollTrigger] = useState(0);
   const [searchParams] = useSearchParams();
-  const query = searchParams.get("c")
-  const loc = useLocation()
+  const query = searchParams.get("c");
+  const loc = useLocation();
   const nav = useNavigate();
   async function handleFollowUnfollow() {
-      if(!post.author.isFollowed)
-      {
-        const res = await postRequest(`/user/${post.author.username}/follow`,{
-          followingUsername:post.author.username
-        })
-        if(res.ok)
-          setPost(prev => ({...prev,author:{
-        ...prev.author,
-        isFollowed : true}
-      }))
-      } else {
-        const res = await postRequest(`/user/${post.author.username}/unfollow`,{
-          followingUsername:post.author.username
-        })
-        if(res.ok)
-          setPost(prev => ({...prev,author:{
-        ...prev.author,
-        isFollowed : false}
-      }))
-      }
+    if (!post.author.isFollowed) {
+      const res = await postRequest(`/user/${post.author.username}/follow`, {
+        followingUsername: post.author.username,
+      });
+      if (res.ok)
+        setPost((prev) => ({
+          ...prev,
+          author: {
+            ...prev.author,
+            isFollowed: true,
+          },
+        }));
+    } else {
+      const res = await postRequest(`/user/${post.author.username}/unfollow`, {
+        followingUsername: post.author.username,
+      });
+      if (res.ok)
+        setPost((prev) => ({
+          ...prev,
+          author: {
+            ...prev.author,
+            isFollowed: false,
+          },
+        }));
     }
+  }
   useEffect(() => {
     if (hash) {
       if (query) {
@@ -48,7 +54,7 @@ export function Post({setPost, post, isSigned }) {
         }
       }
     }
-  }, [hash]);
+  }, [hash,scrollTrigger]);
 
   const date = new Date(post.createdAt);
   return (
@@ -71,10 +77,10 @@ export function Post({setPost, post, isSigned }) {
             </div>
           </div>
           {isSigned ? (
-              <Button onClick={() => handleFollowUnfollow()}>
-                {post.author.isFollowed ? "Unfollow" : "Follow"}
-              </Button>
-            ) : (
+            <Button onClick={() => handleFollowUnfollow()}>
+              {post.author.isFollowed ? "Unfollow" : "Follow"}
+            </Button>
+          ) : (
             <Button onClick={() => nav("/user/signin")}>
               Sign in to Follow
             </Button>
@@ -99,9 +105,10 @@ export function Post({setPost, post, isSigned }) {
       <Separator className={"h-px bg-muted-foreground"} />
       <div className="flex p-0.5 gap-2 text-muted-foreground items-center">
         <Link
-                    state={{
-              from:loc.pathname
-            }}
+          onClick={() => setScrollTrigger(prev => prev + 1)}
+          state={{
+            from: loc.pathname,
+          }}
           to={"#comments"}
           className="flex gap-0.5 active:text-accent "
           draggable={false}
