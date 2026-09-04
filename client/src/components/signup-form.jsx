@@ -102,7 +102,7 @@ export function SignupForm({ className, ...props }) {
                   Signup with Google
                 </Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <a href="/user/signin">Sign in</a>
+                  Already have an account? <a href="/signin">Sign in</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

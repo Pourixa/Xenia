@@ -19,7 +19,7 @@ export function Create() {
       //post
     }
     else {
-      nav("/user/signin")
+      nav("/signin")
     }
   }
 

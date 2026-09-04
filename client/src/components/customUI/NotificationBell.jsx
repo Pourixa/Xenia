@@ -8,7 +8,7 @@ export function NotificationBell({ unreadNotifications = 0 }) {
   const { selected } = useContext(SelectedContext);
   const nav = useNavigate()
   return (
-    <Avatar onClick={() => {nav("/user/notifications")}} className={"after:border-none hover:cursor-pointer"}>
+    <Avatar onClick={() => {nav("/notifications")}} className={"after:border-none hover:cursor-pointer"}>
       <AvatarFallback className={"bg-background text-foreground"}>
         <Bell width={24} height={24} className={(selected === "notifications" ? "fill-foreground" : "")} />
       </AvatarFallback>

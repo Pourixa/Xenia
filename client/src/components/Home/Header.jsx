@@ -20,14 +20,16 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
       setBreadCrumb((prev) => [...prev, from]);
     }
   }, [loc.state]);
-  if (selected?.selected === "post") {
+  if ((loc.pathname === "/signin" | loc.pathname === "/signup")) {
+    return;
+  } else if (selected?.selected === "post") {
     return (
       <div className="flex p-4 border-b w-full">
         <ArrowLeft
           className="mr-8 hover:cursor-pointer"
           onClick={() => {
             const previous = breadCrumb.at(-1);
-            console.log("going to" + previous)
+            console.log("going to" + previous);
             if (!previous) {
               nav("/");
               return;
@@ -48,7 +50,7 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
           className="mr-8 hover:cursor-pointer"
           onClick={() => {
             const previous = breadCrumb.at(-1);
-            console.log("going to" + previous)
+            console.log("going to" + previous);
             if (!previous) {
               nav("/");
               return;
@@ -65,7 +67,7 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
   } else {
     return (
       <header className="sticky bg-background z-999 top-0 border-b-2 flex justify-between items-center p-1 pl-5 pr-5">
-        <Link to={isSigned ? `/${username}` : "/user/signin"}>
+        <Link to={isSigned ? `/${username}` : "/signin"}>
           <XeniaAvatar
             className={selected === "profile" ? "ring-2" : ""}
             size="lg"

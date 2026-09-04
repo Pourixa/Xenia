@@ -87,7 +87,7 @@ export function Profile() {
               </Button>
             )
           ) : (
-            <Button onClick={() => nav("/user/signin")}>
+            <Button onClick={() => nav("/signin")}>
               Sign in to Follow
             </Button>
           )}

@@ -83,7 +83,7 @@ export function Post({ setPost, post, isSigned }) {
               {post.author.isFollowed ? "Unfollow" : "Follow"}
             </Button>
           ) : (
-            <Button onClick={() => nav("/user/signin")}>
+            <Button onClick={() => nav("/signin")}>
               Sign in to Follow
             </Button>
           )}
@@ -118,7 +118,7 @@ export function Post({ setPost, post, isSigned }) {
           <MessageSquare className="active:fill-accent" />
           <span>{post._count.comments}</span>
         </Link>
-        <div onClick={() => isSigned ? handleLikeUnLike(post,setPost) : nav("/user/signin")} className="flex gap-0.5 active:text-primary " draggable={false}>
+        <div onClick={() => isSigned ? handleLikeUnLike(post,setPost) : nav("/signin")} className="flex gap-0.5 active:text-primary " draggable={false}>
           <Heart className={"active:fill-primary " + `${post.isLiked ? "fill-primary stroke-primary" : ""}`}/>
           <span>{post._count.likes}</span>
         </div>

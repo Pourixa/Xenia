@@ -35,7 +35,7 @@ export function PostPage() {
         setText("")
       }
     } else {
-      nav("/user/signin");
+      nav("/signin");
     }
   }
 

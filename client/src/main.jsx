@@ -23,12 +23,20 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomeTab /> },
 
-      { path: "user/search", element: <Search /> },
-      { path: "post/create", element: <Create /> },
-      { path: "user/notifications", element: <Notifications /> },
+      { path: "/search", element: <Search /> },
+      { path: "/create", element: <Create /> },
+      { path: "/notifications", element: <Notifications /> },
 
+        {
+    path: "/signin",
+    element: <Signin />
+  },
+  {
+    path: "/signup",
+    element: <Signup />
+  },
       {
-        path: ":username",
+        path: "/:username",
         element: <Profile />,
         children: [
           { index: true, element: <ProfilePosts /> },
@@ -41,14 +49,6 @@ const router = createBrowserRouter([
     ]
   },
 
-  {
-    path: "/user/signin",
-    element: <Signin />
-  },
-  {
-    path: "/user/signup",
-    element: <Signup />
-  }
 ])
 
 createRoot(document.getElementById('root')).render(
