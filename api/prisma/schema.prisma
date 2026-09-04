@@ -24,8 +24,6 @@ model user {
   posts    post[]
   likes    like[]
   comments comment[]
-
-  notifications notification[]
 }
 
 model followship {
@@ -87,18 +85,4 @@ enum EventTypes {
   POST
   LIKE
   COMMENT
-}
-
-model notification {
-  id Int @id @default(autoincrement())
-
-  eventType EventTypes
-  isRead    Boolean    @default(false)
-
-  receiverId Int
-  receiver   user @relation(fields: [receiverId], references: [id], onDelete: Cascade)
-
-  data Json
-
-  createdAt DateTime @default(now())
 }

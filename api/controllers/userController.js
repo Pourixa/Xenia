@@ -198,15 +198,6 @@ exports.followUser = async (req, res, next) => { // auth
         }
       }
     });
-    await db.notification.create({
-      data: {
-        eventType: "FOLLOW",
-        data: {
-          follower: data.follower,
-        },
-        receiverId:following.id
-      },
-    });
     res.json("Followed");
   } catch (e) {
     next(e);
@@ -224,7 +215,7 @@ exports.unfollowUser = async (req, res, next) => { // auth
         id: true,
       },
     });
-    const data = await db.followship.delete({
+    await db.followship.delete({
       where:{
         followerId_followingId:{
           followingId:following.id,

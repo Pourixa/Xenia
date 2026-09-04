@@ -25,19 +25,6 @@ async function seed() {
         });
       }
 
-      for (let j = 0; j < 10; j++) {
-        await db.notification.create({
-          data: {
-            eventType: faker.helpers.arrayElement(EventTypes),
-            isRead: Math.random() > 0.5 ? true : false,
-            receiverId: id,
-            data: {
-              actionMaker: faker.internet.username(),
-              madeOn: username,
-            },
-          },
-        });
-      }
     }
   } catch {}
 
