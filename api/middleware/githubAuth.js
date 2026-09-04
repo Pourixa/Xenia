@@ -1,5 +1,7 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
+const {faker} = require("@faker-js/faker")
+const { unavailableUsernames } = require("./utils");
 
 exports.githubAuth = (req, res, next) => {
   try {
@@ -67,7 +69,11 @@ exports.githubAuthCallback = async (req, res, next) => {
       );
       res.redirect(process.env.CLIENT_URL);
     } else {
-      const baseUsername = githubUser.login;
+      let baseUsername = githubUser.login.toLocaleLowerCase();
+      while(unavailableUsernames.includes(baseUsername))
+      {
+        baseUsername = faker.internet.username().toLocaleLowerCase()
+      }
       let username = baseUsername;
       let count = 1;
       while (await db.user.findUnique({ where: { username } })) {
