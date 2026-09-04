@@ -28,7 +28,17 @@ exports.getPostsFollowing = async (req, res, next) => {
           in: ids,
         },
       },
-      include: {
+      select: {
+        content: true,
+        createdAt: true,
+        id: true,
+        likes: !req.user
+          ? false
+          : {
+              where: {
+                likerId: req.user.id,
+              },
+            },
         _count: {
           select: {
             comments: true,
@@ -57,7 +67,17 @@ exports.getPosts = async (req, res, next) => {
       orderBy: {
         createdAt: "desc",
       },
-      include: {
+      select: {
+        content: true,
+        createdAt: true,
+        id: true,
+        likes: !req.user
+          ? false
+          : {
+              where: {
+                likerId: req.user.id,
+              },
+            },
         _count: {
           select: {
             comments: true,
@@ -212,7 +232,7 @@ exports.getPost = async (req, res, next) => {
         id: Number(req.params.postId),
       },
       select: {
-        id:true,
+        id: true,
         content: true,
         createdAt: true,
         likes: !req.user
@@ -330,7 +350,7 @@ exports.unlikePost = async (req, res, next) => {
       where: {
         likerId_postId: {
           likerId: req.user.id,
-          postId:Number( req.params.postId),
+          postId: Number(req.params.postId),
         },
       },
     });

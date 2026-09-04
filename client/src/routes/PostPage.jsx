@@ -30,9 +30,9 @@ export function PostPage() {
         const comment = await res.json();
         setPost((prev) => ({
           ...prev,
-          comments: [comment,...prev.comments],
+          comments: [comment, ...prev.comments],
         }));
-        setText("")
+        setText("");
       }
     } else {
       nav("/signin");
@@ -43,8 +43,10 @@ export function PostPage() {
     setSelected({ selected: "post" });
     getRequest("/post/" + postId).then((res) => {
       res.json().then((pst) => {
-        if (isSigned) pst.author.isFollowed = pst.author.followers.length > 0;
-        if (isSigned) pst.isLiked = pst.likes.length > 0;
+        if (isSigned) {
+          pst.author.isFollowed = pst.author.followers.length > 0;
+          pst.isLiked = pst.likes.length > 0;
+        }
         setPost(pst);
       });
     });

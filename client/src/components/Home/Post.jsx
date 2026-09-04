@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router";
 import { XeniaAvatar } from "../customUI/XeniaAvatar";
-import { timeAgo } from "@/lib/utils";
+import { handleLikeUnLike, timeAgo } from "@/lib/utils";
 import { Heart, LucideMessageSquare } from "lucide-react";
 
-export function Post({ post }) {
+export function Post({ setPosts, post, isSigned , idx }) {
   const loc = useLocation();
   return (
     <div className="flex border-b last:border-b-0 pl-4 pr-4 pt-1 pb-1">
@@ -61,8 +61,8 @@ export function Post({ post }) {
               <span>{post._count.comments}</span>
             </div>
           </Link>
-          <div className="flex gap-0.5 active:text-primary hover:cursor-pointer">
-            <Heart className="active:fill-primary hover:cursor-pointer" />
+          <div onClick={() => isSigned ? handleLikeUnLike(post,setPosts,idx) : nav("/signin")} className="flex gap-0.5 active:text-primary hover:cursor-pointer">
+            <Heart className={"active:fill-primary hover:cursor-pointer " + `${post.isLiked ? "fill-primary stroke-primary" : ""}`} />
             <span>{post._count.likes}</span>
           </div>
         </div>

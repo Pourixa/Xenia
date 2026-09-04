@@ -30,30 +30,70 @@ export function timeAgo(date) {
   return "now";
 }
 
-export async function handleLikeUnLike(post, setPost) {
-  if (post.isLiked) {
-    const res = await postRequest(`/post/${post.id}/unlike`);
-    if (res.ok) {
-      setPost((prev) => ({
-        ...prev,
-        isLiked: false,
-        _count: {
-          ...prev._count,
-          likes: prev._count.likes - 1,
-        },
-      }));
+export async function handleLikeUnLike(post, setPost, idx = -1) {
+  if (idx < 0) {
+    if (post.isLiked) {
+      const res = await postRequest(`/post/${post.id}/unlike`);
+      if (res.ok) {
+        setPost((prev) => ({
+          ...prev,
+          isLiked: false,
+          _count: {
+            ...prev._count,
+            likes: prev._count.likes - 1,
+          },
+        }));
+      }
+    } else {
+      const res = await postRequest(`/post/${post.id}/like`);
+      if (res.ok) {
+        setPost((prev) => ({
+          ...prev,
+          isLiked: true,
+          _count: {
+            ...prev._count,
+            likes: prev._count.likes + 1,
+          },
+        }));
+      }
     }
   } else {
-    const res = await postRequest(`/post/${post.id}/like`);
-    if (res.ok) {
-      setPost((prev) => ({
-        ...prev,
-        isLiked: true,
-        _count: {
-          ...prev._count,
-          likes: prev._count.likes + 1,
-        },
-      }));
+    if (post.isLiked) {
+      const res = await postRequest(`/post/${post.id}/unlike`);
+      if (res.ok) {
+        setPost(
+          prev => {
+            const a = [...prev]
+            a[idx] = {
+              ...post,
+              isLiked : false,
+               _count: {
+            ...a[idx]._count,
+            likes: a[idx]._count.likes - 1,
+          },
+            }
+            return a
+          }
+        );
+      }
+    } else {
+      const res = await postRequest(`/post/${post.id}/like`);
+      if (res.ok) {
+        setPost(
+          prev => {
+            const a = [...prev]
+            a[idx] = {
+              ...post,
+              isLiked : true,
+               _count: {
+            ...a[idx]._count,
+            likes: a[idx]._count.likes + 1,
+          },
+            }
+            return a
+          }
+        );
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import { Header } from "@/components/Home/Header";
 import { Post } from "@/components/Home/Post";
 import { getRequest } from "@/lib/requests";
 import { useState, createContext, useContext, useEffect } from "react";
-import { Outlet, useOutletContext } from "react-router";
+import { Outlet, useNavigate, useOutletContext } from "react-router";
 
 export const SelectedContext = createContext(null);
 
@@ -13,17 +13,20 @@ export function HomeTab() {
   const [tab, setTab] = useState("fy");
   const [posts, setPosts] = useState(null);
   const {isSigned , user} = useOutletContext()
+  const nav = useNavigate()
   useEffect(() => {
     setSelected("home");
     if (tab === "fy") {
       getRequest("/post").then((res) =>
         res.json().then((json) => {
+          if (isSigned) json.map(pst => pst.isLiked = pst.likes.length > 0);
           setPosts(json);
         }),
       );
     } else {
       getRequest("/post/following?id="+user.id).then((res) =>
         res.json().then((json) => {
+          if (isSigned) json.map(pst => pst.isLiked = pst.likes.length > 0);
           setPosts(json);
         }),
       );
@@ -34,8 +37,8 @@ export function HomeTab() {
   return <main className="overflow-auto flex flex-col items-center grow">
     <HomeTabs setTab={setTab} isSigned={isSigned}/>
     <div>
-      {posts.map((pst) => {
-        return <Post post={pst} key={pst.id}/>
+      {posts.map((pst,idx) => {
+        return <Post isSigned={isSigned} setPosts={setPosts} idx={idx} post={pst} key={pst.id}/>
       })}
     </div>
   </main>;

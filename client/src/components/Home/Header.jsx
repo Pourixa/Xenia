@@ -29,7 +29,6 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
           className="mr-8 hover:cursor-pointer"
           onClick={() => {
             const previous = breadCrumb.at(-1);
-            console.log("going to" + previous);
             if (!previous) {
               nav("/");
               return;
@@ -50,7 +49,6 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
           className="mr-8 hover:cursor-pointer"
           onClick={() => {
             const previous = breadCrumb.at(-1);
-            console.log("going to" + previous);
             if (!previous) {
               nav("/");
               return;
