@@ -182,6 +182,8 @@ exports.followUser = async (req, res, next) => { // auth
         id: true,
       },
     });
+    if(id === req.user.id) 
+      throw new Error("Can't follow yourself")
     const data = await db.followship.create({
       data: {
         followerId: req.user.id,

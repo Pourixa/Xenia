@@ -31,7 +31,8 @@ model followship {
 
   followerId  Int 
   followingId Int
-
+  notificationId Int
+  
   createdAt DateTime @default(now())
 
   follower  user @relation("following", fields: [followerId], references: [id] , onDelete: Cascade) 
@@ -58,6 +59,7 @@ model like {
 
   likerId Int
   postId  Int
+  notificationId Int
 
   createdAt DateTime @default(now())
 
@@ -73,6 +75,7 @@ model comment {
   commenterId Int
   postId      Int
   content     String
+  notificationId Int
 
   createdAt DateTime @default(now())
 
@@ -82,7 +85,6 @@ model comment {
 
 enum EventTypes {
   FOLLOW
-  POST
   LIKE
   COMMENT
 }
