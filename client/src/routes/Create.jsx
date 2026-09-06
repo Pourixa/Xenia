@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import XeniaEmojiPicker from "@/components/Create/EmojiPicker";
 import { Separator } from "@/components/ui/separator";
 import {useNavigate, useOutletContext } from "react-router";
+import { postRequest } from "@/lib/requests";
 
 const MAX_LENGTH = 280;
 export function Create() {
@@ -13,10 +14,13 @@ export function Create() {
   const nav = useNavigate()
   const [text, setText] = useState("");
 
-  function handleClick() {
+  async function handleClick() {
     if(isSigned)
     {
-      //post
+      await postRequest("/post",{
+        content:text
+      })
+      nav(`/${user.username}`)
     }
     else {
       nav("/signin")

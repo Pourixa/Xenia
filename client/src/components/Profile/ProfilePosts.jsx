@@ -18,7 +18,7 @@ export function ProfilePosts() {
 
   if (!posts) return <>loading</>;
   return <div className="overflow-auto flex flex-col items-center grow">
-      <div>
+      <div className="w-full">
         {posts.length > 0 ? posts.map((pst) => {
           return <Post post={pst} key={pst.id}/>
         })  : <XeniaEmpty HeaderIcon={<SquareXIcon />} title={"No posts by this user"}/>}
