@@ -19,7 +19,7 @@ const {commentValidations} = require("../middleware/postValidations")
 const postRouter = require("express").Router();
 
 postRouter.get("/",authenticate, getPosts);
-postRouter.get("/user/:username", getPostsByUsername);
+postRouter.get("/user/:username",authenticate, getPostsByUsername);
 postRouter.get("/comments/:username", getCommentsByUsername);
 postRouter.get("/likes/:username", getLikesByUsername);
 postRouter.get("/following",authenticate, getPostsFollowing);

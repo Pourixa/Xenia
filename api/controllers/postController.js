@@ -105,16 +105,29 @@ exports.getPostsByUsername = async (req, res, next) => {
       where: {
         username: req.params.username,
       },
+      select:{
+        id:true
+      }
     });
     const posts = await db.post.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
       where: {
         authorId: user.id,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       take: MAX_POSTS,
-      include: {
+      select: {
+        content: true,
+        createdAt: true,
+        id: true,
+        likes: !req.user
+          ? false
+          : {
+              where: {
+                likerId: req.user.id,
+              },
+            },
         _count: {
           select: {
             comments: true,

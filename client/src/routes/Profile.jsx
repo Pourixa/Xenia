@@ -109,7 +109,7 @@ export function Profile() {
       </div>
       <div>
         <ProfileTabs state={loc.state} />
-        <Outlet />
+        <Outlet context={isSigned}/>
       </div>
     </main>
   );
