@@ -30,6 +30,10 @@ export function PostPage() {
         const comment = await res.json();
         setPost((prev) => ({
           ...prev,
+          _count:{
+            ...prev._count,
+            comments: prev._count.comments + 1
+          },
           comments: [comment, ...prev.comments],
         }));
         setText("");
