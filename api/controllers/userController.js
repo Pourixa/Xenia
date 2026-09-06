@@ -174,20 +174,13 @@ exports.searchUser = async (req, res, next) => {
 
 exports.followUser = async (req, res, next) => { // auth
   try {
-    const following = await db.user.findUniqueOrThrow({
-      where: {
-        username: req.body.followingUsername,
-      },
-      select: {
-        id: true,
-      },
-    });
-    if(id === req.user.id) 
+
+    if(req.body.id === req.user.username) 
       throw new Error("Can't follow yourself")
     const data = await db.followship.create({
       data: {
         followerId: req.user.id,
-        followingId: following.id,
+        followingId: req.body.id,
       },
       select:{
         follower:{
@@ -199,6 +192,15 @@ exports.followUser = async (req, res, next) => { // auth
       }
         }
       }
+    });
+    await db.notification.create({
+      data: {
+        eventType: "FOLLOW",
+        data: {
+          follower: data.follower,
+        },
+        receiverId:req.body.id
+      },
     });
     res.json("Followed");
   } catch (e) {

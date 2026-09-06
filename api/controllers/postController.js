@@ -271,6 +271,7 @@ exports.getPost = async (req, res, next) => {
             username: true,
             avatarUrl: true,
             name: true,
+            id:true,
 
             followers: !req.user
               ? false

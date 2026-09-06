@@ -17,7 +17,7 @@ export function PostPage() {
   const [post, setPost] = useState(null);
   const [text, setText] = useState("");
   const { postId } = useParams();
-  const { isSigned } = useOutletContext();
+  const { isSigned , user } = useOutletContext();
   const { setSelected } = useContext(SelectedContext);
   const nav = useNavigate();
 
@@ -56,7 +56,7 @@ export function PostPage() {
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">
-        <Post setPost={setPost} post={post} isSigned={isSigned} />
+        <Post setPost={setPost} post={post} isSigned={isSigned} user={user} />
       </div>
       <div>
         <div className="p-4 grid w-full gap-2 border-b">

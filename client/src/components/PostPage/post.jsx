@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { postRequest } from "@/lib/requests";
 import { handleLikeUnLike } from "@/lib/utils";
 
-export function Post({ setPost, post, isSigned }) {
+export function Post({ setPost, post, isSigned , user }) {
   const { hash } = useLocation();
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const [searchParams] = useSearchParams();
@@ -17,7 +17,7 @@ export function Post({ setPost, post, isSigned }) {
   async function handleFollowUnfollow() {
     if (!post.author.isFollowed) {
       const res = await postRequest(`/user/${post.author.username}/follow`, {
-        followingUsername: post.author.username,
+        id: post.author.id,
       });
       if (res.ok)
         setPost((prev) => ({
@@ -78,11 +78,11 @@ export function Post({ setPost, post, isSigned }) {
               </span>
             </div>
           </div>
-          {isSigned ? (
+          {isSigned ? user.id != post.author.id ? (
             <Button onClick={() => handleFollowUnfollow()}>
               {post.author.isFollowed ? "Unfollow" : "Follow"}
             </Button>
-          ) : (
+          ) : <></> : (
             <Button onClick={() => nav("/signin")}>
               Sign in to Follow
             </Button>
