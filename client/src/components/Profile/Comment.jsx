@@ -12,8 +12,8 @@ export function Comment({ comment }) {
           name={comment.commenter.name}
         />
       </Link> */}
-      <div>
-        <div className="flex gap-1 flex-wrap gap-y-0">
+      <div className="flex-1 min-w-0">
+        <div className=" flex gap-1 flex-wrap gap-y-0">
           <Link
             to={`/${comment.commenter.username}`}
             draggable={false}
@@ -58,8 +58,8 @@ export function Comment({ comment }) {
             {timeAgo(comment.createdAt)}
           </span>
         </div>
-        <div className="flex flex-col">
-          <div className="p-0.5">{comment.content}</div>
+        <div className="flex-col">
+          <div className="p-0.5 wrap-break-word">{comment.content}</div>
         </div>
       </div>
     </div>

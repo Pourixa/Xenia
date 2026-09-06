@@ -24,7 +24,7 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
     return;
   } else if (selected?.selected === "post") {
     return (
-      <div className="flex p-4 border-b w-full">
+      <header className="flex p-4 border-b w-full">
         <ArrowLeft
           className="mr-8 hover:cursor-pointer"
           onClick={() => {
@@ -40,11 +40,11 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
           }}
         />
         <span className="font-bold">Post</span>
-      </div>
+      </header>
     );
   } else if (selected?.selected === "user") {
     return (
-      <div className="flex p-4 border-b w-full">
+      <header className="flex p-4 border-b w-full">
         <ArrowLeft
           className="mr-8 hover:cursor-pointer"
           onClick={() => {
@@ -60,7 +60,7 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
           }}
         />
         <span className="font-bold">{selected.name}</span>
-      </div>
+      </header>
     );
   } else {
     return (

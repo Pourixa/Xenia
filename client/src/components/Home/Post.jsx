@@ -21,7 +21,7 @@ export function Post({ setPosts, post, isSigned , idx }) {
           name={post.author.name}
         />
       </Link>
-      <div>
+      <div className="flex-1 min-w-0">
         <Link
           state={{
             from: loc.pathname,
@@ -46,7 +46,7 @@ export function Post({ setPosts, post, isSigned , idx }) {
           className="flex flex-col"
           draggable={false}
         >
-          <div className="p-0.5">{post.content}</div>
+          <div className="p-0.5 wrap-break-word">{post.content}</div>
         </Link>
         <div className="flex p-0.5 gap-2 text-muted-foreground items-center">
           <Link

@@ -5,7 +5,7 @@ import { timeAgo } from "@/lib/utils";
 export function Comment({ comment }) {
   const loc = useLocation()
   return (
-    <div className="flex border-b pl-4 pr-4 pt-1 pb-1" id={comment.id}>
+    <div className=" flex border-b pl-4 pr-4 pt-1 pb-1" id={comment.id}>
       <Link
         state={{
           from: loc.pathname,
@@ -20,7 +20,7 @@ export function Comment({ comment }) {
           name={comment.commenter.name}
         />
       </Link>
-      <div>
+      <div className="min-w-0">
         <Link
           state={{
             from: loc.pathname,
@@ -38,7 +38,7 @@ export function Comment({ comment }) {
           </div>
         </Link>
         <div className="flex flex-col">
-          <div className="p-0.5">{comment.content}</div>
+          <div className="p-0.5 wrap-break-word">{comment.content}</div>
         </div>
       </div>
     </div>

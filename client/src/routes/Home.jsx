@@ -34,9 +34,9 @@ export function HomeTab() {
   }, [setSelected, tab]);
   if(posts === null) 
     return <span>Loading</span>
-  return <main className="overflow-auto flex flex-col items-center grow">
+  return <main className="overflow-y-auto flex flex-col items-center grow">
     <HomeTabs setTab={setTab} isSigned={isSigned}/>
-    <div>
+    <div className="max-w-dvw">
       {posts.map((pst,idx) => {
         return <Post isSigned={isSigned} setPosts={setPosts} idx={idx} post={pst} key={pst.id}/>
       })}

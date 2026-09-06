@@ -19,7 +19,7 @@ export function ProfilePosts() {
   },[]);
 
   if (!posts) return <>loading</>;
-  return <div className="overflow-auto flex flex-col items-center grow">
+  return <div className="flex flex-col items-center grow">
       <div className="w-full">
         {posts.length > 0 ? posts.map((pst,idx) => {
           return <Post setPosts={setPosts} post={pst} key={pst.id} isSigned={isSigned} idx={idx}/>

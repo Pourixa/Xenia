@@ -62,7 +62,7 @@ export function Profile() {
   if (!profileUser) return <>loading</>;
   console.log(profileUser);
   return (
-    <main className="grow">
+    <main className="overflow-y-auto flex flex-col  grow">
       <div className="p-4 border-b-2 flex flex-col gap-2 ">
         <div className="flex justify-between">
           <div className="flex gap-2 flex-wrap">
@@ -107,7 +107,7 @@ export function Profile() {
           </span>
         </div>
       </div>
-      <div>
+      <div >
         <ProfileTabs state={loc.state} />
         <Outlet context={isSigned}/>
       </div>

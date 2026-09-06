@@ -88,7 +88,7 @@ export function Post({ setPost, post, isSigned , user }) {
             </Button>
           )}
         </div>
-        <div>{post.content}</div>
+        <div className="wrap-break-word">{post.content}</div>
         <div className="text-muted-foreground">
           <time dateTime={date}>
             {date.toLocaleTimeString(undefined, {
