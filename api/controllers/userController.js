@@ -17,13 +17,11 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.getCurrentUser = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
-    if (!token) return res.json({ user: null, isSigned: false });
+    if (!req.user) return res.json({ user: null, isSigned: false });
 
-    const data = jwt.decode(token);
     const user = await db.user.findUnique({
       where: {
-        id: data.id,
+        id: req.user.id,
       },
       select: {
         id: true,
@@ -43,6 +41,19 @@ exports.getCurrentUser = async (req, res, next) => {
     next(e);
   }
 };
+
+exports.getNotifications = async (req,res,next) => {
+    try {
+      const notifications = await db.notification.findMany({
+        where:{
+          receiverId:req.user.id
+        } 
+      })
+      res.json(notifications)
+    } catch(e) {
+      next(e)
+    }
+}
 
 exports.updateUser = async (req, res, next) => {
   try {
