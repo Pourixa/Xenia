@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { SelectedContext } from "./Home";
 import { getRequest } from "@/lib/requests";
-
+import { XeniaEmpty } from "@/components/customUI/XeniaEmpty";
+import { BellOff } from "lucide-react";
+import {Notification} from "../components/Notifications/notification"
 export function Notifications() {
   const { setSelected } = useContext(SelectedContext);
   const [notifications, setNotifications] = useState([]);
@@ -16,5 +18,11 @@ export function Notifications() {
         }
       })();
   }, [setSelected]);
-  return;
+  return <div className="overflow-auto flex flex-col items-center grow w-full">
+        <div className="w-full">
+          {notifications.length > 0 ? notifications.map((notif) => {
+            return <Notification notification={notif} key={notif.id}/>
+          }) : <XeniaEmpty HeaderIcon={<BellOff/>} title={"No notifications by this user"}/>}
+        </div>
+      </div>
 }

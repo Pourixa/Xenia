@@ -49,7 +49,7 @@ export function Like({ like }) {
             state={{
               from:loc.pathname
             }}
-            to={`/${like.post.author.username}/post/${like.post.id}?c=${like.id}`}
+            to={`/${like.post.author.username}/post/${like.post.id}`}
           >
             Post
           </Link>
