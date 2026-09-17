@@ -336,8 +336,30 @@ exports.commentPost = async (req, res, next) => {
             name: true,
           },
         },
+        post:{
+          select:{
+            id:true,
+            author:{
+              select:{
+                id:true,
+                username:true,
+              }
+            }
+          }
+        }
       },
     });
+    if(req.user.id === comment.post.author.id)
+      return res.json(comment);
+    await db.notification.create({
+      data:{
+        data:{
+          ...comment
+        },
+        eventType:"COMMENT",
+        receiverId:comment.post.author.id
+      }
+    })
     res.json(comment);
   } catch (e) {
     next(e);
@@ -346,12 +368,44 @@ exports.commentPost = async (req, res, next) => {
 
 exports.likePost = async (req, res, next) => {
   try {
-    await db.like.create({
+    const data = await db.like.create({
       data: {
         postId: Number(req.params.postId),
         likerId: req.user.id,
       },
+      select:{
+        liker:{
+          select:{
+        id: true,
+        name: true,
+        username: true,
+        avatarUrl: true,
+      }
+        },
+        post:{
+          select:{
+            id:true,
+            author:{
+              select:{
+                username:true,
+                id:true
+              }
+            }
+          }
+        }
+      }
     });
+    if(req.user.id === data.post.author.id)
+      return res.json("Post Liked");
+    await db.notification.create({
+      data:{
+        data:{
+          ...data
+        },
+        eventType:"LIKE",
+        receiverId:data.post.author.id
+      }
+    })
     res.json("Post Liked");
   } catch (e) {
     next(e);
