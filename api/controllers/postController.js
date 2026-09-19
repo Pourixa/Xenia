@@ -349,8 +349,8 @@ exports.commentPost = async (req, res, next) => {
         }
       },
     });
-    if(req.user.id === comment.post.author.id)
-      return res.json(comment);
+    // if(req.user.id === comment.post.author.id)
+    //   return res.json(comment);
     await db.notification.create({
       data:{
         data:{

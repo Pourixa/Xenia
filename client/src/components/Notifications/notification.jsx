@@ -5,7 +5,12 @@ export function Notification({ notification }) {
   const loc = useLocation();
   if (notification.eventType === "FOLLOW")
     return (
-      <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
+      <div
+        className={
+          "flex border-b pl-4 pr-4 pt-1 pb-1 relative " +
+          (notification.isRead ? "" : "bg-[var(--muted-background)]")
+        }
+      >
         {/* <Link to={`/${notification.data.follower.username}`} className="p-0.5" draggable={false}>
         <XeniaAvatar
           imageSrc={notification.data.follower.avatarUrl}
@@ -13,6 +18,10 @@ export function Notification({ notification }) {
           name={notification.data.follower.name}
         />
       </Link> */}
+        {!notification.isRead && (
+          <span className="absolute rounded-full right-1 top-1 bg-primary w-2 h-2"></span>
+        )}
+
         <div className="flex-1 min-w-0">
           <div className=" flex gap-1 flex-wrap gap-y-0">
             <Link
@@ -41,7 +50,12 @@ export function Notification({ notification }) {
     );
   else if (notification.eventType === "COMMENT")
     return (
-      <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
+      <div
+        className={
+          "flex border-b pl-4 pr-4 pt-1 pb-1 relative " +
+          (notification.isRead ? "" : "bg-[var(--muted-background)]")
+        }
+      >
         {/* <Link to={`/${notification.data.commenter.username}`} className="p-0.5" draggable={false}>
         <XeniaAvatar
           imageSrc={notification.data.commenter.avatarUrl}
@@ -49,6 +63,10 @@ export function Notification({ notification }) {
           name={notification.data.commenter.name}
         />
       </Link> */}
+        {!notification.isRead && (
+          <span className="absolute rounded-full right-1 top-1 bg-primary w-2 h-2"></span>
+        )}
+
         <div className="flex-1 min-w-0">
           <div className=" flex gap-1 flex-wrap gap-y-0">
             <Link
@@ -86,7 +104,12 @@ export function Notification({ notification }) {
     );
   else
     return (
-      <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
+      <div
+        className={
+          "flex border-b pl-4 pr-4 pt-1 pb-1 relative " +
+          (notification.isRead ? "" : "bg-[var(--muted-background)]")
+        }
+      >
         {/* <Link to={`/${notification.data.data.liker.username}`} className="p-0.5" draggable={false}>
         <XeniaAvatar
           imageSrc={notification.data.data.liker.avatarUrl}
@@ -94,6 +117,9 @@ export function Notification({ notification }) {
           name={notification.data.data.liker.name}
         />
       </Link> */}
+        {!notification.isRead && (
+          <span className="absolute rounded-full right-1 top-1 bg-primary w-2 h-2"></span>
+        )}
         <div className="flex-1 min-w-0">
           <div className=" flex gap-1 flex-wrap gap-y-0 items-center">
             <Link

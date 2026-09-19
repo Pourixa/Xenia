@@ -4,6 +4,7 @@
 
 :root {
   --background: hsl(0 0% 100%);
+  --muted-background: hsl(0, 0%, 85%);
   --foreground: hsl(0 0% 0%);
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(0 0% 0%);

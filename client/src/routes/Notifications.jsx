@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { SelectedContext } from "./Home";
-import { getRequest } from "@/lib/requests";
+import { getRequest, patchRequest } from "@/lib/requests";
 import { XeniaEmpty } from "@/components/customUI/XeniaEmpty";
 import { BellOff } from "lucide-react";
 import {Notification} from "../components/Notifications/notification"
@@ -13,7 +13,9 @@ export function Notifications() {
         const res = await getRequest("/user/notifications");
         if (res.ok) {
           const js = await res.json();
-          setNotifications(js);
+          setNotifications(js.notifs);
+          if(js.count > 0)
+          await patchRequest("/user/readNotifications",{notificationsID : js.notifs.map(n => n.id)})
           console.log(js);
         }
       })();

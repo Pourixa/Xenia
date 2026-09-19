@@ -53,7 +53,7 @@ export function Home() {
       setUser(j.user)
       setIsSigned(j.isSigned)
     }))
-  }, [])
+  }, [selected])
   if(!user && isSigned==null) 
     return <>
     Loading

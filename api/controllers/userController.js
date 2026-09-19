@@ -1,7 +1,8 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
 
-MAX_POSTS = 20;
+const MAX_POSTS = 20;
+const MAX_NOTIFS = 20;
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await db.user.delete({
@@ -30,7 +31,9 @@ exports.getCurrentUser = async (req, res, next) => {
         name: true,
         _count: {
           select: {
-            notifications: true,
+            notifications: {
+              where: { isRead: false },
+            },
           },
         },
       },
@@ -42,18 +45,47 @@ exports.getCurrentUser = async (req, res, next) => {
   }
 };
 
-exports.getNotifications = async (req,res,next) => {
-    try {
-      const notifications = await db.notification.findMany({
-        where:{
-          receiverId:req.user.id
-        } 
-      })
-      res.json(notifications)
-    } catch(e) {
-      next(e)
-    }
-}
+exports.getNotifications = async (req, res, next) => {
+  try {
+    const notifications = await db.notification.findMany({
+      where: {
+        receiverId: req.user.id,
+      },
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+        { isRead: "asc" },
+      ],
+      take: MAX_NOTIFS,
+    });
+    const count = await db.notification.count({
+      where: {
+        receiverId: req.user.id,
+        isRead: false,
+      },
+    });
+    res.json({notifs:notifications , count:count});
+  } catch (e) {
+    next(e);
+  }
+};
+exports.readNotifs = async (req, res, next) => {
+  try {
+    await db.notification.updateMany({
+      where: {
+        id: {
+          in: req.body.notificationsID,
+        },
+      },
+      data: {
+        isRead: true,
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 
 exports.updateUser = async (req, res, next) => {
   try {
@@ -77,7 +109,8 @@ const MAX_FOLLOW = 20;
 exports.getUserInfo = async (req, res, next) => {
   try {
     let bearer = null;
-    if (req.cookies.token) bearer = jwt.verify(req.cookies.token,process.env.JWT_SECRET);
+    if (req.cookies.token)
+      bearer = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
 
     const user = await db.user.findUnique({
       where: {
@@ -88,11 +121,13 @@ exports.getUserInfo = async (req, res, next) => {
         name: true,
         about: true,
         avatarUrl: true,
-        followers: (!bearer ? false : {
-          where:{
-            followerId:bearer.id
-          }
-        }),
+        followers: !bearer
+          ? false
+          : {
+              where: {
+                followerId: bearer.id,
+              },
+            },
         _count: {
           select: {
             followers: true,
@@ -183,26 +218,26 @@ exports.searchUser = async (req, res, next) => {
   }
 };
 
-exports.followUser = async (req, res, next) => { // auth
+exports.followUser = async (req, res, next) => {
+  // auth
   try {
-
-    if(req.body.id === req.user.username) 
-      throw new Error("Can't follow yourself")
+    if (req.body.id === req.user.username)
+      throw new Error("Can't follow yourself");
     const data = await db.followship.create({
       data: {
         followerId: req.user.id,
         followingId: req.body.id,
       },
-      select:{
-        follower:{
-          select:{
-        id: true,
-        name: true,
-        username: true,
-        avatarUrl: true,
-      }
-        }
-      }
+      select: {
+        follower: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            avatarUrl: true,
+          },
+        },
+      },
     });
     await db.notification.create({
       data: {
@@ -210,7 +245,7 @@ exports.followUser = async (req, res, next) => { // auth
         data: {
           follower: data.follower,
         },
-        receiverId:req.body.id
+        receiverId: req.body.id,
       },
     });
     res.json("Followed");
@@ -219,8 +254,8 @@ exports.followUser = async (req, res, next) => { // auth
   }
 };
 
-
-exports.unfollowUser = async (req, res, next) => { // auth
+exports.unfollowUser = async (req, res, next) => {
+  // auth
   try {
     const following = await db.user.findUniqueOrThrow({
       where: {
@@ -231,12 +266,12 @@ exports.unfollowUser = async (req, res, next) => { // auth
       },
     });
     await db.followship.delete({
-      where:{
-        followerId_followingId:{
-          followingId:following.id,
-          followerId:req.user.id
-        }
-      }
+      where: {
+        followerId_followingId: {
+          followingId: following.id,
+          followerId: req.user.id,
+        },
+      },
     });
     res.json("unFollowed");
   } catch (e) {

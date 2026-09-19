@@ -11,6 +11,7 @@ app.use(cookieParser())
 app.use(cors({
     origin:process.env.CLIENT_URL,
     credentials:true,
+    methods:["PATCH","POST","GET"]
 }))
 
 app.use("/post",postRouter)
