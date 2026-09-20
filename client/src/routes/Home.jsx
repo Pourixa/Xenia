@@ -18,7 +18,7 @@ export function HomeTab() {
   useEffect(() => {
     setSelected("home");
     if (tab === "fy") {
-      getRequest("/post?p="+pag).then((res) =>
+      getRequest("/post"+(pag === null ? "" : "?p="+pag)).then((res) =>
         res.json().then((json) => {
           if (isSigned) json.map(pst => pst.isLiked = pst.likes.length > 0);
           if(json.length === 0 ) setPag(null)
@@ -26,7 +26,7 @@ export function HomeTab() {
         }),
       );
     } else {
-      getRequest("/post/following?id="+user.id+"&p="+pag).then((res) =>
+      getRequest("/post/following?id="+user.id+(pag === null ? "" : "&p="+pag)).then((res) =>
         res.json().then((json) => {
           if (isSigned) json.map(pst => pst.isLiked = pst.likes.length > 0);
           if(json.length === 0 ) setPag(null)
@@ -38,7 +38,7 @@ export function HomeTab() {
   if(posts === null) 
     return <span>Loading</span>
   return <main className="overflow-y-auto flex flex-col items-center grow">
-    <HomeTabs setTab={setTab} setPag={setPag} isSigned={isSigned}/>
+    <HomeTabs setTab={setTab} setPosts={setPosts} setPag={setPag} isSigned={isSigned}/>
     <div className="max-w-dvw">
       {posts.map((pst,idx) => {
         return <Post isSigned={isSigned} setPosts={setPosts} idx={idx} post={pst} key={crypto.randomUUID()}/>

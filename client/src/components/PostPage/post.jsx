@@ -29,7 +29,7 @@ export function Post({ setPost, post, isSigned , user }) {
         }));
     } else {
       const res = await postRequest(`/user/${post.author.username}/unfollow`, {
-        followingUsername: post.author.username,
+        id: post.author.id,
       });
       if (res.ok)
         setPost((prev) => ({

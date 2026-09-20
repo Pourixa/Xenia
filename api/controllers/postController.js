@@ -19,6 +19,7 @@ exports.getPostsFollowing = async (req, res, next) => {
     });
     const ids = followings.followings.map((e) => e.followingId);
     const posts = await db.post.findMany({
+      skip: Number(req.query.p) * MAX_POSTS,
       take: MAX_POSTS,
       orderBy: {
         createdAt: "desc",
