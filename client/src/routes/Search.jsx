@@ -6,6 +6,7 @@ import { postRequest } from "@/lib/requests";
 import { User } from "@/components/Search/user";
 import { XeniaEmpty } from "@/components/customUI/XeniaEmpty";
 import { useSearchParams } from "react-router";
+import { Button } from "@/components/ui/button";
 
 export function Search() {
   const { setSelected } = useContext(SelectedContext);
@@ -13,15 +14,27 @@ export function Search() {
   const q = searchParams.get("s")
   const [text,setText] = useState(q ? q : "")
   const [result,setResult] = useState([])
-  useEffect(() => {
-    setSelected("search");
-    if(text.length > 0) {
-      postRequest("/user/search",{
-        q:text
-      }).then((r) => r.json().then(j => setResult(j)))
-    } else setResult([])
-  }, [setSelected,text]);
-  return <main className="grow overflow-auto">
+  const [pag,setPag] = useState(0)
+useEffect(() => {
+  setSelected("search");
+
+  if (!text.length) {
+    setResult([]);
+    return;
+  }
+  if(pag!=null)
+  postRequest("/user/search", {
+    q: text,
+    p: pag
+  })
+    .then(r => r.json())
+    .then(j => {
+      if(j.length === 0)
+        setPag(null)
+      setResult(prev => pag === 0 ? j : [...prev, ...j]);
+    });
+}, [pag, text]);
+  return <main className="grow overflow-auto flex flex-col">
     <div className="z-999 bg-background p-4 border-b sticky top-0">
       <div className=" flex border items-center p-1 focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 ">
           <Input onChange={e => {setText(e.target.value);setSearchParams({s:e.target.value});}} value={text} className={"border-0 focus-visible:ring-0"}  placeholder="Type to search..." />
@@ -33,5 +46,8 @@ export function Search() {
         return <User user={user} key={user.username}/>
       }) :  <XeniaEmpty HeaderIcon={<SearchX />} title={"No results found"} />}
     </div>
+    {(pag != null && result.length > 0 && <Button className={"m-2 "} onClick={() => {
+      setPag(prev => prev + 1)
+    }}>Load More</Button>)}
   </main>
 }

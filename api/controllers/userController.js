@@ -212,6 +212,7 @@ exports.searchUser = async (req, res, next) => {
         name: true,
         avatarUrl: true,
       },
+      skip: req.body.p * MAX_SEARCH,
       take: MAX_SEARCH,
     });
     res.json(searchResult);
