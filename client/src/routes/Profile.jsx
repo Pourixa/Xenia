@@ -8,7 +8,6 @@ import {
   useParams,
 } from "react-router";
 import { getRequest, postRequest } from "@/lib/requests";
-import { Post } from "@/components/Home/Post";
 import { ProfileTabs } from "@/components/Profile/ProfileTabs";
 import { XeniaAvatar } from "@/components/customUI/XeniaAvatar";
 import { Button } from "@/components/ui/button";

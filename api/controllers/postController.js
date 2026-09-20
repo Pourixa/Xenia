@@ -63,6 +63,7 @@ exports.getPostsFollowing = async (req, res, next) => {
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await db.post.findMany({
+      skip:Number(req.query.p) * MAX_POSTS,
       take: MAX_POSTS,
       orderBy: {
         createdAt: "desc",

@@ -6,7 +6,7 @@ import { Heart, LucideMessageSquare } from "lucide-react";
 export function Post({ setPosts, post, isSigned , idx }) {
   const loc = useLocation();
   return (
-    <div className="flex border-b last:border-b-0 pl-4 pr-4 pt-1 pb-1">
+    <div className="flex border-b pl-4 pr-4 pt-1 pb-1">
       <Link
         state={{
           from: loc.pathname,

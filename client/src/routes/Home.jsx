@@ -4,43 +4,49 @@ import { Header } from "@/components/Home/Header";
 import { Post } from "@/components/Home/Post";
 import { getRequest } from "@/lib/requests";
 import { useState, createContext, useContext, useEffect } from "react";
-import { Outlet, useNavigate, useOutletContext } from "react-router";
+import { Outlet, useOutletContext } from "react-router";
+import { Button } from "@/components/ui/button";
 
 export const SelectedContext = createContext(null);
 
 export function HomeTab() {
   const { setSelected } = useContext(SelectedContext);
   const [tab, setTab] = useState("fy");
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState([]);
   const {isSigned , user} = useOutletContext()
-  const nav = useNavigate()
+  const [pag,setPag] = useState(0)
   useEffect(() => {
     setSelected("home");
     if (tab === "fy") {
-      getRequest("/post").then((res) =>
+      getRequest("/post?p="+pag).then((res) =>
         res.json().then((json) => {
           if (isSigned) json.map(pst => pst.isLiked = pst.likes.length > 0);
-          setPosts(json);
+          if(json.length === 0 ) setPag(null)
+          setPosts(prev => [...prev , ...json]);
         }),
       );
     } else {
-      getRequest("/post/following?id="+user.id).then((res) =>
+      getRequest("/post/following?id="+user.id+"&p="+pag).then((res) =>
         res.json().then((json) => {
           if (isSigned) json.map(pst => pst.isLiked = pst.likes.length > 0);
-          setPosts(json);
+          if(json.length === 0 ) setPag(null)
+          setPosts(prev => [...prev , ...json])
         }),
       );
     }
-  }, [setSelected, tab]);
+  }, [tab,pag]);
   if(posts === null) 
     return <span>Loading</span>
   return <main className="overflow-y-auto flex flex-col items-center grow">
-    <HomeTabs setTab={setTab} isSigned={isSigned}/>
+    <HomeTabs setTab={setTab} setPag={setPag} isSigned={isSigned}/>
     <div className="max-w-dvw">
       {posts.map((pst,idx) => {
-        return <Post isSigned={isSigned} setPosts={setPosts} idx={idx} post={pst} key={pst.id}/>
+        return <Post isSigned={isSigned} setPosts={setPosts} idx={idx} post={pst} key={crypto.randomUUID()}/>
       })}
     </div>
+    {(pag != null && <Button className={"m-2"} onClick={() => {
+      setPag(prev => prev + 1)
+    }}>Load More</Button>)}
   </main>;
 }
 
