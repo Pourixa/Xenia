@@ -26,13 +26,13 @@ export function Profile() {
     if(!profileUser.isFollowed)
     {
       const res = await postRequest(`/user/${profileUser.username}/follow`,{
-        followingUsername:profileUser.username
+        id:profileUser.id
       })
       if(res.ok)
         setProfileUser(prev => ({...prev,isFollowed : true}))
     } else{ 
       const res = await postRequest(`/user/${profileUser.username}/unfollow`,{
-        followingUsername:profileUser.username
+        id:profileUser.id
       })
       if(res.ok)
         setProfileUser(prev => ({...prev,isFollowed : false}))
@@ -58,7 +58,7 @@ export function Profile() {
     }
 
     fetchUser();
-  }, [params.username, user, setSelected]);
+  }, [params.username]);
   if (!profileUser) return <>loading</>;
   console.log(profileUser);
   return (

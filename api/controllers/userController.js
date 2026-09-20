@@ -82,6 +82,7 @@ exports.readNotifs = async (req, res, next) => {
         isRead: true,
       },
     });
+    res.json("Read the new notifications")
   } catch (e) {
     next(e);
   }
@@ -117,6 +118,7 @@ exports.getUserInfo = async (req, res, next) => {
         username: req.params.username,
       },
       select: {
+        id:true,
         username: true,
         name: true,
         about: true,
@@ -257,18 +259,10 @@ exports.followUser = async (req, res, next) => {
 exports.unfollowUser = async (req, res, next) => {
   // auth
   try {
-    const following = await db.user.findUniqueOrThrow({
-      where: {
-        username: req.body.followingUsername,
-      },
-      select: {
-        id: true,
-      },
-    });
     await db.followship.delete({
       where: {
         followerId_followingId: {
-          followingId: following.id,
+          followingId: req.body.id,
           followerId: req.user.id,
         },
       },
