@@ -144,20 +144,16 @@ exports.getPostsById = async (req, res, next) => {
   }
 };
 
-exports.getCommentsByUsername = async (req, res, next) => {
+exports.getCommentsById = async (req, res, next) => {
   try {
-    const user = await db.user.findUnique({
-      where: {
-        username: req.params.username,
-      },
-    });
     const comments = await db.comment.findMany({
       orderBy: {
         createdAt: "desc",
       },
       where: {
-        commenterId: user.id,
+        commenterId: Number(req.params.id),
       },
+      skip: MAX_POSTS * Number(req.query.p),
       take: MAX_POSTS,
       select: {
         id: true,
@@ -344,8 +340,8 @@ exports.commentPost = async (req, res, next) => {
         }
       },
     });
-    // if(req.user.id === comment.post.author.id)
-    //   return res.json(comment);
+    if(req.user.id === comment.post.author.id)
+      return res.json(comment);
     await db.notification.create({
       data:{
         data:{
