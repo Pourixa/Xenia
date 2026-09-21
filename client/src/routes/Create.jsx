@@ -17,10 +17,11 @@ export function Create() {
   async function handleClick() {
     if(isSigned)
     {
-      await postRequest("/post",{
+      const res = await postRequest("/post",{
         content:text
       })
-      nav(`/${user.username}`)
+      const post = await res.json();
+      nav(`/${user.username}/post/${post.id}`)
     }
     else {
       nav("/signin")

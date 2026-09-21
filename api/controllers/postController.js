@@ -301,6 +301,9 @@ exports.postPost = async (req, res, next) => {
         content: req.body.content,
         authorId: req.user.id,
       },
+      select:{
+        id:true
+      }
     });
     res.json(post);
   } catch (e) {
