@@ -7,6 +7,7 @@ import { User } from "@/components/Search/user";
 import { XeniaEmpty } from "@/components/customUI/XeniaEmpty";
 import { useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
+import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 
 export function Search() {
   const { setSelected } = useContext(SelectedContext);
@@ -46,8 +47,6 @@ useEffect(() => {
         return <User user={user} key={user.username}/>
       }) :  <XeniaEmpty HeaderIcon={<SearchX />} title={"No results found"} />}
     </div>
-    {(pag != null && result.length > 0 && <Button className={"m-2 "} onClick={() => {
-      setPag(prev => prev + 1)
-    }}>Load More</Button>)}
+    <XeniaLoadMore pag={pag} setPag={setPag} list={result}/>
   </main>
 }

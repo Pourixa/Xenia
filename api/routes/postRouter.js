@@ -5,12 +5,12 @@ const {
   updatePost,
   getPost,
   getPostsFollowing,
-  getPostsByUsername,
   getCommentsByUsername,
   getLikesByUsername,
   commentPost,
   likePost,
   unlikePost,
+  getPostsById,
 } = require("../controllers/postController");
 
 const {authenticate, checkValidation} = require("../middleware/utils")
@@ -19,7 +19,7 @@ const {commentValidations} = require("../middleware/postValidations")
 const postRouter = require("express").Router();
 
 postRouter.get("/",authenticate, getPosts);
-postRouter.get("/user/:username",authenticate, getPostsByUsername);
+postRouter.get("/user/:id",authenticate, getPostsById);
 postRouter.get("/comments/:username", getCommentsByUsername);
 postRouter.get("/likes/:username", getLikesByUsername);
 postRouter.get("/following",authenticate, getPostsFollowing);

@@ -101,23 +101,16 @@ exports.getPosts = async (req, res, next) => {
   }
 };
 
-exports.getPostsByUsername = async (req, res, next) => {
+exports.getPostsById = async (req, res, next) => {
   try {
-    const user = await db.user.findUnique({
-      where: {
-        username: req.params.username,
-      },
-      select:{
-        id:true
-      }
-    });
     const posts = await db.post.findMany({
       where: {
-        authorId: user.id,
+        authorId: Number(req.params.id),
       },
       orderBy: {
         createdAt: "desc",
       },
+      skip:MAX_POSTS * Number(req.query.p),
       take: MAX_POSTS,
       select: {
         content: true,

@@ -6,6 +6,7 @@ import { getRequest } from "@/lib/requests";
 import { useState, createContext, useContext, useEffect } from "react";
 import { Outlet, useOutletContext } from "react-router";
 import { Button } from "@/components/ui/button";
+import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 
 export const SelectedContext = createContext(null);
 
@@ -61,16 +62,7 @@ export function HomeTab() {
           );
         })}
       </div>
-      {pag != null && posts.length > 0 && (
-        <Button
-          className={"m-2"}
-          onClick={() => {
-            setPag((prev) => prev + 1);
-          }}
-        >
-          Load More
-        </Button>
-      )}
+        <XeniaLoadMore setPag={setPag} pag={pag} list={posts} />
     </main>
   );
 }

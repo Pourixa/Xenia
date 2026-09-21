@@ -108,7 +108,7 @@ export function Profile() {
       </div>
       <div >
         <ProfileTabs state={loc.state} />
-        <Outlet context={isSigned}/>
+        <Outlet context={{profileUser:profileUser,isSigned:isSigned}}/>
       </div>
     </main>
   );
