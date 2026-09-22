@@ -21,7 +21,7 @@ const postRouter = require("express").Router();
 postRouter.get("/",authenticate, getPosts);
 postRouter.get("/user/:id",authenticate, getPostsById);
 postRouter.get("/comments/:id", getCommentsById);
-postRouter.get("/likes/:username", getLikesByUsername);
+postRouter.get("/likes/:id", getLikesByUsername);
 postRouter.get("/following",authenticate, getPostsFollowing);
 postRouter.get("/:postId",authenticate, getPost);
 

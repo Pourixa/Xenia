@@ -1,7 +1,8 @@
 const db = require("../prisma/db").prisma;
 
 const MAX_POSTS = 20;
-
+const MAX_LIKES = 20;
+const MAX_COMMENTS = 20;
 exports.getPostsFollowing = async (req, res, next) => {
   try {
     if (!req.user) throw new Error("NO USER");
@@ -153,8 +154,8 @@ exports.getCommentsById = async (req, res, next) => {
       where: {
         commenterId: Number(req.params.id),
       },
-      skip: MAX_POSTS * Number(req.query.p),
-      take: MAX_POSTS,
+      skip: MAX_COMMENTS * Number(req.query.p),
+      take: MAX_COMMENTS,
       select: {
         id: true,
         content: true,
@@ -187,19 +188,15 @@ exports.getCommentsById = async (req, res, next) => {
 
 exports.getLikesByUsername = async (req, res, next) => {
   try {
-    const user = await db.user.findUnique({
-      where: {
-        username: req.params.username,
-      },
-    });
     const likes = await db.like.findMany({
       orderBy: {
         createdAt: "desc",
       },
       where: {
-        likerId: user.id,
+        likerId: Number(req.params.id),
       },
-      take: MAX_POSTS,
+      skip:MAX_LIKES * req.query.p,
+      take: MAX_LIKES,
       select: {
         id: true,
         createdAt: true,

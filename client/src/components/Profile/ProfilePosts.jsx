@@ -18,9 +18,9 @@ export function ProfilePosts() {
         );
         const json = await res.json();
         if (isSigned) json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-        if (pag === 0) setPosts(json);
-        else setPosts((prev) => [...prev, ...json]);
         if (json.length === 0) setPag(null);
+        else if (pag === 0) setPosts(json);
+        else setPosts((prev) => [...prev, ...json]);
       }
     })();
   }, [pag]);
