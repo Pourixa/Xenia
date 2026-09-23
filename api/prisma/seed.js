@@ -9,7 +9,7 @@ async function seed() {
     for (let i = 0; i < 50; i++) {
       const { id, username } = await db.user.create({
         data: {
-          username: faker.internet.username() + i,
+          username: faker.internet.username().toLowerCase() + i,
           avatarUrl: Math.random() > 0.5 ? faker.image.avatar() : null,
           name: faker.internet.displayName(),
           about: Math.random() > 0.5 ? faker.person.bio() : null,

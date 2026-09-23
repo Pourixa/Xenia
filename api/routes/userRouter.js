@@ -1,6 +1,7 @@
-const { updateUser, deleteUser, searchUser, getCurrentUser, getUserInfo, followUser, unfollowUser, getNotifications, readNotifs } = require("../controllers/userController")
+const { updateUser, deleteUser, searchUser, getCurrentUser, getUserInfo, followUser, unfollowUser, getNotifications, readNotifs, editprofile } = require("../controllers/userController")
 const { githubAuth, githubAuthCallback } = require("../middleware/githubAuth")
-const {authenticate} = require("../middleware/utils")
+const { profileValidations } = require("../middleware/profileValidations")
+const {authenticate, checkValidation} = require("../middleware/utils")
 const userRouter = require("express").Router()
 
 userRouter.patch("/",updateUser)  //authenticate update user
@@ -20,7 +21,7 @@ userRouter.get("/auth/github/callback",authenticate,githubAuthCallback)
 userRouter.get("/:username",getUserInfo)  // get user by username
 
 userRouter.patch("/readNotifications",authenticate,readNotifs)
-
+userRouter.patch("/editprofile",...profileValidations,checkValidation,authenticate,editprofile)
 
 
 

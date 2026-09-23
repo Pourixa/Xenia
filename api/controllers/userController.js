@@ -273,3 +273,23 @@ exports.unfollowUser = async (req, res, next) => {
     next(e);
   }
 };
+
+
+exports.editprofile = async (req,res,next) => {
+  try{
+    const user = await db.user.update({
+      where:{
+        id:req.user.id,
+      },
+      data:{
+        about:req.body.bio,
+        name:req.body.name,
+        username:req.body.username,
+        avatarUrl:req.body.avatarUrl
+      }
+    })
+    res.json("Profile Updated")
+  } catch(e) {
+  next(e)
+  }
+}

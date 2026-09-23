@@ -14,7 +14,7 @@ const {
 } = require("../controllers/postController");
 
 const {authenticate, checkValidation} = require("../middleware/utils")
-const {commentValidations} = require("../middleware/postValidations")
+const {commentValidations, postValidations} = require("../middleware/postValidations")
 
 const postRouter = require("express").Router();
 
@@ -25,7 +25,7 @@ postRouter.get("/likes/:id", getLikesByUsername);
 postRouter.get("/following",authenticate, getPostsFollowing);
 postRouter.get("/:postId",authenticate, getPost);
 
-postRouter.post("/",authenticate, postPost); //authenitcate
+postRouter.post("/",...postValidations,checkValidation,authenticate, postPost); //authenitcate
 postRouter.post("/:postId/comment",...commentValidations,checkValidation,authenticate, commentPost); //authenitcate
 postRouter.post("/:postId/like",authenticate, likePost); //authenitcate
 postRouter.post("/:postId/unlike",authenticate, unlikePost); //authenitcate
