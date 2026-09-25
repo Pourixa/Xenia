@@ -7,6 +7,7 @@ import { useState, createContext, useContext, useEffect } from "react";
 import { Outlet, useOutletContext } from "react-router";
 import { Button } from "@/components/ui/button";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
+import { MAX_POSTS } from "@/lib/utils";
 
 export const SelectedContext = createContext(null);
 
@@ -24,7 +25,10 @@ export function HomeTab() {
           res.json().then((json) => {
             if (isSigned)
               json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-            if (json.length === 0) setPag(null);
+            if (pag === 0 && json.length === 0) {
+              setPag(null);
+              setPosts([]);
+            } else if (json.length < MAX_POSTS) setPag(null);
             setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
           }),
         );
@@ -33,7 +37,10 @@ export function HomeTab() {
           res.json().then((json) => {
             if (isSigned)
               json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-            if (json.length === 0) setPag(null);
+            if (pag === 0 && json.length === 0) {
+              setPag(null);
+              setPosts([]);
+            } else if (json.length < MAX_POSTS) setPag(null);
             setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
           }),
         );
@@ -62,7 +69,7 @@ export function HomeTab() {
           );
         })}
       </div>
-        <XeniaLoadMore setPag={setPag} pag={pag} list={posts} />
+      <XeniaLoadMore setPag={setPag} pag={pag} list={posts} />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import { Like } from "./Like";
 import { HeartX } from "lucide-react";
 import { XeniaEmpty } from "../customUI/XeniaEmpty";
 import { XeniaLoadMore } from "../customUI/XeniaLoadmore";
+import { MAX_LIKES } from "@/lib/utils";
 
 export function ProfileLikes() {
   const [likes, setLikes] = useState(null);
@@ -18,7 +19,10 @@ export function ProfileLikes() {
           "/post/likes/" + profileUser.id + "?p=" + pag,
         );
         const json = await res.json();
-        if (json.length === 0) setPag(null);
+        if (pag === 0 && json.length === 0) {
+          setPag(null);
+          setLikes([]);
+        } else if (json.length < MAX_LIKES) setPag(null);
         else if (pag === 0) setLikes(json);
         else setLikes((prev) => [...prev, ...json]);
       }

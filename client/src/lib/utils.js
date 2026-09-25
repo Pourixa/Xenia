@@ -97,3 +97,9 @@ export async function handleLikeUnLike(post, setPost, idx = -1) {
     }
   }
 }
+
+export const MAX_POSTS = 20;
+export const MAX_LIKES = 20;
+export const MAX_COMMENTS = 20;
+export const MAX_NOTIFS = 20;
+export const MAX_SEARCH = 20;

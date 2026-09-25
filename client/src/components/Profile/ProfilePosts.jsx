@@ -5,6 +5,7 @@ import { Post } from "../Home/Post";
 import { SquareXIcon } from "lucide-react";
 import { XeniaEmpty } from "../customUI/XeniaEmpty";
 import { XeniaLoadMore } from "../customUI/XeniaLoadmore";
+import { MAX_POSTS } from "@/lib/utils";
 
 export function ProfilePosts() {
   const [posts, setPosts] = useState(null);
@@ -18,7 +19,8 @@ export function ProfilePosts() {
         );
         const json = await res.json();
         if (isSigned) json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-        if (json.length === 0) setPag(null);
+        if(pag === 0 && json.length === 0) {setPag(null) ; setPosts([])}
+        else if (json.length < MAX_POSTS) setPag(null);
         else if (pag === 0) setPosts(json);
         else setPosts((prev) => [...prev, ...json]);
       }

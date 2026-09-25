@@ -5,6 +5,7 @@ import { Comment } from "./Comment";
 import { XeniaEmpty } from "../customUI/XeniaEmpty";
 import { MessageSquareX } from "lucide-react";
 import { XeniaLoadMore } from "../customUI/XeniaLoadmore";
+import { MAX_COMMENTS } from "@/lib/utils";
 
 export function ProfileComments() {
   const [comments, setComments] = useState(null);
@@ -17,7 +18,10 @@ export function ProfileComments() {
           "/post/comments/" + profileUser.id + "?p=" + pag,
         );
         const json = await res.json();
-        if (json.length === 0) setPag(null);
+        if (pag === 0 && json.length === 0) {
+          setPag(null);
+          setComments([]);
+        } else if (json.length < MAX_COMMENTS) setPag(null);
         else if (pag === 0) setComments(json);
         else setComments((prev) => [...prev, ...json]);
       }
