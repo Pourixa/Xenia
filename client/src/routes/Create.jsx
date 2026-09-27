@@ -6,6 +6,8 @@ import XeniaEmojiPicker from "@/components/Create/EmojiPicker";
 import { Separator } from "@/components/ui/separator";
 import {useNavigate, useOutletContext } from "react-router";
 import { postRequest } from "@/lib/requests";
+import { Image } from "lucide-react";
+import { XeniaImageUploader } from "@/components/Create/XeniaImageUploader";
 
 const MAX_LENGTH = 280;
 export function Create() {
@@ -48,8 +50,9 @@ export function Create() {
           />
           <Separator className={"justify-self-center h-px w-[95%]"} />
           <div className=" flex items-center p-1  justify-between pl-4 pr-4">
-            <div>
+            <div className="flex gap-2">
               <XeniaEmojiPicker setText={setText} maxLength={MAX_LENGTH} />
+              <XeniaImageUploader/>
             </div>
             <span>
               {text.length} / {MAX_LENGTH}

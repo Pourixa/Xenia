@@ -17,7 +17,7 @@ export default function XeniaEmojiPicker({ setText, maxLength }) {
   return (
     <Popover>
       <PopoverTrigger >
-        <SmileIcon className="active:bg-foreground active:text-background rounded-full" />
+        <SmileIcon className="active:bg-foreground active:text-primary rounded-full" />
       </PopoverTrigger>
       <PopoverContent className="w-fit p-0">
         <EmojiPicker
