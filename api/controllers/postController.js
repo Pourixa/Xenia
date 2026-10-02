@@ -33,6 +33,11 @@ exports.getPostsFollowing = async (req, res, next) => {
         },
       },
       select: {
+        images: {
+          select: {
+            imageURL: true,
+          },
+        },
         content: true,
         createdAt: true,
         id: true,
@@ -67,12 +72,17 @@ exports.getPostsFollowing = async (req, res, next) => {
 exports.getPosts = async (req, res, next) => {
   try {
     const posts = await db.post.findMany({
-      skip:Number(req.query.p) * MAX_POSTS,
+      skip: Number(req.query.p) * MAX_POSTS,
       take: MAX_POSTS,
       orderBy: {
         createdAt: "desc",
       },
       select: {
+        images: {
+          select: {
+            imageURL: true,
+          },
+        },
         content: true,
         createdAt: true,
         id: true,
@@ -113,9 +123,14 @@ exports.getPostsById = async (req, res, next) => {
       orderBy: {
         createdAt: "desc",
       },
-      skip:MAX_POSTS * Number(req.query.p),
+      skip: MAX_POSTS * Number(req.query.p),
       take: MAX_POSTS,
       select: {
+        images: {
+          select: {
+            imageURL: true,
+          },
+        },
         content: true,
         createdAt: true,
         id: true,
@@ -188,7 +203,7 @@ exports.getCommentsById = async (req, res, next) => {
   }
 };
 
-exports.getLikesByUsername = async (req, res, next) => {
+exports.getLikesById = async (req, res, next) => {
   try {
     const likes = await db.like.findMany({
       orderBy: {
@@ -197,7 +212,7 @@ exports.getLikesByUsername = async (req, res, next) => {
       where: {
         likerId: Number(req.params.id),
       },
-      skip:MAX_LIKES * req.query.p,
+      skip: MAX_LIKES * req.query.p,
       take: MAX_LIKES,
       select: {
         id: true,
@@ -238,11 +253,11 @@ exports.getPost = async (req, res, next) => {
         id: true,
         content: true,
         createdAt: true,
-        images:{
-          select:{
-            imageURL:true
-          }
-        },  
+        images: {
+          select: {
+            imageURL: true,
+          },
+        },
         likes: !req.user
           ? false
           : {
@@ -279,7 +294,7 @@ exports.getPost = async (req, res, next) => {
             username: true,
             avatarUrl: true,
             name: true,
-            id:true,
+            id: true,
 
             followers: !req.user
               ? false
@@ -305,25 +320,27 @@ exports.postPost = async (req, res, next) => {
         content: req.body.content,
         authorId: req.user.id,
       },
-      select:{
-        id:true
-      }
+      select: {
+        id: true,
+      },
     });
 
     if (req.files?.length) {
-      const files = await Promise.all(req.files.map(async (file) => {
-        const imageURL = await uploadFile(file.buffer, file.mimetype);
-        return {
-          imageURL,
-          size: file.size,
-          type: file.mimetype,
-          name: file.originalname,
-          postId: post.id,
-        }
-      }));
+      const files = await Promise.all(
+        req.files.map(async (file) => {
+          const imageURL = await uploadFile(file.buffer, file.mimetype);
+          return {
+            imageURL,
+            size: file.size,
+            type: file.mimetype,
+            name: file.originalname,
+            postId: post.id,
+          };
+        }),
+      );
       await db.image.createMany({
-        data: files
-      })
+        data: files,
+      });
     }
 
     res.json(post);
@@ -351,30 +368,29 @@ exports.commentPost = async (req, res, next) => {
             name: true,
           },
         },
-        post:{
-          select:{
-            id:true,
-            author:{
-              select:{
-                id:true,
-                username:true,
-              }
-            }
-          }
-        }
+        post: {
+          select: {
+            id: true,
+            author: {
+              select: {
+                id: true,
+                username: true,
+              },
+            },
+          },
+        },
       },
     });
-    if(req.user.id === comment.post.author.id)
-      return res.json(comment);
+    if (req.user.id === comment.post.author.id) return res.json(comment);
     await db.notification.create({
-      data:{
-        data:{
-          ...comment
+      data: {
+        data: {
+          ...comment,
         },
-        eventType:"COMMENT",
-        receiverId:comment.post.author.id
-      }
-    })
+        eventType: "COMMENT",
+        receiverId: comment.post.author.id,
+      },
+    });
     res.json(comment);
   } catch (e) {
     next(e);
@@ -388,39 +404,38 @@ exports.likePost = async (req, res, next) => {
         postId: Number(req.params.postId),
         likerId: req.user.id,
       },
-      select:{
-        liker:{
-          select:{
-        id: true,
-        name: true,
-        username: true,
-        avatarUrl: true,
-      }
+      select: {
+        liker: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            avatarUrl: true,
+          },
         },
-        post:{
-          select:{
-            id:true,
-            author:{
-              select:{
-                username:true,
-                id:true
-              }
-            }
-          }
-        }
-      }
+        post: {
+          select: {
+            id: true,
+            author: {
+              select: {
+                username: true,
+                id: true,
+              },
+            },
+          },
+        },
+      },
     });
-    if(req.user.id === data.post.author.id)
-      return res.json("Post Liked");
+    if (req.user.id === data.post.author.id) return res.json("Post Liked");
     await db.notification.create({
-      data:{
-        data:{
-          ...data
+      data: {
+        data: {
+          ...data,
         },
-        eventType:"LIKE",
-        receiverId:data.post.author.id
-      }
-    })
+        eventType: "LIKE",
+        receiverId: data.post.author.id,
+      },
+    });
     res.json("Post Liked");
   } catch (e) {
     next(e);

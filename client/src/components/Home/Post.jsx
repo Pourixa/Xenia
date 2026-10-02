@@ -48,6 +48,11 @@ export function Post({ setPosts, post, isSigned , idx }) {
         >
           <div className="p-0.5 wrap-break-word">{post.content}</div>
         </Link>
+        <div className="flex overflow-x-auto scrollbar-none p-2 gap-2">
+          {post.images.map(img => {
+            return <img className="object-center object-cover w-full" src={img.imageURL} />
+          })}
+        </div>
         <div className="flex p-0.5 gap-2 text-muted-foreground items-center">
           <Link
             state={{

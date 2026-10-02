@@ -5,12 +5,12 @@ const {
   updatePost,
   getPost,
   getPostsFollowing,
-  getLikesByUsername,
   commentPost,
   likePost,
   unlikePost,
   getPostsById,
   getCommentsById,
+  getLikesById,
 } = require("../controllers/postController");
 
 const multer  = require('multer')
@@ -25,7 +25,7 @@ const postRouter = require("express").Router();
 postRouter.get("/",authenticate, getPosts);
 postRouter.get("/user/:id",authenticate, getPostsById);
 postRouter.get("/comments/:id", getCommentsById);
-postRouter.get("/likes/:id", getLikesByUsername);
+postRouter.get("/likes/:id", getLikesById);
 postRouter.get("/following",authenticate, getPostsFollowing);
 postRouter.get("/:postId",authenticate, getPost);
 

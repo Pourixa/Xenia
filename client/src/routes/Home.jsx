@@ -56,7 +56,7 @@ export function HomeTab() {
         setPag={setPag}
         isSigned={isSigned}
       />
-      <div className="max-w-dvw">
+      <div className="w-full">
         {posts.map((pst, idx) => {
           return (
             <Post
