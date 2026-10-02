@@ -46,7 +46,7 @@ model post {
 
   authorId Int
   content  String
-
+  images image[]
   createdAt DateTime @default(now())
 
   author   user      @relation(fields: [authorId], references: [id] , onDelete: Cascade)
@@ -99,4 +99,14 @@ model notification {
   data Json
 
   createdAt DateTime @default(now())
+}
+
+model image {
+  id String @default(uuid()) @id
+  postId Int
+  post post @relation(fields: [postId] , references: [id])
+  imageURL String
+  size Int
+  name String
+  type String
 }

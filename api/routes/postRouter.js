@@ -13,6 +13,10 @@ const {
   getCommentsById,
 } = require("../controllers/postController");
 
+const multer  = require('multer')
+const storage = multer.memoryStorage()
+
+const upload = multer({storage:storage})
 const {authenticate, checkValidation} = require("../middleware/utils")
 const {commentValidations, postValidations} = require("../middleware/postValidations")
 
@@ -25,7 +29,7 @@ postRouter.get("/likes/:id", getLikesByUsername);
 postRouter.get("/following",authenticate, getPostsFollowing);
 postRouter.get("/:postId",authenticate, getPost);
 
-postRouter.post("/",...postValidations,checkValidation,authenticate, postPost); //authenitcate
+postRouter.post("/",authenticate,upload.array("images",4),...postValidations,checkValidation, postPost); //authenitcate
 postRouter.post("/:postId/comment",...commentValidations,checkValidation,authenticate, commentPost); //authenitcate
 postRouter.post("/:postId/like",authenticate, likePost); //authenitcate
 postRouter.post("/:postId/unlike",authenticate, unlikePost); //authenitcate

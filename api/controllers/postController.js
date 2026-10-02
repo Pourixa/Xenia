@@ -1,3 +1,5 @@
+const { uploadFile } = require("../middleware/utils");
+
 const db = require("../prisma/db").prisma;
 
 const MAX_POSTS = 20;
@@ -302,6 +304,23 @@ exports.postPost = async (req, res, next) => {
         id:true
       }
     });
+
+    if (req.files?.length) {
+      const files = await Promise.all(req.files.map(async (file) => {
+        const imageURL = await uploadFile(file.buffer, file.mimetype);
+        return {
+          imageURL,
+          size: file.size,
+          type: file.mimetype,
+          name: file.originalname,
+          postId: post.id,
+        }
+      }));
+      await db.image.createMany({
+        data: files
+      })
+    }
+
     res.json(post);
   } catch (e) {
     next(e);

@@ -1,5 +1,21 @@
+const { createClient } = require('@supabase/supabase-js')
+const { randomUUID } = require("node:crypto");
 const jwt = require("jsonwebtoken");
 const {validationResult} = require("express-validator")
+require("dotenv").config()
+const supabase = createClient(process.env.PROJECT_URL, process.env.API_KEY)
+
+exports.uploadFile = async (buffer, contentType) => {
+  const { data, error } = await supabase.storage
+    .from('Images')
+    .upload(randomUUID(), buffer, { contentType });
+  if (error) {
+    throw error;
+  } else {
+    const urlStruct = supabase.storage.from('Images').getPublicUrl(data.path)
+    return urlStruct.data.publicUrl
+  }
+}
 
 exports.authenticate = (req, res, next) => {
   try {

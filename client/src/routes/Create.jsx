@@ -20,9 +20,14 @@ export function Create() {
   async function handleClick() {
     if(isSigned)
     {
-      const res = await postRequest("/post",{
-        content:text
-      })
+      console.log(files)
+      const formData = new FormData();
+      formData.append("content",text)
+      files.forEach((file) => {
+        formData.append("images",file.f)
+      }) 
+      const res = await postRequest("/post",formData)
+      console.log(res)
       const post = await res.json();
       nav(`/${user.username}/post/${post.id}`)
     }
