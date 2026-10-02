@@ -89,6 +89,11 @@ export function Post({ setPost, post, isSigned , user }) {
           )}
         </div>
         <div className="wrap-break-word">{post.content}</div>
+        <div className="flex overflow-x-auto scrollbar-none p-2 gap-2">
+          {post.images.map(img => {
+            return <img className="object-center object-cover w-full" src={img.imageURL} />
+          })}
+        </div>
         <div className="text-muted-foreground">
           <time dateTime={date}>
             {date.toLocaleTimeString(undefined, {

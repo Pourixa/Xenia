@@ -238,6 +238,11 @@ exports.getPost = async (req, res, next) => {
         id: true,
         content: true,
         createdAt: true,
+        images:{
+          select:{
+            imageURL:true
+          }
+        },  
         likes: !req.user
           ? false
           : {
