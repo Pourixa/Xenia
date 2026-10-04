@@ -1,6 +1,7 @@
 import { use, useContext, useEffect, useState } from "react";
 import { SelectedContext } from "./Home";
 import {
+  Link,
   Outlet,
   useLocation,
   useNavigate,
@@ -17,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 export function Profile() {
   const { setSelected } = useContext(SelectedContext);
   const [edit, setEdit] = useState(false);
+
   const [data, setData] = useState({
     avatarUrl: null,
     name: null,
@@ -119,7 +121,6 @@ export function Profile() {
               <Button onClick={() => nav("/signin")}>Sign in to Follow</Button>
             )}
           </div>
-                   
         ) : (
           <div className="flex justify-between">
             <div className="flex gap-2 flex-wrap">
@@ -196,19 +197,28 @@ export function Profile() {
             <Button onClick={() => handleEdit()}>Save</Button>
           </div>
         )}
-        {!edit && ( <div className="flex gap-4">
-          <span>
-            <span className="font-bold">{profileUser._count.posts}</span> Posts
-          </span>
-          <span>
-            <span className="font-bold">{profileUser._count.followings}</span>{" "}
-            Following
-          </span>
-          <span>
-            <span className="font-bold">{profileUser._count.followers}</span>{" "}
-            Followers
-          </span>
-        </div>)}
+        {!edit && (
+          <div className="flex gap-4">
+            <span>
+              <span className="font-bold">{profileUser._count.posts}</span>{" "}
+              Posts
+            </span>
+            <Link
+              to={"followships?tab=" + "followers"}
+              state={{ from: loc.pathname }}
+            >
+              <span className="font-bold">{profileUser._count.followers}</span>{" "}
+              Followers
+            </Link>
+            <Link
+              to={"followships?tab=" + "followings"}
+              state={{ from: loc.pathname }}
+            >
+              <span className="font-bold">{profileUser._count.followings}</span>{" "}
+              Following
+            </Link>
+          </div>
+        )}
       </div>
       <div>
         <ProfileTabs state={loc.state} />

@@ -1,5 +1,6 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
+const { prisma } = require("../prisma/db");
 
 const MAX_POSTS = 20;
 const MAX_NOTIFS = 20;
@@ -65,7 +66,7 @@ exports.getNotifications = async (req, res, next) => {
         isRead: false,
       },
     });
-    res.json({notifs:notifications , count:count});
+    res.json({ notifs: notifications, count: count });
   } catch (e) {
     next(e);
   }
@@ -82,7 +83,7 @@ exports.readNotifs = async (req, res, next) => {
         isRead: true,
       },
     });
-    res.json("Read the new notifications")
+    res.json("Read the new notifications");
   } catch (e) {
     next(e);
   }
@@ -118,7 +119,7 @@ exports.getUserInfo = async (req, res, next) => {
         username: req.params.username,
       },
       select: {
-        id:true,
+        id: true,
         username: true,
         name: true,
         about: true,
@@ -145,31 +146,56 @@ exports.getUserInfo = async (req, res, next) => {
   }
 };
 
-exports.getUserFollowers = async (req, res, next) => {
-  // followers:{
-  //   take:MAX_FOLLOW,
-  //   select:{
-  //     follower:{
-  //       select:{
-  //         avatarUrl:true,
-  //         name:true,
-  //         username:true
-  //       }
-  //     }
-  //   },
-  // },
-  // followings:{
-  //   take:MAX_FOLLOW,
-  //   select:{
-  //     follower:{
-  //       select:{
-  //         avatarUrl:true,
-  //         name:true,
-  //         username:true
-  //       }
-  //     }
-  //   },
-  // },
+exports.getUserFollowersByUsername = async (req, res, next) => {
+  try {
+    const followers = await db.followship.findMany({
+      where: {
+        following:{
+          username:req.params.username,
+        } 
+      },
+      take: MAX_FOLLOW,
+      skip: MAX_FOLLOW * req.query.p,
+      select: {
+        follower: {
+          select: {
+            username: true,
+            name: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    });
+    res.json(followers);
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.getUserFollowingsByUsername = async (req, res, next) => {
+  try {
+    const followings = await db.followship.findMany({
+      where: {
+        follower: {
+          username:req.params.username,
+        }
+      },
+      take: MAX_FOLLOW,
+      skip: MAX_FOLLOW * req.query.p,
+      select: {
+        following: {
+          select: {
+            username: true,
+            name: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    });
+    res.json(followings);
+  } catch (e) {
+    next(e);
+  }
 };
 
 exports.signupUser = async (req, res, next) => {
@@ -274,22 +300,21 @@ exports.unfollowUser = async (req, res, next) => {
   }
 };
 
-
-exports.editprofile = async (req,res,next) => {
-  try{
+exports.editprofile = async (req, res, next) => {
+  try {
     const user = await db.user.update({
-      where:{
-        id:req.user.id,
+      where: {
+        id: req.user.id,
       },
-      data:{
-        about:req.body.bio,
-        name:req.body.name,
-        username:req.body.username,
-        avatarUrl:req.body.avatarUrl
-      }
-    })
-    res.json("Profile Updated")
-  } catch(e) {
-  next(e)
+      data: {
+        about: req.body.bio,
+        name: req.body.name,
+        username: req.body.username,
+        avatarUrl: req.body.avatarUrl,
+      },
+    });
+    res.json("Profile Updated");
+  } catch (e) {
+    next(e);
   }
-}
+};

@@ -15,6 +15,7 @@ import { PostPage } from './routes/PostPage'
 import { ProfilePosts } from './components/Profile/ProfilePosts'
 import { ProfileLikes } from './components/Profile/ProfileLikes'
 import { ProfileComments } from './components/Profile/ProfileComments'
+import { Followships } from './routes/followships'
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
           { path: "comments", element: <ProfileComments /> },
         ]
       },
-
+      {path:":username/followships",element:<Followships/>},
       { path: ":username/post/:postId", element: <PostPage /> },
     ]
   },

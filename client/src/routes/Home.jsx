@@ -14,7 +14,7 @@ export const SelectedContext = createContext(null);
 export function HomeTab() {
   const { setSelected } = useContext(SelectedContext);
   const [tab, setTab] = useState("fy");
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(null);
   const { isSigned, user } = useOutletContext();
   const [pag, setPag] = useState(0);
   useEffect(() => {
