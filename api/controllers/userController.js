@@ -318,3 +318,11 @@ exports.editprofile = async (req, res, next) => {
     next(e);
   }
 };
+
+exports.userLogOut = async (req,res,next) => {
+  try{
+    res.clearCookie("token", { path: "/" }).sendStatus(204)
+  } catch(e) {
+  next(e)
+  }
+}

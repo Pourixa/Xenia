@@ -1,4 +1,4 @@
-const { updateUser, deleteUser, searchUser, getCurrentUser, getUserInfo, followUser, unfollowUser, getNotifications, readNotifs, editprofile, getUserFollowersByUsername, getUserFollowingsByUsername } = require("../controllers/userController")
+const { updateUser, deleteUser, searchUser, getCurrentUser, getUserInfo, followUser, unfollowUser, getNotifications, readNotifs, editprofile, getUserFollowersByUsername, getUserFollowingsByUsername, userLogOut } = require("../controllers/userController")
 const { githubAuth, githubAuthCallback } = require("../middleware/githubAuth")
 const { profileValidations } = require("../middleware/profileValidations")
 const {authenticate, checkValidation} = require("../middleware/utils")
@@ -13,6 +13,7 @@ userRouter.delete("/",deleteUser)  //authenticate delete user
 userRouter.post("/search",searchUser) // search user by query username
 userRouter.post("/:username/follow",authenticate,followUser) // search user by query username
 userRouter.post("/:username/unfollow",authenticate,unfollowUser) // search user by query username
+userRouter.post("/logout",userLogOut)
 
 userRouter.get("/",authenticate,getCurrentUser)
 userRouter.get("/notifications",authenticate,getNotifications)

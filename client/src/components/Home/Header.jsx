@@ -5,6 +5,14 @@ import { SelectedContext } from "@/routes/Home";
 import { useContext, useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { postRequest } from "@/lib/requests";
 const guest = "guest.png";
 
 export function Header({ isSigned, username, notifications, imageSrc, name }) {
@@ -12,6 +20,17 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
   const [breadCrumb, setBreadCrumb] = useState([]);
   const loc = useLocation();
   const nav = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const response = await postRequest("/user/logout", {});
+      if (!response.ok) {
+        throw new Error(`Logout failed (${response.status})`);
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    }
+  };
   useEffect(() => {
     if (loc.state?.from) {
       const from = loc.state?.from;
@@ -20,7 +39,7 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
       setBreadCrumb((prev) => [...prev, from]);
     }
   }, [loc.state]);
-  if ((loc.pathname === "/signin" | loc.pathname === "/signup")) {
+  if ((loc.pathname === "/signin") | (loc.pathname === "/signup")) {
     return;
   } else if (selected?.selected === "post") {
     return (
@@ -65,14 +84,36 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
   } else {
     return (
       <header className="sticky bg-background z-999 top-0 border-b-2 flex justify-between items-center p-1 pl-5 pr-5">
-        <Link to={isSigned ? `/${username}` : "/signin"}>
-          <XeniaAvatar
-            className={selected === "profile" ? "ring-2" : ""}
-            size="lg"
-            imageSrc={isSigned ? imageSrc : guest}
-            name={isSigned ? name : "G"}
-          />
-        </Link>
+        {isSigned ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <XeniaAvatar
+                className={selected === "profile" ? "ring-2" : ""}
+                size="lg"
+                imageSrc={isSigned ? imageSrc : guest}
+                name={isSigned ? name : "G"}
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                <Link to={`/${username}`}>Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} variant={"destructive"}>
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link to={"/signin"}>
+            <XeniaAvatar
+              className={selected === "profile" ? "ring-2" : ""}
+              size="lg"
+              imageSrc={isSigned ? imageSrc : guest}
+              name={isSigned ? name : "G"}
+            />
+          </Link>
+        )}
         <XeniaLogoNoName width={56} height={56} />
         <NotificationBell unreadNotifications={notifications} />
       </header>

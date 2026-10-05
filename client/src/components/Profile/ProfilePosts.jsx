@@ -20,13 +20,14 @@ export function ProfilePosts() {
         const json = await res.json();
         if (isSigned) json.map((pst) => (pst.isLiked = pst.likes.length > 0));
         if(pag === 0 && json.length === 0) {setPag(null) ; setPosts([])}
-        else if (json.length < MAX_POSTS) setPag(null);
         else if (pag === 0) setPosts(json);
+        else if (json.length < MAX_POSTS) setPag(null);
         else setPosts((prev) => [...prev, ...json]);
       }
     })();
   }, [pag]);
-
+  
+  console.log(posts)
   if (!posts) return <>loading</>;
   return (
     <div className="flex flex-col items-center grow">
