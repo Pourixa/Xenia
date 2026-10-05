@@ -6,6 +6,7 @@ import { HeartX } from "lucide-react";
 import { XeniaEmpty } from "../customUI/XeniaEmpty";
 import { XeniaLoadMore } from "../customUI/XeniaLoadmore";
 import { MAX_LIKES } from "@/lib/utils";
+import { Spinner } from "../ui/spinner";
 
 export function ProfileLikes() {
   const [likes, setLikes] = useState(null);
@@ -28,7 +29,7 @@ export function ProfileLikes() {
       }
     })();
   }, [pag]);
-  if (!likes) return <>loading</>;
+  if (!likes) return <Spinner/>;
   return (
     <div className="overflow-auto flex flex-col items-center grow w-full">
       <div className="w-full">

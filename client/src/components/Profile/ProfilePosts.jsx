@@ -6,6 +6,7 @@ import { SquareXIcon } from "lucide-react";
 import { XeniaEmpty } from "../customUI/XeniaEmpty";
 import { XeniaLoadMore } from "../customUI/XeniaLoadmore";
 import { MAX_POSTS } from "@/lib/utils";
+import { Spinner } from "../ui/spinner";
 
 export function ProfilePosts() {
   const [posts, setPosts] = useState(null);
@@ -25,10 +26,10 @@ export function ProfilePosts() {
         else setPosts((prev) => [...prev, ...json]);
       }
     })();
-  }, [pag]);
+  }, [pag,profileUser]);
   
   console.log(posts)
-  if (!posts) return <>loading</>;
+  if (!posts) return <Spinner/>;
   return (
     <div className="flex flex-col items-center grow">
       <div className="w-full">

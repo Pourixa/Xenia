@@ -8,6 +8,7 @@ import { Outlet, useOutletContext } from "react-router";
 import { Button } from "@/components/ui/button";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_POSTS } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 
 export const SelectedContext = createContext(null);
 
@@ -47,7 +48,7 @@ export function HomeTab() {
       }
     }
   }, [tab, pag]);
-  if (posts === null) return <span>Loading</span>;
+  if (posts === null) return <Spinner/> ;
   return (
     <main className="overflow-y-auto flex flex-col items-center grow">
       <HomeTabs
@@ -86,7 +87,7 @@ export function Home() {
       }),
     );
   }, [selected]);
-  if (!user && isSigned == null) return <>Loading</>;
+  if (!user && isSigned == null) return <Spinner className={"h-dvh"}/>;
   return (
     <div className="flex flex-col h-dvh">
       <SelectedContext value={{ selected, setSelected }}>

@@ -14,6 +14,7 @@ import { XeniaAvatar } from "@/components/customUI/XeniaAvatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner";
 
 export function Profile() {
   const { setSelected } = useContext(SelectedContext);
@@ -86,7 +87,7 @@ export function Profile() {
 
     fetchUser();
   }, [params.username]);
-  if (!profileUser) return <>loading</>;
+  if (!profileUser) return <Spinner/>;
   console.log(profileUser);
   return (
     <main className="overflow-y-auto flex flex-col  grow">
@@ -220,7 +221,7 @@ export function Profile() {
           </div>
         )}
       </div>
-      <div>
+      <div className="h-full">
         <ProfileTabs state={loc.state} />
         <Outlet context={{ profileUser: profileUser, isSigned: isSigned }} />
       </div>

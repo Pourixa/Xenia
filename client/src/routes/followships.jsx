@@ -1,6 +1,7 @@
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { FollowShipTabs } from "@/components/Followships/FollowShipTabs";
 import { User } from "@/components/Search/user";
+import { Spinner } from "@/components/ui/spinner";
 import { getRequest } from "@/lib/requests";
 import { MAX_FOLLOW } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -41,7 +42,7 @@ export function Followships() {
       }
     }
   }, [tab, pag]);
-  if (users === null) return <span>Loading</span>;
+  if (users === null) return <Spinner/>;
   return (
     <main className="overflow-y-auto flex flex-col items-center grow">
         <FollowShipTabs def={query.get("tab")} setUsers={setUsers} setTab={setTab} setPag={setPag}/>

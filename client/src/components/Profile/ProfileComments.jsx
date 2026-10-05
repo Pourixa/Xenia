@@ -6,6 +6,7 @@ import { XeniaEmpty } from "../customUI/XeniaEmpty";
 import { MessageSquareX } from "lucide-react";
 import { XeniaLoadMore } from "../customUI/XeniaLoadmore";
 import { MAX_COMMENTS } from "@/lib/utils";
+import { Spinner } from "../ui/spinner";
 
 export function ProfileComments() {
   const [comments, setComments] = useState(null);
@@ -27,7 +28,7 @@ export function ProfileComments() {
       }
     })();
   }, [pag]);
-  if (!comments) return <>loading</>;
+  if (!comments) return <Spinner/>;
   return (
     <div className="overflow-auto flex flex-col items-center grow w-full">
       <div className="w-full">

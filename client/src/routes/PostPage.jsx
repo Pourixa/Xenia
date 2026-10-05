@@ -10,6 +10,7 @@ import { XeniaEmpty } from "@/components/customUI/XeniaEmpty";
 import { MessageSquareX } from "lucide-react";
 import XeniaEmojiPicker from "@/components/Create/EmojiPicker";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 
 const MAX_LENGTH = 280;
 
@@ -56,7 +57,7 @@ export function PostPage() {
     });
   }, [setSelected]);
 
-  if (!post) return <>Loading</>;
+  if (!post) return <Spinner/>;
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">
