@@ -6,8 +6,9 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { postRequest } from "@/lib/requests";
 import { handleLikeUnLike } from "@/lib/utils";
+import { toast } from "../ui/toast";
 
-export function Post({ setPost, post, isSigned , user }) {
+export function Post({ setPost, post, isSigned, user }) {
   const { hash } = useLocation();
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const [searchParams] = useSearchParams();
@@ -15,30 +16,29 @@ export function Post({ setPost, post, isSigned , user }) {
   const loc = useLocation();
   const nav = useNavigate();
   async function handleFollowUnfollow() {
-    if (!post.author.isFollowed) {
-      const res = await postRequest(`/user/${post.author.username}/follow`, {
-        id: post.author.id,
+    const isFollowed = post.author.isFollowed;
+    const action = isFollowed ? "unfollow" : "follow";
+
+    try {
+      const res = await postRequest(
+        `/user/${post.author.username}/${action}`,
+        { id: post.author.id },
+      );
+      if (!res.ok) throw new Error(`${action} request failed (${res.status})`);
+
+      setPost((prev) => ({
+        ...prev,
+        author: {
+          ...prev.author,
+          isFollowed: !isFollowed,
+        },
+      }));
+    } catch (error) {
+      console.error(`Could not ${action} user:`, error);
+      toast.add({
+        title: `${isFollowed ? "Unfollow" : "Follow"} failed`,
+        type: "error",
       });
-      if (res.ok)
-        setPost((prev) => ({
-          ...prev,
-          author: {
-            ...prev.author,
-            isFollowed: true,
-          },
-        }));
-    } else {
-      const res = await postRequest(`/user/${post.author.username}/unfollow`, {
-        id: post.author.id,
-      });
-      if (res.ok)
-        setPost((prev) => ({
-          ...prev,
-          author: {
-            ...prev.author,
-            isFollowed: false,
-          },
-        }));
     }
   }
   useEffect(() => {
@@ -55,10 +55,10 @@ export function Post({ setPost, post, isSigned , user }) {
         }
       }
     }
-  }, [hash,scrollTrigger]);
+  }, [hash, scrollTrigger]);
 
   const date = new Date(post.createdAt);
-  console.log(post)
+  console.log(post);
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-col p-0.5">
@@ -78,20 +78,27 @@ export function Post({ setPost, post, isSigned , user }) {
               </span>
             </div>
           </div>
-          {isSigned ? user.id != post.author.id ? (
-            <Button onClick={() => handleFollowUnfollow()}>
-              {post.author.isFollowed ? "Unfollow" : "Follow"}
-            </Button>
-          ) : <></> : (
-            <Button onClick={() => nav("/signin")}>
-              Sign in to Follow
-            </Button>
+          {isSigned ? (
+            user.id != post.author.id ? (
+              <Button onClick={() => handleFollowUnfollow()}>
+                {post.author.isFollowed ? "Unfollow" : "Follow"}
+              </Button>
+            ) : (
+              <></>
+            )
+          ) : (
+            <Button onClick={() => nav("/signin")}>Sign in to Follow</Button>
           )}
         </div>
         <div className="wrap-break-word">{post.content}</div>
         <div className="flex overflow-x-auto scrollbar-none p-2 gap-2">
-          {post.images.map(img => {
-            return <img className="object-center object-cover w-full" src={img.imageURL} />
+          {post.images.map((img) => {
+            return (
+              <img
+                className="object-center object-cover w-full"
+                src={img.imageURL}
+              />
+            );
           })}
         </div>
         <div className="text-muted-foreground">
@@ -112,7 +119,7 @@ export function Post({ setPost, post, isSigned , user }) {
       <Separator className={"h-px bg-muted-foreground"} />
       <div className="flex p-0.5 gap-2 text-muted-foreground items-center">
         <Link
-          onClick={() => setScrollTrigger(prev => prev + 1)}
+          onClick={() => setScrollTrigger((prev) => prev + 1)}
           state={{
             from: loc.pathname,
           }}
@@ -123,8 +130,19 @@ export function Post({ setPost, post, isSigned , user }) {
           <MessageSquare className="active:fill-accent" />
           <span>{post._count.comments}</span>
         </Link>
-        <div onClick={() => isSigned ? handleLikeUnLike(post,setPost) : nav("/signin")} className="flex gap-0.5 active:text-primary " draggable={false}>
-          <Heart className={"active:fill-primary " + `${post.isLiked ? "fill-primary stroke-primary" : ""}`}/>
+        <div
+          onClick={() =>
+            isSigned ? handleLikeUnLike(post, setPost) : nav("/signin")
+          }
+          className="flex gap-0.5 active:text-primary "
+          draggable={false}
+        >
+          <Heart
+            className={
+              "active:fill-primary " +
+              `${post.isLiked ? "fill-primary stroke-primary" : ""}`
+            }
+          />
           <span>{post._count.likes}</span>
         </div>
       </div>
