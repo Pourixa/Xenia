@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "@/components/ui/toast";
 
 export function Profile() {
   const { setSelected } = useContext(SelectedContext);
@@ -59,11 +60,16 @@ export function Profile() {
       }));
       nav(`/${data.username.toLowerCase()}`);
     } else {
-      console.log(res.json());
+      const mes = await res.json()
+      toast.add({
+        title:"Update Failed - "+ mes.msg,
+        type:"error"
+      });
     }
   }
 
   useEffect(() => {
+    setEdit(false)
     async function fetchUser() {
       const r = await getRequest(`/user/${params.username}`);
       const profileInfo = await r.json();

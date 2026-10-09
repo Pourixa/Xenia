@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_POSTS } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
+import { Toaster } from "@/components/ui/toast";
 
 export const SelectedContext = createContext(null);
 
@@ -99,6 +100,7 @@ export function Home() {
           username={user?.username ?? ""}
         />
         <Outlet context={{ user, isSigned }} />
+        <Toaster/>
         <Footer />
       </SelectedContext>
     </div>

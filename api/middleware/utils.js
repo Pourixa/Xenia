@@ -5,6 +5,14 @@ const {validationResult} = require("express-validator")
 require("dotenv").config()
 const supabase = createClient(process.env.PROJECT_URL, process.env.API_KEY)
 
+class responseError extends Error {
+  constructor (message , code) 
+  {
+    super(message)
+    this.code = code
+  }
+}
+
 exports.uploadFile = async (buffer, contentType) => {
   const { data, error } = await supabase.storage
     .from('Images')
@@ -33,7 +41,7 @@ exports.checkValidation = async (req,res,next) => {
   try{
     const valid = validationResult(req)
     if(!valid.isEmpty())
-      throw new Error(valid.array()[0].msg)
+      throw new responseError(valid.array()[0].msg,400)
     next()
   } catch(e) {
   next(e)
@@ -41,7 +49,9 @@ exports.checkValidation = async (req,res,next) => {
 }
 
 exports.errorHandler = (err,req,res,next) => {
-    console.log(err)
+    console.log('err',err)
+    if(err.code === 400)
+      res.status(400).json({msg:err.message})
     res.status(500).json({msg:"Something went wrong."})
 }
 

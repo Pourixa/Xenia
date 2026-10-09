@@ -3,6 +3,7 @@ const { unavailableUsernames } = require("./utils");
 
 exports.profileValidations = [
     body("username").trim().toLowerCase()
+    .custom((value) => !/\s/.test(value)).withMessage("Username cannot contain white space")
     .not().isIn(unavailableUsernames)
     .notEmpty().withMessage("Username can't be empty")
     .isLength({min:1,max:39}).withMessage("Username must be between 1 to 39 characters")

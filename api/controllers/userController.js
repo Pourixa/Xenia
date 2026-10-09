@@ -302,7 +302,7 @@ exports.unfollowUser = async (req, res, next) => {
 
 exports.editprofile = async (req, res, next) => {
   try {
-    const user = await db.user.update({
+    await db.user.update({
       where: {
         id: req.user.id,
       },
