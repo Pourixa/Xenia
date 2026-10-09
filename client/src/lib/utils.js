@@ -69,7 +69,8 @@ export async function handleLikeUnLike(post, setPost, idx = -1) {
     }
   } catch {
     toast.add({
-      title:`${isPostLiked ? "Unlike" : "Like"} failed`
+      title:`${isPostLiked ? "Unlike" : "Like"} failed`,
+      type:"error"
     })
   }
 }
