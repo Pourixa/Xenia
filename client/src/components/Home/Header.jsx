@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { postRequest } from "@/lib/requests";
+import { toast } from "../ui/toast";
 const guest = "guest.png";
 
 export function Header({ isSigned, username, notifications, imageSrc, name }) {
@@ -24,11 +25,14 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
     try {
       const response = await postRequest("/user/logout", {});
       if (!response.ok) {
-        throw new Error(`Logout failed (${response.status})`);
+        throw new Error(`Logout failed !`);
       }
       window.location.reload();
     } catch (error) {
-      console.error("Logout request failed:", error);
+      toast.add({
+        title:"Logout request failed",
+        type:"error"
+      })
     }
   };
   useEffect(() => {
