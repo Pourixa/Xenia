@@ -19,34 +19,37 @@ export function PostPage() {
   const [post, setPost] = useState(null);
   const [text, setText] = useState("");
   const { postId } = useParams();
-  const { isSigned , user } = useOutletContext();
+  const { isSigned, user } = useOutletContext();
   const { setSelected } = useContext(SelectedContext);
   const nav = useNavigate();
 
   async function handleClick() {
-   try{ if (isSigned) {
+    try {
       const res = await postRequest(`/post/${postId}/comment`, {
         content: text,
       });
-      if (res.ok) {
-        const comment = await res.json();
-        setPost((prev) => ({
-          ...prev,
-          _count:{
-            ...prev._count,
-            comments: prev._count.comments + 1
-          },
-          comments: [comment, ...prev.comments],
-        }));
-        setText("");
+      if (isSigned) {
+        if (res.ok) {
+          const comment = await res.json();
+          setPost((prev) => ({
+            ...prev,
+            _count: {
+              ...prev._count,
+              comments: prev._count.comments + 1,
+            },
+            comments: [comment, ...prev.comments],
+          }));
+          setText("");
+        }
+      } else {
+        nav("/signin");
       }
-    } else {
-      nav("/signin");
-    }} catch {
+    } catch {
+      const msg = res.json();
       toast.add({
-        title:"Failed to add the comment ! ",
-        type:"error"
-      })
+        title: "Failed to add the comment ! - " + msg,
+        type: "error",
+      });
     }
   }
 
@@ -63,7 +66,7 @@ export function PostPage() {
     });
   }, [setSelected]);
 
-  if (!post) return <Spinner/>;
+  if (!post) return <Spinner />;
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">

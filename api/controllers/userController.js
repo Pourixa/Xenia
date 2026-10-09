@@ -1,6 +1,5 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
-const { prisma } = require("../prisma/db");
 
 const MAX_POSTS = 20;
 const MAX_NOTIFS = 20;
@@ -284,7 +283,6 @@ exports.followUser = async (req, res, next) => {
 };
 
 exports.unfollowUser = async (req, res, next) => {
-  // auth
   try {
     await db.followship.delete({
       where: {
