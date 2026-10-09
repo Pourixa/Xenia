@@ -11,6 +11,7 @@ import { MessageSquareX } from "lucide-react";
 import XeniaEmojiPicker from "@/components/Create/EmojiPicker";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "@/components/ui/toast";
 
 const MAX_LENGTH = 280;
 
@@ -23,7 +24,7 @@ export function PostPage() {
   const nav = useNavigate();
 
   async function handleClick() {
-    if (isSigned) {
+   try{ if (isSigned) {
       const res = await postRequest(`/post/${postId}/comment`, {
         content: text,
       });
@@ -41,6 +42,11 @@ export function PostPage() {
       }
     } else {
       nav("/signin");
+    }} catch {
+      toast.add({
+        title:"Failed to add the comment ! ",
+        type:"error"
+      })
     }
   }
 
