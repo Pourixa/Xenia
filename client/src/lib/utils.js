@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { postRequest } from "./requests";
+import { toast } from "@/components/ui/toast";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -31,70 +32,45 @@ export function timeAgo(date) {
 }
 
 export async function handleLikeUnLike(post, setPost, idx = -1) {
-  if (idx < 0) {
-    if (post.isLiked) {
-      const res = await postRequest(`/post/${post.id}/unlike`);
+  const isPostLiked = post.isLiked;
+  const action = isPostLiked ? "unlike" : "like";
+  try {
+    if (idx < 0) {
+      const res = await postRequest(`/post/${post.id}/${action}`);
       if (res.ok) {
         setPost((prev) => ({
           ...prev,
-          isLiked: false,
+          isLiked: isPostLiked ? false : true,
           _count: {
             ...prev._count,
-            likes: prev._count.likes - 1,
+            likes: isPostLiked ? a[idx]._count.likes - 1 : a[idx]._count.likes + 1,
           },
         }));
-      }
+      } else 
+        throw new Error()
     } else {
-      const res = await postRequest(`/post/${post.id}/like`);
+      const res = await postRequest(`/post/${post.id}/${action}`);
       if (res.ok) {
-        setPost((prev) => ({
-          ...prev,
-          isLiked: true,
-          _count: {
-            ...prev._count,
-            likes: prev._count.likes + 1,
-          },
-        }));
+        setPost((prev) => {
+          const a = [...prev];
+          a[idx] = {
+            ...post,
+            isLiked: isPostLiked? false : true,
+            _count: {
+              ...a[idx]._count,
+              likes: isPostLiked ? a[idx]._count.likes - 1 : a[idx]._count.likes + 1 ,
+            },
+          };
+          return a;
+        });
+      } else {
+        throw new Error()
       }
     }
-  } else {
-    if (post.isLiked) {
-      const res = await postRequest(`/post/${post.id}/unlike`);
-      if (res.ok) {
-        setPost(
-          prev => {
-            const a = [...prev]
-            a[idx] = {
-              ...post,
-              isLiked : false,
-               _count: {
-            ...a[idx]._count,
-            likes: a[idx]._count.likes - 1,
-          },
-            }
-            return a
-          }
-        );
-      }
-    } else {
-      const res = await postRequest(`/post/${post.id}/like`);
-      if (res.ok) {
-        setPost(
-          prev => {
-            const a = [...prev]
-            a[idx] = {
-              ...post,
-              isLiked : true,
-               _count: {
-            ...a[idx]._count,
-            likes: a[idx]._count.likes + 1,
-          },
-            }
-            return a
-          }
-        );
-      }
-    }
+  } catch {
+    toast.add({
+      title:`${isPostLiked ? "Unlike" : "Like"} failed`
+    })
   }
 }
 

@@ -33,8 +33,7 @@ export function Post({ setPost, post, isSigned, user }) {
           isFollowed: !isFollowed,
         },
       }));
-    } catch (error) {
-      console.error(`Could not ${action} user:`, error);
+    } catch {
       toast.add({
         title: `${isFollowed ? "Unfollow" : "Follow"} failed`,
         type: "error",

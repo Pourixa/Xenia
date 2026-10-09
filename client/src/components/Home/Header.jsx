@@ -28,7 +28,7 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
         throw new Error(`Logout failed !`);
       }
       window.location.reload();
-    } catch (error) {
+    } catch {
       toast.add({
         title:"Logout request failed",
         type:"error"
