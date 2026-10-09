@@ -34,16 +34,22 @@ export function Profile() {
   const nav = useNavigate();
 
   async function handleFollowUnfollow() {
-    if (!profileUser.isFollowed) {
-      const res = await postRequest(`/user/${profileUser.username}/follow`, {
-        id: profileUser.id,
+    const isFollowed = profileUser.isFollowed;
+    const action = isFollowed ? "unfollow" : "follow";
+
+    try {
+      const res = await postRequest(
+        `/user/${profileUser.username}/${action}`,
+        { id: profileUser.id },
+      );
+      if (!res.ok) throw new Error(`${action} request failed (${res.status})`);
+
+      setProfileUser((prev) => ({ ...prev, isFollowed: !isFollowed }));
+    } catch {
+      toast.add({
+        title: `${isFollowed ? "Unfollow" : "Follow"} failed`,
+        type: "error",
       });
-      if (res.ok) setProfileUser((prev) => ({ ...prev, isFollowed: true }));
-    } else {
-      const res = await postRequest(`/user/${profileUser.username}/unfollow`, {
-        id: profileUser.id,
-      });
-      if (res.ok) setProfileUser((prev) => ({ ...prev, isFollowed: false }));
     }
   }
 
