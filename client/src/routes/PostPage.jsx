@@ -40,12 +40,15 @@ export function PostPage() {
             comments: [comment, ...prev.comments],
           }));
           setText("");
+        } else {
+          throw new Error((await res.json()).msg)
         }
+          
       } else {
         nav("/signin");
       }
-    } catch {
-      const msg = res.json();
+    } catch(e) {
+      const msg = e.message;
       toast.add({
         title: "Failed to add the comment ! - " + msg,
         type: "error",

@@ -8,6 +8,7 @@ import {useNavigate, useOutletContext } from "react-router";
 import { postRequest } from "@/lib/requests";
 import { XeniaImageUploader } from "@/components/Create/XeniaImageUploader";
 import { XeniaImage } from "@/components/Create/XeniaImage";
+import { toast } from "@/components/ui/toast";
 
 const MAX_LENGTH = 280;
 export function Create() {
@@ -26,10 +27,16 @@ export function Create() {
       files.forEach((file) => {
         formData.append("images",file.f)
       }) 
-      const res = await postRequest("/post",formData)
-      console.log(res)
+      try{const res = await postRequest("/post",formData)
+      if(!res.ok)
+        throw new Error((await res.json()).msg)
       const post = await res.json();
-      nav(`/${user.username}/post/${post.id}`)
+      nav(`/${user.username}/post/${post.id}`)}catch(e) {
+        toast.add({
+          title:e.message,
+          type:"error"
+        })
+      }
     }
     else {
       nav("/signin")

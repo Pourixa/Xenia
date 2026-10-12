@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_POSTS } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
-import { Toaster } from "@/components/ui/toast";
+import { toast, Toaster } from "@/components/ui/toast";
 
 export const SelectedContext = createContext(null);
 
@@ -23,33 +23,47 @@ export function HomeTab() {
     setSelected("home");
     if (pag != null) {
       if (tab === "fy") {
-        getRequest("/post?p=" + pag).then((res) =>
-          res.json().then((json) => {
-            if (isSigned)
-              json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-            if (pag === 0 && json.length === 0) {
-              setPag(null);
-              setPosts([]);
-            } else if (json.length < MAX_POSTS) setPag(null);
-            setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
-          }),
-        );
+        getRequest("/post?p=" + pag)
+          .then((res) =>
+            res.json().then((json) => {
+              if (isSigned)
+                json.map((pst) => (pst.isLiked = pst.likes.length > 0));
+              if (pag === 0 && json.length === 0) {
+                setPag(null);
+                setPosts([]);
+              } else if (json.length < MAX_POSTS) setPag(null);
+              setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
+            }),
+          )
+          .catch((e) => {
+            toast.add({
+              title: "Can't fetch posts",
+              type: "error",
+            });
+          });
       } else {
-        getRequest("/post/following?id=" + user.id + "&p=" + pag).then((res) =>
-          res.json().then((json) => {
-            if (isSigned)
-              json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-            if (pag === 0 && json.length === 0) {
-              setPag(null);
-              setPosts([]);
-            } else if (json.length < MAX_POSTS) setPag(null);
-            setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
-          }),
-        );
+        getRequest("/post/following?id=" + user.id + "&p=" + pag)
+          .then((res) =>
+            res.json().then((json) => {
+              if (isSigned)
+                json.map((pst) => (pst.isLiked = pst.likes.length > 0));
+              if (pag === 0 && json.length === 0) {
+                setPag(null);
+                setPosts([]);
+              } else if (json.length < MAX_POSTS) setPag(null);
+              setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
+            }),
+          )
+          .catch((e) => {
+            toast.add({
+              title: "Can't fetch posts",
+              type: "error",
+            });
+          });
       }
     }
   }, [tab, pag]);
-  if (posts === null) return <Spinner/> ;
+  if (posts === null) return <Spinner />;
   return (
     <main className="overflow-y-auto flex flex-col items-center grow">
       <HomeTabs
@@ -88,7 +102,7 @@ export function Home() {
       }),
     );
   }, [selected]);
-  if (!user && isSigned == null) return <Spinner className={"h-dvh"}/>;
+  if (!user && isSigned == null) return <Spinner className={"h-dvh"} />;
   return (
     <div className="flex flex-col h-dvh">
       <SelectedContext value={{ selected, setSelected }}>
@@ -100,7 +114,7 @@ export function Home() {
           username={user?.username ?? ""}
         />
         <Outlet context={{ user, isSigned }} />
-        <Toaster/>
+        <Toaster />
         <Footer />
       </SelectedContext>
     </div>

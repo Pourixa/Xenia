@@ -23,7 +23,7 @@ export function Notifications() {
         }
       } catch {
         toast.add({
-          title: "Failed to receive notifications !",
+          title: "Failed to fetch notifications !",
           type: "error",
         });
       }

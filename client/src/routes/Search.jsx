@@ -8,6 +8,7 @@ import { XeniaEmpty } from "@/components/customUI/XeniaEmpty";
 import { useSearchParams } from "react-router";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_SEARCH } from "@/lib/utils";
+import { toast } from "@/components/ui/toast";
 
 export function Search() {
   const { setSelected } = useContext(SelectedContext);
@@ -53,6 +54,13 @@ export function Search() {
       })
       .finally(() => {
         setLoading(false);
+      }).catch((e) => {
+        toast.add(
+          {
+            title:"Failed to perform search !",
+            type:"error"
+          }
+        )
       });
 
   }, [pag, text, hasMore]);

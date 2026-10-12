@@ -54,7 +54,7 @@ export function Profile() {
   }
 
   async function handleEdit() {
-    const res = await patchRequest("/user/editprofile", data);
+    try{const res = await patchRequest("/user/editprofile", data);
     if (res.ok) {
       setEdit(false);
       setProfileUser((prev) => ({
@@ -67,8 +67,11 @@ export function Profile() {
       nav(`/${data.username.toLowerCase()}`);
     } else {
       const mes = await res.json()
-      toast.add({
-        title:"Update Failed - "+ mes.msg,
+      throw new Error(mes.msg)
+    }} catch (e)
+    {
+            toast.add({
+        title:"Update Failed - "+ e.message,
         type:"error"
       });
     }

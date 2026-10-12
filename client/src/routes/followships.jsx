@@ -2,6 +2,7 @@ import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { FollowShipTabs } from "@/components/Followships/FollowShipTabs";
 import { User } from "@/components/Search/user";
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "@/components/ui/toast";
 import { getRequest } from "@/lib/requests";
 import { MAX_FOLLOW } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -27,7 +28,12 @@ export function Followships() {
             } else if (json.length < MAX_FOLLOW) setPag(null);
             setUsers((prev) => (pag === 0 ? usrs : [...prev, ...usrs]));
           }),
-        );
+        ).catch(e => {
+          toast.add({
+            title:"Can't fetch followers !",
+            type:"error"
+          })
+        });
       } else {
         getRequest(`/user/${params.username}/followings?p=${pag}`).then((res) =>
           res.json().then((json) => {
@@ -38,7 +44,10 @@ export function Followships() {
             } else if (json.length < MAX_FOLLOW) setPag(null);
             setUsers((prev) => (pag === 0 ? usrs : [...prev, ...usrs]));
           }),
-        );
+        ).catch(toast.add({
+            title:"Can't fetch followings !",
+            type:"error"
+          }));
       }
     }
   }, [tab, pag]);
