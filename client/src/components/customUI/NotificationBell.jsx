@@ -4,13 +4,13 @@ import { Bell } from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
 
-export function NotificationBell({ unreadNotifications = 0 }) {
+export function NotificationBell({ unreadNotifications = 0 , InHeaderFooter = false }) {
   const { selected } = useContext(SelectedContext);
   const nav = useNavigate()
   return (
     <Avatar onClick={() => {nav("/notifications")}} className={"after:border-none hover:cursor-pointer"}>
       <AvatarFallback className={"bg-background text-foreground"}>
-        <Bell width={24} height={24} className={(selected === "notifications" ? "fill-foreground" : "")} />
+        <Bell width={InHeaderFooter ? 32 : 24} height={InHeaderFooter ? 32 : 24} className={(selected === "notifications" ? "fill-foreground" : "")} />
       </AvatarFallback>
       {unreadNotifications >= 1 && (
         <AvatarBadge className={"top-0 translate-x-2 -translate-y-2 p-3"}>

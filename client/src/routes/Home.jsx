@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_POSTS } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
-import { toast, Toaster } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toast";
+import { HeaderFooter } from "@/components/Home/HeaderFooter";
 
 export const SelectedContext = createContext(null);
 
@@ -23,43 +24,29 @@ export function HomeTab() {
     setSelected("home");
     if (pag != null) {
       if (tab === "fy") {
-        getRequest("/post?p=" + pag)
-          .then((res) =>
-            res.json().then((json) => {
-              if (isSigned)
-                json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-              if (pag === 0 && json.length === 0) {
-                setPag(null);
-                setPosts([]);
-              } else if (json.length < MAX_POSTS) setPag(null);
-              setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
-            }),
-          )
-          .catch((e) => {
-            toast.add({
-              title: "Can't fetch posts",
-              type: "error",
-            });
-          });
+        getRequest("/post?p=" + pag).then((res) =>
+          res.json().then((json) => {
+            if (isSigned)
+              json.map((pst) => (pst.isLiked = pst.likes.length > 0));
+            if (pag === 0 && json.length === 0) {
+              setPag(null);
+              setPosts([]);
+            } else if (json.length < MAX_POSTS) setPag(null);
+            setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
+          }),
+        );
       } else {
-        getRequest("/post/following?id=" + user.id + "&p=" + pag)
-          .then((res) =>
-            res.json().then((json) => {
-              if (isSigned)
-                json.map((pst) => (pst.isLiked = pst.likes.length > 0));
-              if (pag === 0 && json.length === 0) {
-                setPag(null);
-                setPosts([]);
-              } else if (json.length < MAX_POSTS) setPag(null);
-              setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
-            }),
-          )
-          .catch((e) => {
-            toast.add({
-              title: "Can't fetch posts",
-              type: "error",
-            });
-          });
+        getRequest("/post/following?id=" + user.id + "&p=" + pag).then((res) =>
+          res.json().then((json) => {
+            if (isSigned)
+              json.map((pst) => (pst.isLiked = pst.likes.length > 0));
+            if (pag === 0 && json.length === 0) {
+              setPag(null);
+              setPosts([]);
+            } else if (json.length < MAX_POSTS) setPag(null);
+            setPosts((prev) => (pag === 0 ? json : [...prev, ...json]));
+          }),
+        );
       }
     }
   }, [tab, pag]);
@@ -104,18 +91,31 @@ export function Home() {
   }, [selected]);
   if (!user && isSigned == null) return <Spinner className={"h-dvh"} />;
   return (
-    <div className="flex flex-col h-dvh">
+    <div className="flex flex-col h-dvh md:flex-row">
       <SelectedContext value={{ selected, setSelected }}>
-        <Header
-          isSigned={isSigned}
-          notifications={user?._count.notifications ?? 0}
-          imageSrc={user?.avatarUrl ?? null}
-          name={user?.name ?? ""}
-          username={user?.username ?? ""}
-        />
+        <div className="md:hidden">
+          <Header
+            isSigned={isSigned}
+            notifications={user?._count.notifications ?? 0}
+            imageSrc={user?.avatarUrl ?? null}
+            name={user?.name ?? ""}
+            username={user?.username ?? ""}
+          />
+        </div>
+        <div className="hidden md:flex ">
+          <HeaderFooter
+            isSigned={isSigned}
+            notifications={user?._count.notifications ?? 0}
+            imageSrc={user?.avatarUrl ?? null}
+            name={user?.name ?? ""}
+            username={user?.username ?? ""}
+          />
+        </div>
         <Outlet context={{ user, isSigned }} />
         <Toaster />
-        <Footer />
+        <div className="md:hidden">
+          <Footer />
+        </div>
       </SelectedContext>
     </div>
   );
