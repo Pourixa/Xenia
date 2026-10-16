@@ -44,8 +44,8 @@ export function Followships() {
             } else if (json.length < MAX_FOLLOW) setPag(null);
             setUsers((prev) => (pag === 0 ? usrs : [...prev, ...usrs]));
           }),
-        ).catch(toast.add({
-            title:"Can't fetch followings !",
+        ).catch(e => toast.add({
+            title:"Can't fetch followings !" ,
             type:"error"
           }));
       }
