@@ -62,7 +62,7 @@ export function SignupForm({ className, ...props }) {
                 </FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit">Create Account (Coming soon)</Button>
                 <div className="mt-1 mb-1">
                   <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card ">
                     Or continue with
@@ -99,7 +99,7 @@ export function SignupForm({ className, ...props }) {
                       fill="currentColor"
                     />
                   </svg>
-                  Signup with Google
+                  Signup with Google (Coming soon)
                 </Button>
                 <FieldDescription className="text-center">
                   Already have an account? <a href="/signin">Sign in</a>

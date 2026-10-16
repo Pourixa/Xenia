@@ -9,6 +9,7 @@ import { useSearchParams } from "react-router";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_SEARCH } from "@/lib/utils";
 import { toast } from "@/components/ui/toast";
+import { Spinner } from "@/components/ui/spinner";
 
 export function Search() {
   const { setSelected } = useContext(SelectedContext);
@@ -90,12 +91,10 @@ export function Search() {
         </div>
       </div>
 
-      <div>
+      <div className="h-full w-full">
         {console.log(result)}
         {loading ? (
-          <div className="p-4">
-            Loading...
-          </div>
+          <div className="flex flex-col justify-center w-full h-full items-center"><Spinner/></div>
         ) : result.length > 0 ? (
           result.map(user => (
             <User

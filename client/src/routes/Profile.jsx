@@ -102,7 +102,7 @@ export function Profile() {
 
     fetchUser();
   }, [params.username]);
-  if (!profileUser) return <Spinner/>;
+  if (!profileUser) return <div className="w-full h-full items-center"><Spinner/></div>;
   console.log(profileUser);
   return (
     <main className="overflow-y-auto flex flex-col  grow">

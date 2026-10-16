@@ -28,7 +28,7 @@ export function ProfileComments() {
       }
     })();
   }, [pag]);
-  if (!comments) return <Spinner/>;
+  if (!comments) return <div className="w-full h-full items-center"><Spinner/></div>;
   return (
     <div className="overflow-auto flex flex-col items-center grow w-full">
       <div className="w-full">

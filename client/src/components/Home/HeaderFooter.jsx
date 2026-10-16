@@ -14,8 +14,23 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { ModeToggle } from "../customUI/XeniaDarkLight";
+import { toast } from "../ui/toast";
+import { postRequest } from "@/lib/requests";
 const guest = "guest.png";
-
+  const handleLogout = async () => {
+    try {
+      const response = await postRequest("/user/logout", {});
+      if (!response.ok) {
+        throw new Error(`Logout failed !`);
+      }
+      window.location.reload();
+    } catch (e) {
+      toast.add({
+        title: "Logout request failed - " + e,
+        type: "error",
+      });
+    }
+  };
 export function HeaderFooter({
   isSigned,
   username,
@@ -27,20 +42,6 @@ export function HeaderFooter({
   const [breadCrumb, setBreadCrumb] = useState([]);
   const loc = useLocation();
   const nav = useNavigate();
-  const handleLogout = async () => {
-    try {
-      const response = await postRequest("/user/logout", {});
-      if (!response.ok) {
-        throw new Error(`Logout failed !`);
-      }
-      window.location.reload();
-    } catch {
-      toast.add({
-        title: "Logout request failed",
-        type: "error",
-      });
-    }
-  };
   useEffect(() => {
     if (loc.state?.from) {
       const from = loc.state?.from;

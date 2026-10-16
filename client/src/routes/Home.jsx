@@ -4,7 +4,7 @@ import { Header } from "@/components/Home/Header";
 import { Post } from "@/components/Home/Post";
 import { getRequest } from "@/lib/requests";
 import { useState, createContext, useContext, useEffect } from "react";
-import { Outlet, useOutletContext } from "react-router";
+import { Outlet, useLocation, useOutletContext } from "react-router";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_POSTS } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
@@ -50,7 +50,9 @@ export function HomeTab() {
       }
     }
   }, [tab, pag]);
-  if (posts === null) return <Spinner />;
+  if (posts === null) return <div className="flex flex-col w-full">
+    <Spinner className={"justify-self-center "} />
+  </div>;
   return (
     <main className="overflow-y-auto flex flex-col items-center grow">
       <HomeTabs
@@ -79,6 +81,7 @@ export function HomeTab() {
 
 export function Home() {
   const [selected, setSelected] = useState("home");
+  const loc = useLocation()
   const [user, setUser] = useState(null);
   const [isSigned, setIsSigned] = useState(null);
   useEffect(() => {
@@ -92,8 +95,8 @@ export function Home() {
   if (!user && isSigned == null) return <Spinner className={"h-dvh"} />;
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="flex flex-col h-dvh md:flex-row">
-        <SelectedContext value={{ selected, setSelected }}>
+      <div className={"flex flex-col h-dvh "+((loc.pathname === "/signin" || loc.pathname === "/login") ? "w-full md:w-1/2 md:left-1/2 md:translate-x-1/2" : "md:flex-row ")}>
+        <SelectedContext value={{selected, setSelected }}>
           <div className="md:hidden">
             <Header
               isSigned={isSigned}

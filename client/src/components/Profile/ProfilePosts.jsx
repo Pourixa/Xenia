@@ -29,7 +29,7 @@ export function ProfilePosts() {
   }, [pag,profileUser]);
   
   console.log(posts)
-  if (!posts) return <Spinner/>;
+  if (!posts) return <div className="w-full h-full items-center"><Spinner/></div>;
   return (
     <div className="flex flex-col items-center grow">
       <div className="w-full">
