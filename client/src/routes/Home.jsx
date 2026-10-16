@@ -5,12 +5,12 @@ import { Post } from "@/components/Home/Post";
 import { getRequest } from "@/lib/requests";
 import { useState, createContext, useContext, useEffect } from "react";
 import { Outlet, useOutletContext } from "react-router";
-import { Button } from "@/components/ui/button";
 import { XeniaLoadMore } from "@/components/customUI/XeniaLoadmore";
 import { MAX_POSTS } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import { Toaster } from "@/components/ui/toast";
 import { HeaderFooter } from "@/components/Home/HeaderFooter";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export const SelectedContext = createContext(null);
 
@@ -91,32 +91,34 @@ export function Home() {
   }, [selected]);
   if (!user && isSigned == null) return <Spinner className={"h-dvh"} />;
   return (
-    <div className="flex flex-col h-dvh md:flex-row">
-      <SelectedContext value={{ selected, setSelected }}>
-        <div className="md:hidden">
-          <Header
-            isSigned={isSigned}
-            notifications={user?._count.notifications ?? 0}
-            imageSrc={user?.avatarUrl ?? null}
-            name={user?.name ?? ""}
-            username={user?.username ?? ""}
-          />
-        </div>
-        <div className="hidden md:flex ">
-          <HeaderFooter
-            isSigned={isSigned}
-            notifications={user?._count.notifications ?? 0}
-            imageSrc={user?.avatarUrl ?? null}
-            name={user?.name ?? ""}
-            username={user?.username ?? ""}
-          />
-        </div>
-        <Outlet context={{ user, isSigned }} />
-        <Toaster />
-        <div className="md:hidden">
-          <Footer />
-        </div>
-      </SelectedContext>
-    </div>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="flex flex-col h-dvh md:flex-row">
+        <SelectedContext value={{ selected, setSelected }}>
+          <div className="md:hidden">
+            <Header
+              isSigned={isSigned}
+              notifications={user?._count.notifications ?? 0}
+              imageSrc={user?.avatarUrl ?? null}
+              name={user?.name ?? ""}
+              username={user?.username ?? ""}
+            />
+          </div>
+          <div className="hidden md:flex ">
+            <HeaderFooter
+              isSigned={isSigned}
+              notifications={user?._count.notifications ?? 0}
+              imageSrc={user?.avatarUrl ?? null}
+              name={user?.name ?? ""}
+              username={user?.username ?? ""}
+            />
+          </div>
+          <Outlet context={{ user, isSigned }} />
+          <Toaster />
+          <div className="md:hidden">
+            <Footer />
+          </div>
+        </SelectedContext>
+      </div>
+    </ThemeProvider>
   );
 }

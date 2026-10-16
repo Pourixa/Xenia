@@ -14,6 +14,7 @@ import {
 } from "../ui/dropdown-menu";
 import { postRequest } from "@/lib/requests";
 import { toast } from "../ui/toast";
+import { ModeToggle } from "../customUI/XeniaDarkLight";
 const guest = "guest.png";
 
 export function Header({ isSigned, username, notifications, imageSrc, name }) {
@@ -30,9 +31,9 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
       window.location.reload();
     } catch {
       toast.add({
-        title:"Logout request failed",
-        type:"error"
-      })
+        title: "Logout request failed",
+        type: "error",
+      });
     }
   };
   useEffect(() => {
@@ -103,6 +104,9 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
                 <Link to={`/${username}`}>Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <ModeToggle />
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout} variant={"destructive"}>
                 Logout
               </DropdownMenuItem>

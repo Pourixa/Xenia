@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { ModeToggle } from "../customUI/XeniaDarkLight";
 const guest = "guest.png";
 
 export function HeaderFooter({
@@ -125,6 +126,7 @@ export function HeaderFooter({
             </div>
           )}
           <div className="gap-5 flex flex-col items-center">
+            <ModeToggle InHeaderFooter={true} />
             <NotificationBell
               unreadNotifications={notifications}
               InHeaderFooter={true}
