@@ -50,7 +50,7 @@ export function Post({ setPosts, post, isSigned , idx }) {
         </Link>
         <div className="flex overflow-x-auto scrollbar-none p-2 gap-2">
           {post.images.map(img => {
-            return <img className="object-center object-cover w-full" src={img.imageURL} />
+            return <img className="object-center object-cover w-[33vh]" src={img.imageURL} />
           })}
         </div>
         <div className="flex p-0.5 gap-2 text-muted-foreground items-center">
