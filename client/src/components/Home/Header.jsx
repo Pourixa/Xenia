@@ -113,14 +113,25 @@ export function Header({ isSigned, username, notifications, imageSrc, name }) {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Link to={"/signin"}>
-            <XeniaAvatar
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <XeniaAvatar
               className={selected === "profile" ? "ring-2" : ""}
               size="lg"
               imageSrc={isSigned ? imageSrc : guest}
               name={isSigned ? name : "G"}
             />
-          </Link>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                <Link to={`/signin`}>Signin</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <ModeToggle />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
         <XeniaLogoNoName width={56} height={56} />
         <NotificationBell unreadNotifications={notifications} />
