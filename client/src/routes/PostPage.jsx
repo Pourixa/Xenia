@@ -69,7 +69,9 @@ export function PostPage() {
     });
   }, [setSelected]);
 
-  if (!post) return <Spinner />;
+  if (!post) return <div className="flex flex-col w-full justify-center items-center">
+    <Spinner />
+  </div>;
   return (
     <main className="overflow-auto grow">
       <div className="p-4 border-b">

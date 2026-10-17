@@ -43,7 +43,7 @@ export async function handleLikeUnLike(post, setPost, idx = -1) {
           isLiked: isPostLiked ? false : true,
           _count: {
             ...prev._count,
-            likes: isPostLiked ? a[idx]._count.likes - 1 : a[idx]._count.likes + 1,
+            likes: isPostLiked ? prev._count.likes - 1 : prev._count.likes + 1,
           },
         }));
       } else 

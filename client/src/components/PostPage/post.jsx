@@ -94,7 +94,7 @@ export function Post({ setPost, post, isSigned, user }) {
           {post.images.map((img) => {
             return (
               <img
-                className="object-center object-cover w-full"
+                className="object-center object-cover w-[33vh]"
                 src={img.imageURL}
               />
             );

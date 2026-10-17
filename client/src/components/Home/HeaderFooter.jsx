@@ -5,7 +5,7 @@ import { XeniaAvatar } from "../customUI/XeniaAvatar";
 import { XeniaLogoNoName } from "../customUI/XeniaLogoNoName";
 import { NotificationBell } from "../customUI/NotificationBell";
 import { XeniaHomeIcon } from "../customUI/XeniaHomeIcons";
-import { PlusIcon, SearchIcon } from "lucide-react";
+import { ArrowLeft, PlusIcon, SearchIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,11 +52,11 @@ export function HeaderFooter({
   }, [loc.state]);
   if ((loc.pathname === "/signin") | (loc.pathname === "/signup")) {
     return;
-  } else if (selected?.selected === "post") {
+  } else if (selected?.selected === "post" || selected?.selected === "user") {
     return (
-      <header className="flex p-4 border-b w-full">
+      <header className="flex pr-0 pt-4 pl-4 w-full border-r-2 justify-center">
         <ArrowLeft
-          className="mr-8 hover:cursor-pointer"
+          className="mr-8 hover:cursor-pointer "
           onClick={() => {
             const previous = breadCrumb.at(-1);
             if (!previous) {
@@ -69,27 +69,6 @@ export function HeaderFooter({
             setBreadCrumb((prev) => prev.slice(0, -1));
           }}
         />
-        <span className="font-bold">Post</span>
-      </header>
-    );
-  } else if (selected?.selected === "user") {
-    return (
-      <header className="flex p-4 border-b w-full">
-        <ArrowLeft
-          className="mr-8 hover:cursor-pointer"
-          onClick={() => {
-            const previous = breadCrumb.at(-1);
-            if (!previous) {
-              nav("/");
-              return;
-            }
-
-            nav(previous);
-
-            setBreadCrumb((prev) => prev.slice(0, -1));
-          }}
-        />
-        <span className="font-bold">{selected.name}</span>
       </header>
     );
   } else {
