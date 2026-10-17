@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export function XeniaImage({src,setFiles}) {
   return (
-    <div className="group relative aspect-square w-full overflow-hidden">
+    <div className="group relative aspect-square overflow-hidden w-[33vh]">
         <XSquareIcon onClick={() => {
             setFiles(prev => {
                 const arr = [...prev];
