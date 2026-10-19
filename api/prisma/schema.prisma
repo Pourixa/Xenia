@@ -13,10 +13,12 @@ datasource db {
 model user {
   id       Int    @id @default(autoincrement())
   username String @unique
+  email String? @unique
   avatarUrl String?
   name String
   about String?
-  githubAccountID BigInt @unique
+  password String? 
+  githubAccountID BigInt? @unique
 
   followings followship[] @relation("following")
   followers  followship[] @relation("follower")

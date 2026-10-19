@@ -23,7 +23,7 @@ export function Notification({ notification }) {
         )}
 
         <div className="flex-1 min-w-0">
-          <div className=" flex gap-1 flex-wrap gap-y-0">
+          <div className=" items-center flex gap-1 flex-wrap gap-y-0">
             <Link
               to={`/${notification.data.follower.username}`}
               draggable={false}
@@ -68,7 +68,7 @@ export function Notification({ notification }) {
         )}
 
         <div className="flex-1 min-w-0">
-          <div className=" flex gap-1 flex-wrap gap-y-0">
+          <div className="items-center flex gap-1 flex-wrap gap-y-0">
             <Link
               to={`/${notification.data.commenter.username}`}
               draggable={false}

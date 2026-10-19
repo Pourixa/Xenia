@@ -15,11 +15,56 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { getRequest } from "@/lib/requests";
+import { toast } from "./ui/toast";
+import { postRequest } from "@/lib/requests";
+import { useNavigate, useOutletContext } from "react-router";
+import { useEffect } from "react";
+
+async function handleSignUpByEmail(e) {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const formData = new FormData(e.currentTarget);
+
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const confirmPassword = formData.get("confirm-password");
+
+  if (password != confirmPassword) {
+    form.elements["password"].value = "";
+    form.elements["confirm-password"].value = "";
+    toast.add({
+      title: "Passwords must match !",
+      type: "error",
+    });
+  } else {
+    try {
+      const res = await postRequest("/user/auth/signup", {
+        name: name,
+        password: password,
+        email: email,
+      });
+      if(!res.ok)
+        throw new Error(await res.json().msg)
+      location.href = "/"
+    } catch(e) {
+      toast.add({
+        title:e.message,
+        type:"error"
+      })
+    }
+  }
+}
 
 export function SignupForm({ className, ...props }) {
+  const {isSigned} = useOutletContext()
+  const nav = useNavigate()
+  useEffect(() => {
+    if(isSigned)
+      nav("/")
+  })
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6 md:w-1/2 md:translate-x-1/2", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create your account</CardTitle>
@@ -28,16 +73,23 @@ export function SignupForm({ className, ...props }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSignUpByEmail}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                <Input id="name" type="text" placeholder="John Doe" required />
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="John Doe"
+                  required
+                />
               </Field>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -48,13 +100,25 @@ export function SignupForm({ className, ...props }) {
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" type="password" required autoComplete="new-password" />
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      required
+                      autoComplete="new-password"
+                    />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="confirm-password">
                       Confirm Password
                     </FieldLabel>
-                    <Input id="confirm-password" type="password" required autoComplete="new-password"/>
+                    <Input
+                      name="confirm-password"
+                      id="confirm-password"
+                      type="password"
+                      required
+                      autoComplete="new-password"
+                    />
                   </Field>
                 </Field>
                 <FieldDescription>
@@ -62,7 +126,7 @@ export function SignupForm({ className, ...props }) {
                 </FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account (Coming soon)</Button>
+                <Button type="submit">Create Account</Button>
                 <div className="mt-1 mb-1">
                   <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card ">
                     Or continue with

@@ -1,6 +1,7 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
-
+const bcrypt = require("bcrypt");
+const { unavailableUsernames } = require("../middleware/utils");
 const MAX_POSTS = 20;
 const MAX_NOTIFS = 20;
 exports.deleteUser = async (req, res, next) => {
@@ -149,9 +150,9 @@ exports.getUserFollowersByUsername = async (req, res, next) => {
   try {
     const followers = await db.followship.findMany({
       where: {
-        following:{
-          username:req.params.username,
-        } 
+        following: {
+          username: req.params.username,
+        },
       },
       take: MAX_FOLLOW,
       skip: MAX_FOLLOW * req.query.p,
@@ -176,8 +177,8 @@ exports.getUserFollowingsByUsername = async (req, res, next) => {
     const followings = await db.followship.findMany({
       where: {
         follower: {
-          username:req.params.username,
-        }
+          username: req.params.username,
+        },
       },
       take: MAX_FOLLOW,
       skip: MAX_FOLLOW * req.query.p,
@@ -199,6 +200,45 @@ exports.getUserFollowingsByUsername = async (req, res, next) => {
 
 exports.signupUser = async (req, res, next) => {
   try {
+    const emailUser = req.body.email.split("@")[0];
+    const CleanedUser = emailUser.split(".").join("");
+    const salt = await bcrypt.genSalt();
+    const hashed = await bcrypt.hash(req.body.password, salt);
+    let baseUsername = CleanedUser.toLocaleLowerCase();
+    while (unavailableUsernames.includes(baseUsername)) {
+      baseUsername = faker.internet.username().toLocaleLowerCase();
+    }
+    let username = baseUsername;
+    let count = 1;
+    while (await db.user.findUnique({ where: { username } })) {
+      username = `${baseUsername}${count++}`;
+    }
+
+    const user = await db.user.create({
+      data: {
+        username: username.toLowerCase(),
+        name: req.body.name,
+        email: req.body.email,
+        password: hashed,
+      },
+    });
+
+    res.cookie(
+      "token",
+      jwt.sign(
+        { username: user.username, id: user.id },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" },
+      ),
+      {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      },
+    );
+
+    res.json({msg:"Signup Successful"});
   } catch (e) {
     next(e);
   }
@@ -317,10 +357,10 @@ exports.editprofile = async (req, res, next) => {
   }
 };
 
-exports.userLogOut = async (req,res,next) => {
-  try{
-    res.clearCookie("token", { path: "/" }).sendStatus(204)
-  } catch(e) {
-  next(e)
+exports.userLogOut = async (req, res, next) => {
+  try {
+    res.clearCookie("token", { path: "/" }).sendStatus(204);
+  } catch (e) {
+    next(e);
   }
-}
+};
