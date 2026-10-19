@@ -1,8 +1,8 @@
 const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { unavailableUsernames } = require("../middleware/utils");
-const MAX_POSTS = 20;
+const { unavailableUsernames, responseError } = require("../middleware/utils");
+
 const MAX_NOTIFS = 20;
 exports.deleteUser = async (req, res, next) => {
   try {
@@ -246,6 +246,34 @@ exports.signupUser = async (req, res, next) => {
 
 exports.signinUser = async (req, res, next) => {
   try {
+    console.log(req.body)
+    const user = await db.user.findUnique({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if(!user)
+      throw new responseError("Username or password is not correct !")
+    const hashedPassword = user.password;
+    const isPassCorrect  = bcrypt.compare(req.body.password,hashedPassword)
+    if(!isPassCorrect)
+      throw new responseError("Username or password is not correct !")
+    res.cookie(
+      "token",
+      jwt.sign(
+        { username: user.username, id: user.id },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" },
+      ),
+      {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      },
+    );
+
+    res.json({msg:"SignIn Successful"});
   } catch (e) {
     next(e);
   }

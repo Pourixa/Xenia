@@ -15,6 +15,30 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { toast } from "./ui/toast";
+import { postRequest } from "@/lib/requests";
+async function handleLogin(e) {
+  e.preventDefault();
+  const formData = new FormData(e.currentTarget);
+
+  const email = formData.get("email");
+  const password = formData.get("password");
+
+    try {
+      const res = await postRequest("/user/auth/signin", {
+        password: password,
+        email: email,
+      });
+      if(!res.ok)
+        throw new Error(await res.json().msg)
+      location.href = "/"
+    } catch(e) {
+      toast.add({
+        title:e.message,
+        type:"error"
+      })
+    }
+}
 
 export function LoginForm({ className, ...props }) {
   return (
@@ -27,7 +51,7 @@ export function LoginForm({ className, ...props }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleLogin}>
             <FieldGroup>
               <Field>
                 <Button
@@ -70,6 +94,7 @@ export function LoginForm({ className, ...props }) {
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  name="email"
                   autoComplete="username"
                   id="email"
                   type="email"
@@ -87,7 +112,7 @@ export function LoginForm({ className, ...props }) {
                     Forgot your password?
                   </a> */}
                 </div>
-                <Input autoComplete="current-password" id="password" type="password" required />
+                <Input autoComplete="current-password" name="password " id="password" type="password" required />
               </Field>
               <Field>
                 <Button type="submit">Login</Button>

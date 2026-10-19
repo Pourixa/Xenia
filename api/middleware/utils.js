@@ -5,7 +5,7 @@ const {validationResult} = require("express-validator")
 require("dotenv").config()
 const supabase = createClient(process.env.PROJECT_URL, process.env.API_KEY)
 
-class responseError extends Error {
+exports.responseError = class responseError extends Error {
   constructor (message , code) 
   {
     super(message)
