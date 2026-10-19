@@ -50,7 +50,7 @@ export function HomeTab() {
       }
     }
   }, [tab, pag]);
-  if (posts === null) return <div className="flex flex-col w-full">
+  if (posts === null) return <div className="flex flex-col h-full w-full">
     <Spinner className={"justify-self-center "} />
   </div>;
   return (
