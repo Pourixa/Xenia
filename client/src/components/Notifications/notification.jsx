@@ -123,7 +123,7 @@ export function Notification({ notification }) {
         <div className="flex-1 min-w-0">
           <div className=" flex gap-1 flex-wrap gap-y-0 items-center">
             <Link
-              to={`/${notification.data.data.liker.username}`}
+              to={`/${notification.data.liker.username}`}
               draggable={false}
               className="flex-wrap flex gap-1 gap-y-0 p-0.5"
               state={{
@@ -131,7 +131,7 @@ export function Notification({ notification }) {
               }}
             >
               <span className="font-bold">
-                {notification.data.data.liker.name}
+                {notification.data.liker.name}
               </span>
               {/* <span className="text-muted-foreground">
               @{notification.data.data.liker.username}
@@ -143,7 +143,7 @@ export function Notification({ notification }) {
               state={{
                 from: loc.pathname,
               }}
-              to={`/${notification.data.data.post.author.username}/post/${notification.data.data.post.id}`}
+              to={`/${notification.data.post.author.username}/post/${notification.data.post.id}`}
             >
               Post
             </Link>
