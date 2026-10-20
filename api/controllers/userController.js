@@ -2,6 +2,7 @@ const db = require("../prisma/db").prisma;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { unavailableUsernames, responseError } = require("../middleware/utils");
+const { faker } = require("@faker-js/faker");
 
 const MAX_NOTIFS = 20;
 exports.deleteUser = async (req, res, next) => {
@@ -246,7 +247,6 @@ exports.signupUser = async (req, res, next) => {
 
 exports.signinUser = async (req, res, next) => {
   try {
-    console.log(req.body)
     const user = await db.user.findUnique({
       where: {
         email: req.body.email,
@@ -255,7 +255,7 @@ exports.signinUser = async (req, res, next) => {
     if(!user)
       throw new responseError("Username or password is not correct !")
     const hashedPassword = user.password;
-    const isPassCorrect  = bcrypt.compare(req.body.password,hashedPassword)
+    const isPassCorrect  =  await bcrypt.compare(req.body.password,hashedPassword)
     if(!isPassCorrect)
       throw new responseError("Username or password is not correct !")
     res.cookie(
@@ -317,7 +317,7 @@ exports.searchUser = async (req, res, next) => {
 exports.followUser = async (req, res, next) => {
   // auth
   try {
-    if (req.body.id === req.user.username)
+    if (req.body.id === req.user.id)
       throw new Error("Can't follow yourself");
     const data = await db.followship.create({
       data: {

@@ -57,7 +57,6 @@ export function Post({ setPost, post, isSigned, user }) {
   }, [hash, scrollTrigger]);
 
   const date = new Date(post.createdAt);
-  console.log(post);
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-col p-0.5">

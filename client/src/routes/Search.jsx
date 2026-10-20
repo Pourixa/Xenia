@@ -92,7 +92,6 @@ export function Search() {
       </div>
 
       <div className="h-full w-full">
-        {console.log(result)}
         {loading ? (
           <div className="flex flex-col justify-center w-full h-full items-center"><Spinner/></div>
         ) : result.length > 0 ? (

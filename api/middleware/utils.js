@@ -52,6 +52,8 @@ exports.errorHandler = (err,req,res,next) => {
     console.log('err',err)
     if(err.code === 400)
       res.status(400).json({msg:err.message})
+    else if(err.code === "P2002")
+      res.status(400).json({msg:"User already exists - use another username or email"})
     res.status(500).json({msg:"Something went wrong."})
 }
 

@@ -112,7 +112,7 @@ export function LoginForm({ className, ...props }) {
                     Forgot your password?
                   </a> */}
                 </div>
-                <Input autoComplete="current-password" name="password " id="password" type="password" required />
+                <Input autoComplete="current-password" name="password" id="password" type="password" required />
               </Field>
               <Field>
                 <Button type="submit">Login</Button>

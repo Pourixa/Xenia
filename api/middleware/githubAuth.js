@@ -83,7 +83,7 @@ exports.githubAuthCallback = async (req, res, next) => {
           username: username.toLowerCase(),
           githubAccountID: githubUser.id,
           avatarUrl: githubUser.avatar_url,
-          name: githubUser.name,
+          name: githubUser.name ?? githubUser.login,
         },
       });
       res.cookie(

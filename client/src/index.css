@@ -60,6 +60,7 @@
 
 .dark {
   --background: hsl(240 41.4634% 8.0392%);
+    --muted-background: hsl(240 41.4634% 22.0392%);
   --foreground: hsl(217.5000 26.6667% 94.1176%);
   --card: hsl(240 35.4839% 18.2353%);
   --card-foreground: hsl(217.5000 26.6667% 94.1176%);

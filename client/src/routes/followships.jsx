@@ -11,7 +11,6 @@ import { useOutletContext, useParams, useSearchParams } from "react-router";
 export function Followships() {
   const [query,setQuery] = useSearchParams()
   const params = useParams()
-  console.log(query)
   const [tab, setTab] = useState(query.get("tab") ? query.get("tab") : "followers");
   const [users, setUsers] = useState(null);
   const { isSigned, user } = useOutletContext();

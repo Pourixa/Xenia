@@ -21,7 +21,6 @@ export function Create() {
   async function handleClick() {
     if(isSigned)
     {
-      console.log(files)
       const formData = new FormData();
       formData.append("content",text)
       files.forEach((file) => {
