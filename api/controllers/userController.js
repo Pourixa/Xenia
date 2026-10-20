@@ -253,11 +253,11 @@ exports.signinUser = async (req, res, next) => {
       },
     });
     if(!user)
-      throw new responseError("Username or password is not correct !")
+      throw new responseError("Username or password is not correct !",400)
     const hashedPassword = user.password;
     const isPassCorrect  =  await bcrypt.compare(req.body.password,hashedPassword)
     if(!isPassCorrect)
-      throw new responseError("Username or password is not correct !")
+      throw new responseError("Username or password is not correct !",400)
     res.cookie(
       "token",
       jwt.sign(
