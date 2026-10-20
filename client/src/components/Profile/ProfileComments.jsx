@@ -12,28 +12,38 @@ export function ProfileComments() {
   const [comments, setComments] = useState(null);
   const [pag, setPag] = useState(0);
   const { profileUser } = useOutletContext();
-  useEffect(() => {
-    (async () => {
-      if (pag != null) {
-        const res = await getRequest(
-          "/post/comments/" + profileUser.id + "?p=" + pag,
-        );
-        const json = await res.json();
-        if (pag === 0 && json.length === 0) {
-          setPag(null);
-          setComments([]);
-        } else if (json.length < MAX_COMMENTS) setPag(null);
-        else if (pag === 0) setComments(json);
-        else setComments((prev) => [...prev, ...json]);
+useEffect(() => {
+  if (pag == null) return;
+  let cancelled = false;
+
+  (async () => {
+    try {
+      const res = await getRequest(
+        "/post/comments/" + profileUser.id + "?p=" + pag,
+      );
+      if (!res.ok) throw new Error("Failed to load comments");
+      const json = await res.json();
+      if (cancelled) return;
+
+      setComments((prev) => (pag === 0 ? json : [...prev, ...json]));
+      if (json.length < MAX_COMMENTS) setPag(null); // last page
+    } catch {
+      if (!cancelled) {
+        setComments((prev) => prev ?? []);
+        setPag(null);
       }
-    })();
-  }, [pag]);
+    }
+  })();
+
+  return () => { cancelled = true; };
+}, [pag, profileUser.id]);
   if (!comments) return <div className="w-full h-full items-center"><Spinner/></div>;
   return (
     <div className="overflow-auto flex flex-col items-center grow w-full">
       <div className="w-full">
         {comments.length > 0 ? (
           comments.map((cmt) => {
+            console.log(cmt)
             return <Comment comment={cmt} key={cmt.id} />;
           })
         ) : (

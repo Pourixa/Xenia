@@ -122,8 +122,8 @@ export function HeaderFooter({
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <Link to={`/${username}`}>Profile</Link>
+                  <DropdownMenuItem onClick={() => nav(`/${username}`)}>
+                    Profile
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem

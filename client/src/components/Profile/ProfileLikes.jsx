@@ -13,22 +13,31 @@ export function ProfileLikes() {
   const [pag, setPag] = useState(0);
   const params = useParams();
   const { profileUser } = useOutletContext();
-  useEffect(() => {
-    (async () => {
-      if (pag != null) {
-        const res = await getRequest(
-          "/post/likes/" + profileUser.id + "?p=" + pag,
-        );
-        const json = await res.json();
-        if (pag === 0 && json.length === 0) {
-          setPag(null);
-          setLikes([]);
-        } else if (json.length < MAX_LIKES) setPag(null);
-        else if (pag === 0) setLikes(json);
-        else setLikes((prev) => [...prev, ...json]);
+useEffect(() => {
+  if (pag == null) return;
+  let cancelled = false;
+
+  (async () => {
+    try {
+      const res = await getRequest(
+        "/post/likes/" + profileUser.id + "?p=" + pag,
+      );
+      if (!res.ok) throw new Error("Failed to load likes");
+      const json = await res.json();
+      if (cancelled) return;
+
+      setLikes((prev) => (pag === 0 ? json : [...prev, ...json]));
+      if (json.length < MAX_LIKES) setPag(null); // last page
+    } catch {
+      if (!cancelled) {
+        setLikes((prev) => prev ?? []);
+        setPag(null);
       }
-    })();
-  }, [pag]);
+    }
+  })();
+
+  return () => { cancelled = true; };
+}, [pag, profileUser.id]);
   if (!likes) return <div className="w-full h-full items-center"><Spinner/></div>;
   return (
     <div className="overflow-auto flex flex-col items-center grow w-full">
