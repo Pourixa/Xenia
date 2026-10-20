@@ -387,8 +387,7 @@ exports.editprofile = async (req, res, next) => {
 
 exports.userLogOut = async (req, res, next) => {
   try {
-    exports.userLogOut = (req, res) => {
-  res
+      res
     .clearCookie("token", {
       httpOnly: true,
       secure: true,
@@ -396,7 +395,6 @@ exports.userLogOut = async (req, res, next) => {
       path: "/",
     })
     .sendStatus(204);
-};
   } catch (e) {
     next(e);
   }
