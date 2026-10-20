@@ -387,7 +387,16 @@ exports.editprofile = async (req, res, next) => {
 
 exports.userLogOut = async (req, res, next) => {
   try {
-    res.clearCookie("token", { path: "/" }).sendStatus(204);
+    exports.userLogOut = (req, res) => {
+  res
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+    })
+    .sendStatus(204);
+};
   } catch (e) {
     next(e);
   }
