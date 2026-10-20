@@ -45,9 +45,10 @@ async function handleSignUpByEmail(e) {
         email: email,
       });
       if(!res.ok)
-        throw new Error(await res.json().msg)
+        throw new Error((await res.json()).msg)
       location.href = "/"
     } catch(e) {
+      console.log("hi")
       toast.add({
         title:e.message,
         type:"error"

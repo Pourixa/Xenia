@@ -30,7 +30,7 @@ async function handleLogin(e) {
         email: email,
       });
       if(!res.ok)
-        throw new Error(await res.json().msg)
+        throw new Error((await res.json()).msg)
       location.href = "/"
     } catch(e) {
       toast.add({
