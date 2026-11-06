@@ -135,12 +135,11 @@ npm run build
 
 ## Preview
 
-The demo URL above is configured in the repository. During the documentation review, the application remained on its loading screen, so the live user flows and a useful screenshot could not be verified.
-
 <!-- Add a screenshot of the loaded application at docs/screenshots/home.png,
 then replace the review note above with:
 ![Xenia home feed with image posts and navigation](docs/screenshots/home.png)
 -->
+![Xenia Post Page](/1_001.jpg)
 ---
 
 Documentation based on the main branch at commit `725e406a0f47cec44bdd825b0a1bcaad4acdd584`. Features and setup were reviewed from source; the local setup and checks above were not executed during this documentation review.
