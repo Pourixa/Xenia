@@ -142,5 +142,4 @@ then replace the review note above with:
 ![Xenia Post Page](/1_001.jpg)
 ---
 
-Documentation based on the main branch at commit `725e406a0f47cec44bdd825b0a1bcaad4acdd584`. Features and setup were reviewed from source; the local setup and checks above were not executed during this documentation review.
 
